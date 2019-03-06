@@ -1,7 +1,7 @@
 import subprocess
 
 completed = subprocess.run(
-	['ls','-al'],
+	['python3','catan.py'],
 	stdout=subprocess.PIPE,
 )
 print('returncode:', completed.returncode)
