@@ -23,8 +23,7 @@ def printHelp():
     print("\t-d is for using a development card.")
     print("\t-e is for ending your turn.")
 
-
-if __name__ == '__main__':
+def main():
     playerList = initializePlayers()
     devCardDeck = initializeDevCards()
     board = createBoard()
@@ -148,9 +147,9 @@ if __name__ == '__main__':
             else:
                 print("Invalid command.")
 
-
         # Switch the current player
         if (currentPlayerIndex != len(playerList) - 1):
             currentPlayerIndex += 1
         else:
             currentPlayerIndex = 0
+main()
