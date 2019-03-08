@@ -1,6 +1,6 @@
 import io
 import subprocess
-
+#FOCUS ON POPEN CLASS 
 print('One line at a time:')
 proc = subprocess.Popen(
     'python3 repeater.py',
