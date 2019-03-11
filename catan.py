@@ -23,7 +23,7 @@ def printHelp():
     print("\t-d is for using a development card.")
     print("\t-e is for ending your turn.")
 
-def main():
+if __name__ == "__main__":
     playerList = initializePlayers()
     devCardDeck = initializeDevCards()
     board = createBoard()
@@ -152,4 +152,3 @@ def main():
             currentPlayerIndex += 1
         else:
             currentPlayerIndex = 0
-main()
