@@ -142,6 +142,7 @@ class Board:
             (50, 53): "//"
         }
 
+
         # A matrix that tells what vertices each hex is linked to
         self.hexRelationMatrix = [
             [0, 3, 4, 7, 8, 12],

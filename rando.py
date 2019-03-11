@@ -1,5 +1,7 @@
 import catan
 from player import Player
+import subprocess
+import io
 
 #This runs teh catan game
 catan.main()
