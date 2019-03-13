@@ -166,6 +166,30 @@ class Board:
             [41, 45, 46, 49, 50, 53]
         ]
 
+        self.openBuildSpots =  [
+            [0, 3, 4, 7, 8, 12],
+            [1, 4, 5, 8, 9, 13],
+            [2, 5, 6, 9, 10, 14],
+            [7, 11, 12, 16, 17, 22],
+            [8, 12, 13, 17, 18, 23],
+            [9, 13, 14, 18, 19, 24],
+            [10, 14, 15, 19, 20, 25],
+            [16, 21, 22, 27, 28, 33],
+            [17, 22, 23, 28, 29, 34],
+            [18, 23, 24, 29, 30, 35],
+            [19, 24, 25, 30, 31, 36],
+            [20, 25, 26, 31, 32, 37],
+            [28, 33, 34, 38, 39, 43],
+            [29, 34, 35, 39, 40, 44],
+            [30, 35, 36, 40, 41, 45],
+            [31, 36, 37, 41, 42, 46],
+            [39, 43, 44, 47, 48, 51],
+            [40, 44, 45, 48, 49, 52],
+            [41, 45, 46, 49, 50, 53]
+        ]
+
+
+
         # A matrix that tells what vertices each vertex is linked to
         self.vertexRelationMatrix = [
             [3, 4],
@@ -224,6 +248,17 @@ class Board:
             [49, 50]
         ]
 
+
+    def getOpenRoads(self):
+        #return the road list from above
+        return self.roads
+
+    def getOpenBuildSpots(Self):
+        # is a copy of the hexRelationMatrix but a row [0, 3, 4, 7, 8, 12] looks like [0,3,4,A,8,B]
+        return self.openBuildSpots
+
+
+
     def canPlaceSettlement(self, vertex, playerName, firstPlacement):
         '''
         Determines if a settlement can be placed at the vertex given the user.
@@ -266,6 +301,13 @@ class Board:
         self.vertices[vertex].empty = False
         self.vertices[vertex].playerName = player.name
         player.points += 1
+
+        for row in range(len(self.openBuildSpots)):
+           for vertice in range(len(self.openBuildSpots[row])):
+              if self.openBuildSpots[row][vertice] == vertex:
+                self.openBuildSpots[row][vertice] = player.name
+                
+                
 
 
     def canPlaceRoad(self, vertex1, vertex2, playerName):
