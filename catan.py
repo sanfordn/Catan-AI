@@ -141,9 +141,9 @@ if __name__ == "__main__":
                 obtainedDevCards["Victory Point"] = 0
                 notDone = False
             elif (command == "dev"):
-                # DELETE WHEN DONE: ONLY FOR DEVELOPMENT
-                currentPlayer.resourceDict["wood"] = 10
-                currentPlayer.resourceDict["brick"] = 10
+                currentPlayer.resourceDict["sheep"] = 1
+                currentPlayer.resourceDict["ore"] = 
+                currentPlayer.resourceDict["wheat"] = 1
             else:
                 print("Invalid command.")
 
