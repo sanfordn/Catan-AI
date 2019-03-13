@@ -142,7 +142,7 @@ if __name__ == "__main__":
                 notDone = False
             elif (command == "dev"):
                 currentPlayer.resourceDict["sheep"] = 1
-                currentPlayer.resourceDict["ore"] = 
+                currentPlayer.resourceDict["ore"] = 1
                 currentPlayer.resourceDict["wheat"] = 1
             else:
                 print("Invalid command.")
