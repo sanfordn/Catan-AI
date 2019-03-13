@@ -27,7 +27,7 @@ def terminate(process):
 
 
 proc = subprocess.Popen(['python3','catan.py'],stdout=subprocess.PIPE,stdin=subprocess.PIPE,stderr=subprocess.PIPE)
-write(proc,"2")
+write(proc,input("How many people are playing?"))
 while True:
     line = read(proc)
     if line != '':
