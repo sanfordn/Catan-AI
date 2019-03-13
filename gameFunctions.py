@@ -9,6 +9,7 @@ etc.
 import random
 from board import *
 from player import Player
+from botFunctions import *
 
 def diceRoll():
     '''
@@ -50,18 +51,23 @@ def moveRobber(board, mover, playerList):
     notPlaced = True
     newHex = 0
     while (notPlaced):
-        newHex = input("Player " + mover.name + ", which hex would you like to move the robber to? Select a number 0 - 18, starting from the top left hex and moving right. ")
-        if (not newHex.isdigit()):
-            print("Invalid number.")
-            continue
-        newHex = int(newHex)
-        if (newHex == currentHex):
-            print("The robber is already there. Select a different hex.")
-        elif (newHex < 0 or newHex > 18):
-            print("Please enter a hex between 0 and 18.")
-        else:
+        if(mover.isBot == True):
+            newHex = botMoveRobber()
             board.hexes[newHex].robber = True
             notPlaced = False
+        else:
+            newHex = input("Player " + mover.name + ", which hex would you like to move the robber to? Select a number 0 - 18, starting from the top left hex and moving right. ")
+            if (not newHex.isdigit()):
+                print("Invalid number.")
+                continue
+            newHex = int(newHex)
+            if (newHex == currentHex):
+                print("The robber is already there. Select a different hex.")
+            elif (newHex < 0 or newHex > 18):
+                print("Please enter a hex between 0 and 18.")
+            else:
+                board.hexes[newHex].robber = True
+                notPlaced = False
 
     # Give the player a resource from a neighboring player
     adjacentVertices = board.hexRelationMatrix[newHex]
@@ -69,7 +75,7 @@ def moveRobber(board, mover, playerList):
     possibleVictims = []
     # Add the people next to the robber to the possible victims list
     for vertex in adjacentVertices:
-        if (board.vertices[vertex].empty == False and board.vertices[vertex].playerName != mover.name and board.vertices[vertex].playerName not in possibleVictims):
+        if (board.vertices[vertex].empty == False and board.vertices[vertex].playerName != mover.name and getPlayerFromName(playerList, board.vertices[vertex].playerName) not in possibleVictims):
             possibleVictims.append(getPlayerFromName(playerList, board.vertices[vertex].playerName))
 
     if (len(possibleVictims) == 1):
@@ -78,14 +84,18 @@ def moveRobber(board, mover, playerList):
         # Choose someone to steal from and set it to "victim"
         notChosen = True
         while (notChosen):
-            name = input("Player " + mover.name + ", who would you like to steal from? ")
-            if (name not in possibleVictims):
-                print("Invalid user.")
+            print("Player " + mover.name + ", who would you like to steal from? ")
+            name = None
+            if(mover.isBot == True):
+                name = botChooseWhoToRob()
             else:
-                for i in range(0, len(possibleVictims)):
-                    if possibleVictims[i] == name:
-                        victim = possibleVictims[i]
-
+                name = input()
+                if (getPlayerFromName(playerList, name) not in possibleVictims):
+                    print("Invalid user.")
+                else:
+                    for i in range(0, len(possibleVictims)):
+                        if possibleVictims[i] == getPlayerFromName(playerList, name):
+                            victim = possibleVictims[i]
     if (victim != None):
         # Put their resources in a list and take one at random
         resourceTheftList = []
@@ -93,7 +103,7 @@ def moveRobber(board, mover, playerList):
             for i in range(0, victim.resourceDict[resource]):
                 resourceTheftList.append(resource)
         if (len(resourceTheftList) != 0):
-            randomIndex = random.randint(0, len(resourceTheftList))
+            randomIndex = random.randint(0, len(resourceTheftList)-1)
             victim.resourceDict[resourceTheftList[randomIndex]] -= 1
             mover.resourceDict[resourceTheftList[randomIndex]] += 1
             print("Successfully stole " + resourceTheftList[randomIndex])
