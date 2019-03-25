@@ -13,6 +13,9 @@ from gameFunctions import *
 from tradeFunctions import *
 from player import Player
 
+HUMANS = ['A','B','C','D']
+ROBOTS = ['W','X','Y','Z']
+
 def printHelp():
     '''
     Outputs a list of commands that a user can call during their turn.
