@@ -13,6 +13,9 @@ from gameFunctions import *
 from tradeFunctions import *
 from player import Player
 
+HUMANS = ["A","B","C","D"]
+ROBOTS = ["W","X","Y","Z"]
+
 def printHelp():
     '''
     Outputs a list of commands that a user can call during their turn.
@@ -29,7 +32,7 @@ if __name__ == "__main__":
     board = createBoard()
 
     # Setup Phase
-    placeFirstSettlements(board, playerList)
+    placeFirstSettlements(board, playerList) 
 
     # Game Phase
     currentPlayerIndex = 0
@@ -44,13 +47,14 @@ if __name__ == "__main__":
         print()
         print("A " + str(roll) + " was rolled.")
         if (roll == 7):
+            pass
             # Player moves robber
-            moveRobber(board, currentPlayer, playerList)
-            for player in playerList:
-                if player.numResources() > 7:
-                    halveHand(player, player.numResources())
-        else:
-            handOutResources(board, playerList, roll)
+            #moveRobber(board, currentPlayer, playerList)
+            #for player in playerList:
+                #if player.numResources() > 7:
+                    #halveHand(player, player.numResources())
+        #else:
+            #handOutResources(board, playerList, roll)
 
         # Begin the action phase for the current player
         print("Player " + currentPlayer.name + ":")
@@ -69,7 +73,12 @@ if __name__ == "__main__":
         while(notDone):
             print()
             print("What would you like to do? Type a command, or -h for a list of commands.")
-            command = input()
+            if currentPlayer.name in ROBOTS:
+                command = botStartTurn()
+                print("Bot("+currentPlayer.name+") does "+command)
+            else:
+                command = input()
+
             if (command == "-h"):
                 printHelp()
             elif (command == "-t"):
@@ -88,7 +97,13 @@ if __name__ == "__main__":
                     print("\tInvalid command.")
             elif (command == "-b"):
                 print("\tWhat would you like to build? Type -c for a city, -s for a settlement, -r for a road, or -d for a development card.")
-                toBuild = input("\t")
+                if currentPlayer.name in ROBOTS: 
+                    toBuild = botCommand(currentPlayer.lastcommand)
+                    currentPlayer.lastcommand = command
+                    print("Bot("+currentPlayer.name+") does "+command)
+                else:
+                    toBuild = input("\t")
+
                 if (toBuild == "-c"):
                     buildCity(board, currentPlayer)
                 elif (toBuild == "-s"):
@@ -146,9 +161,12 @@ if __name__ == "__main__":
                 currentPlayer.resourceDict["wheat"] = 1
             else:
                 print("Invalid command.")
-
+        
         # Switch the current player
         if (currentPlayerIndex != len(playerList) - 1):
             currentPlayerIndex += 1
         else:
             currentPlayerIndex = 0
+
+        #rando.think(boardstate,roadstate,handsize)
+        #Robot.think(^,           ^,             ^)

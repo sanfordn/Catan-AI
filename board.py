@@ -166,7 +166,7 @@ class Board:
             [41, 45, 46, 49, 50, 53]
         ]
 
-        self.openBuildSpots =  [
+        self.takenSpots = [
             [0, 3, 4, 7, 8, 12],
             [1, 4, 5, 8, 9, 13],
             [2, 5, 6, 9, 10, 14],
@@ -187,7 +187,6 @@ class Board:
             [40, 44, 45, 48, 49, 52],
             [41, 45, 46, 49, 50, 53]
         ]
-
 
 
         # A matrix that tells what vertices each vertex is linked to
@@ -249,15 +248,15 @@ class Board:
         ]
 
 
+    def occupySpot(self,piece,player):
+        for row in range(len(self.takenSpots)):
+            for vertex in range(len(self.takenSpots[row])):
+               if self.takenSpots[row][vertex] == piece:
+                    self.takenSpots[row][vertex] = player
+                    
     def getOpenRoads(self):
         #return the road list from above
         return self.roads
-
-    def getOpenBuildSpots(Self):
-        # is a copy of the hexRelationMatrix but a row [0, 3, 4, 7, 8, 12] looks like [0,3,4,A,8,B]
-        return self.openBuildSpots
-
-
 
     def canPlaceSettlement(self, vertex, playerName, firstPlacement):
         '''
@@ -300,15 +299,7 @@ class Board:
 
         self.vertices[vertex].empty = False
         self.vertices[vertex].playerName = player.name
-        player.points += 1
-
-        for row in range(len(self.openBuildSpots)):
-           for vertice in range(len(self.openBuildSpots[row])):
-              if self.openBuildSpots[row][vertice] == vertex:
-                self.openBuildSpots[row][vertice] = player.name
-                
-                
-
+        player.points += 1              
 
     def canPlaceRoad(self, vertex1, vertex2, playerName):
         '''
@@ -553,6 +544,9 @@ class Board:
                 if (len(returnStr) == 1):
                     return self.vertices[index].playerName + "S(0" + returnStr + ")"
                 return self.vertices[index].playerName + "S(" + returnStr + ")"
+
+        #This is one of the more important things to remember. When we look at the board we are going to look
+        #at ALL occupied spots and what spots belong to our Brain, using playerNames
 
 
     def printBoard(self):

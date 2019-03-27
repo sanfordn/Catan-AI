@@ -9,6 +9,11 @@ player doesn't have the necessary resources.
 
 from board import *
 from player import Player
+from brain import *
+
+HUMANS = ["A","B","C","D"]
+ROBOTS = ["W","X","Y","Z"]
+
 
 def buildCity(board, player):
     '''
@@ -65,7 +70,10 @@ def buildSettlement(board, player):
     board.printBoard()
     print()
     print("\tWhich vertex would you like to place it on? Pick the vertex number, starting from top left (and starting from 0).")
-    vertex = input("\t")
+    if player.name in ROBOTS:
+       vertex = botPlaceNewSettlement(board.takenSpots)
+    else:
+        vertex = input("\t")
     if (not vertex.isdigit()):
         print("\tInvalid number.")
         return

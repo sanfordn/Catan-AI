@@ -10,6 +10,10 @@ import random
 from board import *
 from player import Player
 from botFunctions import *
+from brain import *
+
+HUMANS = ["A","B","C","D"]
+ROBOTS = ["W","X","Y","Z"]
 
 def diceRoll():
     '''
@@ -41,7 +45,7 @@ def moveRobber(board, mover, playerList):
 
     # Find out where the robber currently is
     currentHex = 0
-    for i in range(0, 19):
+    for i in range(0, 18):
         if (board.hexes[i].robber):
             currentHex = i
             board.hexes[i].robber = False
@@ -51,10 +55,15 @@ def moveRobber(board, mover, playerList):
     notPlaced = True
     newHex = 0
     while (notPlaced):
-        if(mover.isBot == True):
-            newHex = botMoveRobber()
+        #if(mover.isBot == True):
+        if mover.name in ROBOTS:
+            newHex = random.randint(0,18)
             board.hexes[newHex].robber = True
             notPlaced = False
+            print("Bot("+mover.name+") moved the robber to " + str(newHex))
+            #newHex = botMoveRobber()
+            #board.hexes[newHex].robber = True
+            #notPlaced = False
         else:
             newHex = input("Player " + mover.name + ", which hex would you like to move the robber to? Select a number 0 - 18, starting from the top left hex and moving right. ")
             if (not newHex.isdigit()):
@@ -86,16 +95,19 @@ def moveRobber(board, mover, playerList):
         while (notChosen):
             print("Player " + mover.name + ", who would you like to steal from? ")
             name = None
-            if(mover.isBot == True):
-                name = botChooseWhoToRob()
+            #if(mover.isBot == True):
+                #name = botChooseWhoToRob()
+            if mover.name in ROBOTS:
+                name = chooseToSteal(possibleVictims)
             else:
                 name = input()
-                if (getPlayerFromName(playerList, name) not in possibleVictims):
-                    print("Invalid user.")
-                else:
-                    for i in range(0, len(possibleVictims)):
-                        if possibleVictims[i] == getPlayerFromName(playerList, name):
-                            victim = possibleVictims[i]
+            if (getPlayerFromName(playerList, name) not in possibleVictims):
+                print("Invalid user.")
+            else:
+                for i in range(0, len(possibleVictims)):
+                    if possibleVictims[i] == getPlayerFromName(playerList, name):
+                        victim = possibleVictims[i]
+                        notChosen = False
     if (victim != None):
         # Put their resources in a list and take one at random
         resourceTheftList = []
@@ -123,7 +135,10 @@ def halveHand(player, originalNumResources):
     while (True):
         player.printHand()
         print("Please enter the name of the resource you would like to throw away.")
-        toDiscard = input()
+        if player.name in ROBOTS:
+            toDiscard = botThrowAway()
+        else:
+            toDiscard = input()
         if (toDiscard not in player.resourceDict):
             print("Invalid resource.")
         elif (player.resourceDict[toDiscard] == 0):
