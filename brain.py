@@ -17,10 +17,6 @@ def botPlaceNewSettlement(currentBoard):
     return str(choice)
 
 #check to see if the number rolled is already taken
-
-def botPlaceNewRoad(currentRoads):
-    pass
-
 def botThrowAway():
     choices = ['wheat','ore','brick','sheep','wood']
     randchoice = random.randint(0,len(choices)-1)
@@ -46,6 +42,6 @@ def botCommand(lc):
         buildchoices = ["-c","-s","-r",] #'-d' is for dev card
         randchoice = random.randint(0,2)
         action = buildchoices[randchoice]
-        return "-r"
+        return action
 
 

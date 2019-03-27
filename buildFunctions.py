@@ -10,6 +10,7 @@ player doesn't have the necessary resources.
 from board import *
 from player import Player
 from brain import *
+from random import randint
 
 HUMANS = ["A","B","C","D"]
 ROBOTS = ["W","X","Y","Z"]
@@ -108,7 +109,20 @@ def buildRoad(board, player, playerList):
     board.printBoard()
     print()
     print("\tEnter the number of the first vertex it will connect to.")
-    vertex1 = input("\t")
+    if player.name in ROBOTS: 
+        vertex1 = randint(0,53)
+        vertex2 = randint(0,53)
+        while(board.canPlaceRoad(vertex1,vertex2,player.name)) == False:
+            vertex1 = randint(0,53)
+            vertex2 = randint(0,53)
+            if (board.canPlaceRoad(vertex1, vertex2, player.name)):
+                board.placeRoad(vertex1, vertex2, player, playerList)
+                board.printBoard()
+                player.resourceDict["wood"] -= 1
+                player.resourceDict["brick"] -= 1
+                return 
+    else: 
+        vertex1 = input("\t")
     if (not vertex1.isdigit()):
         print("\tInvalid number.")
         return
