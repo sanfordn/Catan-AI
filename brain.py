@@ -16,15 +16,14 @@ def botPlaceNewSettlement(currentBoard):
 
     return str(choice)
 
-def botPlaceCity(currentBoard,player):
-    while True:
-        choice = random.randint(0,53)
-        for row in range(len(currentBoard)):
-            for vertex in range(len(currentBoard[row])):
-                if currentBoard[row][vertex] == player.name: #means YOU own it
-                    return choice
-                else:
-                    choice = random.randint(0,53)
+def botPlaceCity(original,taken,player):
+    choice = random.randint(0,53)
+    for row in range(len(original)):
+        for vertex in range(len(original[row])):
+            if original[row][vertex] == choice:
+                if taken[row][vertex] == player.name+"S":
+                    taken[row][vertex] = player.name+"C"
+    return choice,taken
 
 
 #check to see if the number rolled is already taken
@@ -53,6 +52,33 @@ def botCommand(lc):
         buildchoices = ["-c","-s","-r",] #'-d' is for dev card
         randchoice = random.randint(0,2)
         action = buildchoices[randchoice]
-        return "-c"
+        return action
+
+
+
+
+def rankPlayers(playerList):
+    winList = []
+
+    for p in playerList:
+        winList.append([p.points, p.name])
+    winList.sort()
+    winList.reverse()
+    return winList
+
+def printVictory(winList,amount):
+    if amount == 2:
+        print("\t PLAYER " + winList[0][1] + " WINS WITH "      + str(winList[0][0])+ " POINTS.")
+        print("\t PLAYER " + winList[1][1] + " TOOK LAST WITH " + str(winList[1][0])+ " POINTS.")
+    if amount == 3:
+        print("\t PLAYER " + winList[0][1] + " WINS WITH "        + str(winList[0][0])+ " POINTS.")
+        print("\t PLAYER " + winList[1][1] + " TOOK SECOND WITH " + str(winList[1][0])+ " POINTS.")
+        print("\t PLAYER " + winList[2][1] + " TOOK LAST WITH "   + str(winList[2][0])+ " POINTS.")
+    if amount == 4:
+        print("\t PLAYER " + winList[0][1] + " WINS WITH "        + str(winList[0][0])+ " POINTS.")
+        print("\t PLAYER " + winList[1][1] + " TOOK SECOND WITH " + str(winList[1][0])+ " POINTS.")
+        print("\t PLAYER " + winList[2][1] + " TOOK THIRD WITH "  + str(winList[2][0])+ " POINTS.")
+        print("\t PLAYER " + winList[3][1] + " TOOK LAST WITH "   + str(winList[3][0])+ " POINTS.")
+
 
 

@@ -43,7 +43,7 @@ def buildCity(board, player):
     print("\tWhich settlement would you like to place it on? Pick the settlement number, starting from top left (and starting from 0).")
     
     if player.name in ROBOTS:
-        settlementNum = botPlaceCity(board.takenSpots, player)
+        settlementNum,board.takenSpots = botPlaceCity(board.hexRelationMatrix,board.takenSpots, player)
     else:
         settlementNum = input("\t")
         if (not settlementNum.isdigit()):

@@ -252,7 +252,7 @@ class Board:
         for row in range(len(self.takenSpots)):
             for vertex in range(len(self.takenSpots[row])):
                if self.takenSpots[row][vertex] == piece:
-                    self.takenSpots[row][vertex] = player
+                    self.takenSpots[row][vertex] = player+"S"
                     
     def getOpenRoads(self):
         #return the road list from above

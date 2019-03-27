@@ -37,7 +37,6 @@ if __name__ == "__main__":
     # Game Phase
     currentPlayerIndex = 0
     while(not playerList[currentPlayerIndex].victorious()):
-
         currentPlayer = playerList[currentPlayerIndex]
 
         board.printBoard()
@@ -168,5 +167,9 @@ if __name__ == "__main__":
         else:
             currentPlayerIndex = 0
 
-        #rando.think(boardstate,roadstate,handsize)
-        #Robot.think(^,           ^,             ^)
+    
+    
+    #Displays the win
+    winList = rankPlayers(playerList)
+    printVictory(winList,len(playerList))
+    
