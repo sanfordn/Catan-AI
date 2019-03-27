@@ -14,11 +14,11 @@ class Player:
     def __init__(self, name):
         self.name = name
         self.resourceDict = {
-            "wheat": 10,
-            "sheep": 10,
-            "brick": 10,
-            "ore": 10,
-            "wood": 10
+            "wheat": 100,
+            "sheep": 100,
+            "brick": 100,
+            "ore": 100,
+            "wood": 100
         }
         self.totalResources = 0
         self.devCardDict = {
@@ -51,6 +51,7 @@ class Player:
         print("\t\tVictory Points: " + str(self.devCardDict["Victory Point"]) + "\t\tRoad Building: " + str(self.devCardDict["Road Building"]))
         print("\tStatus:")
         print("\t\tLongest Road: " + str(self.longestRoad) + "\t\tLargest Army: " + str(self.largestArmy))
+        print("\t\tPoints: " + str(self.points))
 
 
     def numResources(self):

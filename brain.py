@@ -16,6 +16,17 @@ def botPlaceNewSettlement(currentBoard):
 
     return str(choice)
 
+def botPlaceCity(currentBoard,player):
+    while True:
+        choice = random.randint(0,53)
+        for row in range(len(currentBoard)):
+            for vertex in range(len(currentBoard[row])):
+                if currentBoard[row][vertex] == player.name: #means YOU own it
+                    return choice
+                else:
+                    choice = random.randint(0,53)
+
+
 #check to see if the number rolled is already taken
 def botThrowAway():
     choices = ['wheat','ore','brick','sheep','wood']
@@ -42,6 +53,6 @@ def botCommand(lc):
         buildchoices = ["-c","-s","-r",] #'-d' is for dev card
         randchoice = random.randint(0,2)
         action = buildchoices[randchoice]
-        return action
+        return "-c"
 
 

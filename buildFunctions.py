@@ -41,11 +41,15 @@ def buildCity(board, player):
     board.printBoard()
     print()
     print("\tWhich settlement would you like to place it on? Pick the settlement number, starting from top left (and starting from 0).")
-    settlementNum = input("\t")
-    if (not settlementNum.isdigit()):
-        print("\tInvalid number.")
-        return
-    settlementNum = int(settlementNum)
+    
+    if player.name in ROBOTS:
+        settlementNum = botPlaceCity(board.takenSpots, player)
+    else:
+        settlementNum = input("\t")
+        if (not settlementNum.isdigit()):
+            print("\tInvalid number.")
+            return
+        settlementNum = int(settlementNum)
     if (settlementNum < 0 or settlementNum >= len(settlementVertices)):
         print("\tInvalid number.")
         return
@@ -115,24 +119,24 @@ def buildRoad(board, player, playerList):
         while(board.canPlaceRoad(vertex1,vertex2,player.name)) == False:
             vertex1 = randint(0,53)
             vertex2 = randint(0,53)
-            if (board.canPlaceRoad(vertex1, vertex2, player.name)):
-                board.placeRoad(vertex1, vertex2, player, playerList)
-                board.printBoard()
-                player.resourceDict["wood"] -= 1
-                player.resourceDict["brick"] -= 1
-                return 
+        vertex1 = str(vertex1)
+        vertex2 = str(vertex2)
+        print("\tEnter the number of the first vertex it will connect to. " +vertex1)
+        print("\tEnter the number of the second vertex it will connect to. "+vertex2)
+
     else: 
         vertex1 = input("\t")
-    if (not vertex1.isdigit()):
-        print("\tInvalid number.")
-        return
+        if (not vertex1.isdigit()):
+            print("\tInvalid number.")
+            return
     vertex1 = int(vertex1)
 
-    print("\tEnter the number of the second vertex it will connect to.")
-    vertex2 = input("\t")
-    if (not vertex2.isdigit()):
-        print("\tInvalid number.")
-        return
+    if player.name not in ROBOTS:
+        print("\tEnter the number of the second vertex it will connect to.")
+        vertex2 = input("\t")
+        if (not vertex2.isdigit()):
+            print("\tInvalid number.")
+            return
     vertex2 = int(vertex2)
 
     # Attempt to place it
