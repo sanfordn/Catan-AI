@@ -14,11 +14,11 @@ class Player:
     def __init__(self, name):
         self.name = name
         self.resourceDict = {
-            "wheat": 0,
-            "sheep": 0,
-            "brick": 0,
-            "ore": 0,
-            "wood": 0
+            "wheat": 10,
+            "sheep": 10,
+            "brick": 10,
+            "ore": 10,
+            "wood": 10
         }
         self.totalResources = 0
         self.devCardDict = {
@@ -33,6 +33,7 @@ class Player:
         self.longestRoadLength = 0
         self.largestArmy = False
         self.longestRoad = False
+        self.lastcommand = ''
 
 
     def printHand(self):
