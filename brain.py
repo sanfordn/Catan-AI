@@ -61,6 +61,8 @@ def rankPlayers(playerList):
     winList = []
 
     for p in playerList:
+        if p.longestRoad == True:
+            p.points +=2
         winList.append([p.points, p.name])
     winList.sort()
     winList.reverse()
