@@ -12,11 +12,11 @@ def botPlaceNewSettlement(currentBoard):
         for vertex in range(len(currentBoard[row])):
             if currentBoard[row][vertex] != int: #means someones already there
                 choice = random.randint(0,53)
-    print(choice)
-
     return str(choice)
 
 def botPlaceCity(original,taken,player):
+
+    #make a loop so it keeps choosing until it gets a city
     choice = random.randint(0,53)
     for row in range(len(original)):
         for vertex in range(len(original[row])):

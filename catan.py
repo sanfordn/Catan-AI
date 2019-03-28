@@ -48,12 +48,12 @@ if __name__ == "__main__":
         if (roll == 7):
             pass
             # Player moves robber
-            #moveRobber(board, currentPlayer, playerList)
+           # moveRobber(board, currentPlayer, playerList)
             #for player in playerList:
-                #if player.numResources() > 7:
-                    #halveHand(player, player.numResources())
-        #else:
-            #handOutResources(board, playerList, roll)
+             #   if player.numResources() > 7:
+              #      halveHand(player, player.numResources())
+       # else:
+        #    handOutResources(board, playerList, roll)
 
         # Begin the action phase for the current player
         print("Player " + currentPlayer.name + ":")
