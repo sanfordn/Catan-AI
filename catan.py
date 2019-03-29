@@ -32,7 +32,7 @@ if __name__ == "__main__":
     board = createBoard()
 
     # Setup Phase
-    placeFirstSettlements(board, playerList) 
+    placeFirstSettlements(board, playerList)
 
     # Game Phase
     currentPlayerIndex = 0
@@ -46,14 +46,13 @@ if __name__ == "__main__":
         print()
         print("A " + str(roll) + " was rolled.")
         if (roll == 7):
-            pass
             # Player moves robber
-           # moveRobber(board, currentPlayer, playerList)
-            #for player in playerList:
-             #   if player.numResources() > 7:
-              #      halveHand(player, player.numResources())
-       # else:
-        #    handOutResources(board, playerList, roll)
+            moveRobber(board, currentPlayer, playerList)
+            for player in playerList:
+                if player.numResources() > 7:
+                   halveHand(player, player.numResources())
+        else:
+            handOutResources(board, playerList, roll)
 
         # Begin the action phase for the current player
         print("Player " + currentPlayer.name + ":")
@@ -96,7 +95,7 @@ if __name__ == "__main__":
                     print("\tInvalid command.")
             elif (command == "-b"):
                 print("\tWhat would you like to build? Type -c for a city, -s for a settlement, -r for a road, or -d for a development card.")
-                if currentPlayer.name in ROBOTS: 
+                if currentPlayer.name in ROBOTS:
                     toBuild = botCommand(currentPlayer.lastcommand)
                     currentPlayer.lastcommand = command
                     print("Bot("+currentPlayer.name+") does "+command)
@@ -160,16 +159,15 @@ if __name__ == "__main__":
                 currentPlayer.resourceDict["wheat"] = 1
             else:
                 print("Invalid command.")
-        
+
         # Switch the current player
         if (currentPlayerIndex != len(playerList) - 1):
             currentPlayerIndex += 1
         else:
             currentPlayerIndex = 0
 
-    
-    
+
+
     #Displays the win
     winList = rankPlayers(playerList)
     printVictory(winList,len(playerList))
-    

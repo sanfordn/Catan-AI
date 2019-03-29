@@ -253,7 +253,7 @@ class Board:
             for vertex in range(len(self.takenSpots[row])):
                if self.takenSpots[row][vertex] == piece:
                     self.takenSpots[row][vertex] = player+"S"
-                    
+
     def getOpenRoads(self):
         #return the road list from above
         return self.roads
@@ -299,7 +299,7 @@ class Board:
 
         self.vertices[vertex].empty = False
         self.vertices[vertex].playerName = player.name
-        player.points += 1              
+        player.points += 1
 
     def canPlaceRoad(self, vertex1, vertex2, playerName):
         '''

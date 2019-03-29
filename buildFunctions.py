@@ -41,7 +41,7 @@ def buildCity(board, player):
     board.printBoard()
     print()
     print("\tWhich settlement would you like to place it on? Pick the settlement number, starting from top left (and starting from 0).")
-    
+
     if player.name in ROBOTS:
         settlementNum,board.takenSpots = botPlaceCity(board.hexRelationMatrix,board.takenSpots, player)
     else:
@@ -113,7 +113,7 @@ def buildRoad(board, player, playerList):
     board.printBoard()
     print()
     print("\tEnter the number of the first vertex it will connect to.")
-    if player.name in ROBOTS: 
+    if player.name in ROBOTS:
         vertex1 = randint(0,53)
         vertex2 = randint(0,53)
         while(board.canPlaceRoad(vertex1,vertex2,player.name)) == False:
@@ -124,7 +124,7 @@ def buildRoad(board, player, playerList):
         print("\tEnter the number of the first vertex it will connect to. " +vertex1)
         print("\tEnter the number of the second vertex it will connect to. "+vertex2)
 
-    else: 
+    else:
         vertex1 = input("\t")
         if (not vertex1.isdigit()):
             print("\tInvalid number.")

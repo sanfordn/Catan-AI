@@ -58,10 +58,9 @@ def moveRobber(board, mover, playerList):
         #if(mover.isBot == True):
         if mover.name in ROBOTS:
             newHex = random.randint(0,18)
-            board.hexes[newHex].robber = True
-            notPlaced = False
+            while newHex == currentHex:
+                newHex = random.randint(0,18)
             print("Bot("+mover.name+") moved the robber to " + str(newHex))
-            newHex = botMoveRobber()
             board.hexes[newHex].robber = True
             notPlaced = False
         else:

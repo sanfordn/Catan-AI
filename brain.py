@@ -1,4 +1,4 @@
-import random 
+import random
 
 def botPlaceSettlement():
     return random.randint(0,53)
@@ -31,14 +31,14 @@ def botThrowAway():
     choices = ['wheat','ore','brick','sheep','wood']
     randchoice = random.randint(0,len(choices)-1)
     action = choices[randchoice]
-    return action 
+    return action
 
 
 def botStartTurn():
     choices = ["-b","-e"]
     randchoice =  random.randint(0,1)
     action = choices[randchoice]
-    return action 
+    return action
 
 def chooseToSteal(playerList):
     randchoice = random.randint(0,len(playerList)-1)
@@ -49,13 +49,10 @@ def chooseToSteal(playerList):
 def botCommand(lc):
      #what last command (lc) does it look to see if the action before was a -b or not
     if lc == "-b":
-        buildchoices = ["-c","-s","-r",] #'-d' is for dev card
-        randchoice = random.randint(0,2)
+        buildchoices = ["-c","-s","-r","-d"] #'-d' is for dev card
+        randchoice = random.randint(0,3)
         action = buildchoices[randchoice]
         return action
-
-
-
 
 def rankPlayers(playerList):
     winList = []
@@ -81,6 +78,3 @@ def printVictory(winList,amount):
         print("\t PLAYER " + winList[1][1] + " TOOK SECOND WITH " + str(winList[1][0])+ " POINTS.")
         print("\t PLAYER " + winList[2][1] + " TOOK THIRD WITH "  + str(winList[2][0])+ " POINTS.")
         print("\t PLAYER " + winList[3][1] + " TOOK LAST WITH "   + str(winList[3][0])+ " POINTS.")
-
-
-
