@@ -60,6 +60,8 @@ def rankPlayers(playerList):
     for p in playerList:
         if p.longestRoad == True:
             p.points +=2
+        if p.largestArmy == True:
+            p.points +=2 
         winList.append([p.points, p.name])
     winList.sort()
     winList.reverse()

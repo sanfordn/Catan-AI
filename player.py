@@ -16,9 +16,9 @@ class Player:
         self.resourceDict = {
             "wheat": 0,
             "sheep": 0,
-            "brick": 0,
+            "brick": 10,
             "ore": 0,
-            "wood": 0
+            "wood": 10
         }
         self.totalResources = 0
         self.devCardDict = {

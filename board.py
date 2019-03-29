@@ -313,7 +313,8 @@ class Board:
 
         # Checks if there is already a road there
         if (vertex1 < vertex2):
-            if self.roads[(vertex1, vertex2)] == "AA" or self.roads[(vertex1, vertex2)] == "BB" or self.roads[(vertex1, vertex2)] == "CC" or self.roads[(vertex1, vertex2)] == "DD":
+            if self.roads[(vertex1, vertex2)] == "AA" or self.roads[(vertex1, vertex2)] == "BB" or self.roads[(vertex1, vertex2)] == "CC" or self.roads[(vertex1, vertex2)] == "DD" or \
+            self.roads[(vertex1, vertex2)] == "WW" or self.roads[(vertex1, vertex2)] == "XX" or self.roads[(vertex1, vertex2)] == "YY" or self.roads[(vertex1, vertex2)] == "ZZ":
                 return False
 
         # Checks if there is a settlement of the same playerName at either
