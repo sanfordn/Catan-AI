@@ -61,9 +61,9 @@ def moveRobber(board, mover, playerList):
             board.hexes[newHex].robber = True
             notPlaced = False
             print("Bot("+mover.name+") moved the robber to " + str(newHex))
-            #newHex = botMoveRobber()
-            #board.hexes[newHex].robber = True
-            #notPlaced = False
+            newHex = botMoveRobber()
+            board.hexes[newHex].robber = True
+            notPlaced = False
         else:
             newHex = input("Player " + mover.name + ", which hex would you like to move the robber to? Select a number 0 - 18, starting from the top left hex and moving right. ")
             if (not newHex.isdigit()):
