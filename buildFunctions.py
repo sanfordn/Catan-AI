@@ -112,7 +112,6 @@ def buildRoad(board, player, playerList):
     # Get the two vertices the road should connect.
     board.printBoard()
     print()
-    print("\tEnter the number of the first vertex it will connect to.")
     if player.name in ROBOTS:
         vertex1 = randint(0,53)
         vertex2 = randint(0,53)
@@ -125,6 +124,7 @@ def buildRoad(board, player, playerList):
         print("\tEnter the number of the second vertex it will connect to. "+vertex2)
 
     else:
+        print("\tEnter the number of the first vertex it will connect to.")
         vertex1 = input("\t")
         if (not vertex1.isdigit()):
             print("\tInvalid number.")

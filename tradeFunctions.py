@@ -7,6 +7,10 @@ another player or trading with the bank.
 
 from board import *
 from player import Player
+from brain import botChooseResource
+
+HUMANS = ["A","B","C","D"]
+ROBOTS = ["W","X","Y","Z"]
 
 def bankTrade(board, player):
     '''
@@ -63,7 +67,12 @@ def bankTrade(board, player):
 
     # Get the resource to be traded in
     print("\tWhat resource are you trading in? Type in the full resource name.")
-    tradeIn = input("\t")
+    if player.name in ROBOTS:
+        tradeIn = botChooseResource()
+        print("\t"+tradeIn)
+    else:
+        tradeIn = input("\t")
+
     tradeQuantity = 0
     if (tradeIn == "wheat"):
         if player.resourceDict["wheat"] < wheatReq:
@@ -100,7 +109,11 @@ def bankTrade(board, player):
         return
 
     print("\tWhat resource are you trading " + tradeIn + " for?")
-    tradeFor = input("\t")
+    if player.name in ROBOTS:
+        tradeFor = botChooseResource()
+        print("\t"+tradeFor)
+    else:
+        tradeFor = input("\t")
     if not tradeFor in player.resourceDict:
         print("\tInvalid resource.")
     else:

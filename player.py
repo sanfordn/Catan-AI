@@ -16,9 +16,9 @@ class Player:
         self.resourceDict = {
             "wheat": 0,
             "sheep": 0,
-            "brick": 10,
-            "ore": 0,
-            "wood": 10
+            "brick": 0,
+            "ore":   0,
+            "wood":  0
         }
         self.totalResources = 0
         self.devCardDict = {
@@ -34,7 +34,7 @@ class Player:
         self.largestArmy = False
         self.longestRoad = False
         self.lastcommand = ''
-
+        self.usedDevCards = []
 
     def printHand(self):
         '''

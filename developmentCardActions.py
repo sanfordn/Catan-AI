@@ -7,6 +7,13 @@ This file holds the functions that will be used in playing development cards.
 from player import Player
 from board import *
 from gameFunctions import moveRobber
+from brain import *
+from random import randint
+
+
+HUMANS = ["A","B","C","D"]
+ROBOTS = ["W","X","Y","Z"]
+
 
 def useKnight(board, player, playerList):
     '''
@@ -49,7 +56,11 @@ def yearOfPlenty(player):
     notReceived = True
     while (notReceived):
         print("\tWhat's the first resource you would like? Please enter the full name of the resource.")
-        toGet = input("\t")
+        if player.name in ROBOTS:
+            toGet = botChooseResource()
+            print(toGet) #this is feedback for the CLI to show what bot chose
+        else:
+            toGet = input("\t")
         if (toGet in player.resourceDict):
             player.resourceDict[toGet] += 1
             notReceived = False
@@ -59,7 +70,11 @@ def yearOfPlenty(player):
     notReceived = True
     while (notReceived):
         print("\tWhat's the second resource you would like? Please enter the full name of the resource.")
-        toGet = input("\t")
+        if player.name in ROBOTS:
+            toGet = botChooseResource()
+            print(toGet)
+        else:
+            toGet = input("\t")
         if (toGet in player.resourceDict):
             player.resourceDict[toGet] += 1
             notReceived = False
@@ -79,7 +94,11 @@ def monopoly(playerList, player):
     notReceived = True
     while (notReceived):
         print("\tWhat resource would you like to take? Please enter the full name of the resource.")
-        toGet = input("\t")
+        if player.name  in ROBOTS:
+            toGet = botChooseResource()
+            print(toGet) #this is feedback for the CLI to show what bot chose
+        else:
+            toGet = input("\t")
         if (toGet in player.resourceDict):
             # Runs through all the players that are NOT the current one
             for i in playerList:
@@ -107,34 +126,47 @@ def roadBuilding(board, player, playerList):
         vertex2 = 0
 
         notPlaced = True
-        while (notPlaced):
-            notReceived = True
-            while (notReceived):
-                print("\tEnter the number of the first vertex your road will connect to.")
-                vertex1 = input("\t")
-                if (not vertex1.isdigit()):
-                    print("\tInvalid number.")
+        if player.name in ROBOTS:
+            vertex1 = randint(0,53)
+            vertex2 = randint(0,53)
+            while(board.canPlaceRoad(vertex1,vertex2,player.name)) == False:
+                vertex1 = randint(0,53)
+                vertex2 = randint(0,53)
+
+            print("\tEnter the number of the first vertex your road will connect to.")
+            print(str(vertex1))
+            print("\tEnter the number of the second vertex your road will connect to.")
+            print(str(vertex2))
+            board.placeRoad(vertex1, vertex2, player, playerList)
+            board.printBoard()
+        else:
+            while (notPlaced):
+                notReceived = True
+                while (notReceived):
+                    print("\tEnter the number of the first vertex your road will connect to.")
+                    vertex1 = input("\t")
+                    if (not vertex1.isdigit()):
+                        print("\tInvalid number.")
+                    else:
+                        vertex1 = int(vertex1)
+                        notReceived = False
+                        
+                notReceived = True
+                while (notReceived):
+                    print("\tEnter the number of the second vertex your road will connect to.")
+                    vertex2 = input("\t")
+                    if (not vertex2.isdigit()):
+                        print("\tInvalid number.")
+                    else:
+                        vertex2 = int(vertex2)
+                        notReceived = False
+
+                if (board.canPlaceRoad(vertex1, vertex2, player.name)):
+                    board.placeRoad(vertex1, vertex2, player, playerList)
+                    board.printBoard()
+                    notPlaced = False
                 else:
-                    vertex1 = int(vertex1)
-                    notReceived = False
-
-
-            notReceived = True
-            while (notReceived):
-                print("\tEnter the number of the second vertex your road will connect to.")
-                vertex2 = input("\t")
-                if (not vertex2.isdigit()):
-                    print("\tInvalid number.")
-                else:
-                    vertex2 = int(vertex2)
-                    notReceived = False
-
-            if (board.canPlaceRoad(vertex1, vertex2, player.name)):
-                board.placeRoad(vertex1, vertex2, player, playerList)
-                board.printBoard()
-                notPlaced = False
-            else:
-                print("\tIllegal road placement.")
+                    print("\tIllegal road placement.")
 
     # Removes the development card from their hand
     player.devCardDict["Road Building"] -= 1

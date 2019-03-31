@@ -73,6 +73,7 @@ if __name__ == "__main__":
             print("What would you like to do? Type a command, or -h for a list of commands.")
             if currentPlayer.name in ROBOTS:
                 command = botStartTurn()
+                currentPlayer.lastcommand = command
                 print("Bot("+currentPlayer.name+") does "+command)
             else:
                 command = input()
@@ -81,8 +82,12 @@ if __name__ == "__main__":
                 printHelp()
             elif (command == "-t"):
                 print("\tWho would you like to trade with? Enter the player's name or type \"bank\" if you would like to trade with the bank.")
-                trader = input("\t")
+                if currentPlayer.name in ROBOTS:
+                    trader = "Bank"
+                else:
+                    trader = input("\t")
                 trader = trader.capitalize()
+
                 if (trader == currentPlayer.name):
                     print("\tYou can't trade with yourself.")
                 elif (trader == "Bank"):
@@ -97,8 +102,8 @@ if __name__ == "__main__":
                 print("\tWhat would you like to build? Type -c for a city, -s for a settlement, -r for a road, or -d for a development card.")
                 if currentPlayer.name in ROBOTS:
                     toBuild = botCommand(currentPlayer.lastcommand)
-                    currentPlayer.lastcommand = command
-                    print("Bot("+currentPlayer.name+") does "+command)
+                    currentPlayer.lastcommand = ''
+                    print("Bot("+currentPlayer.name+") does "+ toBuild)
                 else:
                     toBuild = input("\t")
 
@@ -120,26 +125,36 @@ if __name__ == "__main__":
                 else:
                     usedDevCard = True
                     print("\tWhich development card would you like to use? Type -k to use a knight, -y to use Year of Plenty, -m to use monopoly, or -r to use road building.")
-                    toUse = input("\t")
+                    if currentPlayer.name in ROBOTS:
+                        toUse = botCommand(currentPlayer.lastcommand)
+                        currentPlayer.lastcommand = command
+                        print("Bot("+currentPlayer.name+") does "+command)
+                    else:
+                        toUse = input("\t")
                     if (toUse == "-k"):
                         # Ensures they have a knight, and that they didn't just get it this turn.
                         if (currentPlayer.devCardDict["Knight"] - obtainedDevCards["Knight"] - 1 >= 0):
                             useKnight(board, currentPlayer, playerList)
+                            currentPlayer.usedDevCards.append("Knight")
+                            print(currentPlayer.usedDevCards)
                         else:
                             print("\tYou can't use a knight.")
                     elif (toUse == "-y"):
                         if (currentPlayer.devCardDict["Year of Plenty"] - obtainedDevCards["Year of Plenty"] - 1 >= 0):
                             yearOfPlenty(currentPlayer)
+                            currentPlayer.usedDevCards.append("Year of Plenty")
                         else:
                             print("You can't use year of plenty.")
                     elif (toUse == "-m"):
                         if (currentPlayer.devCardDict["Monopoly"] - obtainedDevCards["Monopoly"] - 1 >= 0):
                             monopoly(playerList, currentPlayer)
+                            currentPlayer.usedDevCards.append("Monopoly")
                         else:
                             print("You can't use monopoly.")
                     elif (toUse == "-r"):
                         if (currentPlayer.devCardDict["Road Building"] - obtainedDevCards["Road Building"] - 1 >= 0):
                             roadBuilding(board, currentPlayer, playerList)
+                            currentPlayer.usedDevCards.append("Road Building")
                         else:
                             print("You can't use road building.")
                     else:
@@ -165,9 +180,6 @@ if __name__ == "__main__":
             currentPlayerIndex += 1
         else:
             currentPlayerIndex = 0
-
-
-
     #Displays the win
     winList = rankPlayers(playerList)
     printVictory(winList,len(playerList))
