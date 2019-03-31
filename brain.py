@@ -106,8 +106,6 @@ def rankPlayers(playerList):
     return winList
 
 def printVictory(winList,amount):
-print("")
-
     if amount == 2:
         print("\t PLAYER " + winList[0][1] + " WINS WITH      " + str(winList[0][0])+ " POINTS. " + winList[0][2])
         print("\t PLAYER " + winList[1][1] + " TOOK LAST WITH " + str(winList[1][0])+ "  POINTS. " + winList[1][2])
