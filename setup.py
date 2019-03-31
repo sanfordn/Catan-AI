@@ -146,10 +146,7 @@ def createBoard():
     hexes = []
     for i in hexCurlMatrix[curlIndex]:
         hexes.append(hexesOrdered[i])
-    print(len(hexes))
-
     return Board(vertices, hexes)
-
 
 def placeFirstSettlements(board, playerList):
     # Determine who goes first: rotation will still be A, B, C, D though
@@ -160,7 +157,7 @@ def placeFirstSettlements(board, playerList):
 
     for i in playerList:
         board.printBoard()
-
+        
         firstVertex = 0
         notPlaced = True
         while(notPlaced):
@@ -170,10 +167,9 @@ def placeFirstSettlements(board, playerList):
                     # Legal placement
                     board.placeSettlement(toPlace, i)
                     firstVertex = toPlace
-                    notPlaced = False
-                print("Bot("+i.name+") places it's first settlement at "+str(toPlace))
-                board.occupySpot(toPlace, i.name) #takes the spot
-                print(board.takenSpots)
+                    print("Bot("+i.name+") places it's first settlement at "+str(toPlace))
+                    board.occupySpot(toPlace, i.name) #takes the spot
+                    notPlaced = False               
             else:
                 toPlace = input("Player " + i.name + ", select the vertex where you want to place your first settlement: ")
                 if toPlace.isdigit():
@@ -188,8 +184,6 @@ def placeFirstSettlements(board, playerList):
                         print("Please enter a valid vertex.")
                 else:
                     print("Please enter a valid vertex.")
-                
-
         board.printBoard()
 
         #building first roads
@@ -200,8 +194,8 @@ def placeFirstSettlements(board, playerList):
                 if (board.canPlaceRoad(firstVertex, toPlace, i.name)):
                     # Legal placement
                     board.placeRoad(firstVertex, toPlace, i, playerList)
-                    notPlaced = False
-                print("Bot("+i.name+") places a road at " + str(toPlace))
+                    print("Bot("+i.name+") places a road at " + str(toPlace))
+                    notPlaced = False                    
             else:
                 toPlace = input("Your road will start at vertex " + str(firstVertex) + ". Which vertex do you want it to link to? ")
                 if toPlace.isdigit():
@@ -234,9 +228,10 @@ def placeFirstSettlements(board, playerList):
                     board.placeSettlement(toPlace, playerList[i])
                     firstVertex = toPlace
                     board.occupySpot(toPlace,playerList[i].name)
-                    notPlaced = False
+                    print("Bot("+playerList[i].name+") places its second settlement at " + str(toPlace))
                     secondSettlements.append((playerList[i], toPlace))
-                print("Bot("+playerList[i].name+") places its second settlement at " + str(toPlace))
+                    notPlaced = False
+                
             else:
                 toPlace = input("Player " + playerList[i].name + ", select the vertex where you want to place your second settlement: ")
                 if toPlace.isdigit():
@@ -266,9 +261,8 @@ def placeFirstSettlements(board, playerList):
                     if (board.canPlaceRoad(firstVertex, toPlace, playerList[i].name)):
                         # Legal placement
                         board.placeRoad(firstVertex, toPlace, playerList[i], playerList)
+                        print("Bot("+playerList[i].name+") places a road at " + str(toPlace))
                         notPlaced = False
-                print("Bot("+playerList[i].name+") places a road at " + str(toPlace))
-
             else:
                 # Get road
                 toPlace = input("Your road will start at vertex " + str(firstVertex) + ". Which vertex do you want it to link to? ")
@@ -283,9 +277,6 @@ def placeFirstSettlements(board, playerList):
                         print("Please enter a valid vertex.")
                 else:
                     print("Please enter a valid vertex.")
-
-
-    print(board.takenSpots)
 
     # Hand out first resource
     for i in range(0, 19):
