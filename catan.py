@@ -46,7 +46,6 @@ if __name__ == "__main__":
         print()
         print("A " + str(roll) + " was rolled.")
         if (roll == 7):
-            pass
             # Player moves robber
             moveRobber(board, currentPlayer, playerList)
             for player in playerList:

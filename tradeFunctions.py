@@ -30,7 +30,6 @@ def bankTrade(board, player):
     # Check for ports
     for vertex in board.vertices:
         if vertex.playerName == player.name and vertex.port != None:
-            print("yeet")
             # There is a port
             if vertex.port.number == 3:
                 # This is a wild card, so change the default ones
@@ -57,8 +56,6 @@ def bankTrade(board, player):
                 if (vertex.port.resourceType == "wood"):
                     woodReq = 2
 
-
-    # NEED TO IMPLEMENT PORTS: WILL STILL KEEP FORMAT THOUGH
     print("\t" + str(wheatReq) + " wheat -> 1 ?")
     print("\t" + str(sheepReq) + " sheep -> 1 ?")
     print("\t" + str(brickReq) + " brick -> 1 ?")
