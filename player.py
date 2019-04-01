@@ -34,6 +34,8 @@ class Player:
         self.largestArmy = False
         self.longestRoad = False
         self.lastcommand = ''
+        self.move = ''
+        self.moveList = []
         self.usedDevCards = []
 
     def printHand(self):

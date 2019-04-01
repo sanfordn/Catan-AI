@@ -12,6 +12,7 @@ from buildFunctions import *
 from gameFunctions import *
 from tradeFunctions import *
 from player import Player
+from logger import *
 
 HUMANS = ["A","B","C","D"]
 ROBOTS = ["W","X","Y","Z"]
@@ -74,6 +75,7 @@ if __name__ == "__main__":
             if currentPlayer.name in ROBOTS:
                 command = botStartTurn()
                 currentPlayer.lastcommand = command
+                currentPlayer.move = command
                 print("Bot("+currentPlayer.name+") does "+command)
             else:
                 command = input()
@@ -86,7 +88,7 @@ if __name__ == "__main__":
                     trader = "Bank"
                 else:
                     trader = input("\t")
-                trader = trader.capitalize()
+                    trader = trader.capitalize()
 
                 if (trader == currentPlayer.name):
                     print("\tYou can't trade with yourself.")
@@ -103,6 +105,7 @@ if __name__ == "__main__":
                 if currentPlayer.name in ROBOTS:
                     toBuild = botCommand(currentPlayer.lastcommand)
                     currentPlayer.lastcommand = ''
+                    currentPlayer.move = toBuild
                     print("Bot("+currentPlayer.name+") does "+ toBuild)
                 else:
                     toBuild = input("\t")
@@ -127,8 +130,9 @@ if __name__ == "__main__":
                     print("\tWhich development card would you like to use? Type -k to use a knight, -y to use Year of Plenty, -m to use monopoly, or -r to use road building.")
                     if currentPlayer.name in ROBOTS:
                         toUse = botCommand(currentPlayer.lastcommand)
-                        currentPlayer.lastcommand = command
-                        print("Bot("+currentPlayer.name+") does "+command)
+                        currentPlayer.lastcommand = toUse
+                        currentPlayer.move = toUse
+                        print("Bot("+currentPlayer.name+") does "+toUse)
                     else:
                         toUse = input("\t")
                     if (toUse == "-k"):
@@ -168,13 +172,13 @@ if __name__ == "__main__":
                 obtainedDevCards["Road Building"] = 0
                 obtainedDevCards["Victory Point"] = 0
                 notDone = False
-            elif (command == "dev"):
-                currentPlayer.resourceDict["sheep"] = 1
-                currentPlayer.resourceDict["ore"] = 1
-                currentPlayer.resourceDict["wheat"] = 1
+            #elif (command == "dev"):
+            #    currentPlayer.move = "dev"
+            #    currentPlayer.resourceDict["sheep"] = 1
+            #    currentPlayer.resourceDict["ore"] = 1
+            #    currentPlayer.resourceDict["wheat"] = 1
             else:
                 print("Invalid command.")
-
         # Switch the current player
         if (currentPlayerIndex != len(playerList) - 1):
             currentPlayerIndex += 1

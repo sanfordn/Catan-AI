@@ -65,7 +65,7 @@ def botCommand(lc):
         return action
 
 def tallyUsedDevCards(alist):
-    #tallies the total number of develpoment cards a player used 
+    #tallies the total number of develpoment cards a player used
     totalDict = {
             "Knight": 0,
             "Year of Plenty": 0,
@@ -90,7 +90,7 @@ def tallyUsedDevCards(alist):
     finalString = "They used " + knights + monopoly + yearOfPlenty + roads + victoryPoints
 
     return finalString
-        
+
 def rankPlayers(playerList):
     winList = []
     for p in playerList:
@@ -98,7 +98,7 @@ def rankPlayers(playerList):
             p.points +=2
         if p.largestArmy == True:
             p.points +=2
-        totalDevCards = tallyUsedDevCards(p.usedDevCards) 
+        totalDevCards = tallyUsedDevCards(p.usedDevCards)
         p.points += p.devCardDict["Victory Point"]
         winList.append([p.points, p.name, totalDevCards])
     winList.sort()
