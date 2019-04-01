@@ -87,8 +87,10 @@ def buildSettlement(board, player):
     # Determines if you can place a settlement on the inputted vertex. False
     # means that this isn't the first settlement of the game.
     if (board.canPlaceSettlement(vertex, player.name, False)):
+        print("Bot("+player.name+") places a new settlement at "+ str(vertex))
         board.placeSettlement(vertex, player)
         board.printBoard()
+
 
         player.resourceDict["wheat"] -= 1
         player.resourceDict["wood"] -= 1

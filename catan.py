@@ -46,11 +46,12 @@ if __name__ == "__main__":
         print()
         print("A " + str(roll) + " was rolled.")
         if (roll == 7):
+            pass
             # Player moves robber
-            moveRobber(board, currentPlayer, playerList)
-            for player in playerList:
-                if player.numResources() > 7:
-                   halveHand(player, player.numResources())
+            #moveRobber(board, currentPlayer, playerList)
+            #for player in playerList:
+             #   if player.numResources() > 7:
+              #     halveHand(player, player.numResources())
         else:
             handOutResources(board, playerList, roll)
 
