@@ -300,13 +300,13 @@ class Board:
         self.vertices[vertex].empty = False
         self.vertices[vertex].playerName = player.name
         player.points += 1
+        player.settlements -= 1
 
     def canPlaceRoad(self, vertex1, vertex2, playerName):
         '''
         Determines if a road can be placed between the two vertices given the
         user.
         '''
-
         # Checks if the vertices are next to each other
         if not vertex2 in self.vertexRelationMatrix[vertex1]:
             return False
@@ -315,12 +315,18 @@ class Board:
         if self.vertices[vertex1].empty == False:
             if (self.vertices[vertex1].playerName != playerName):
                 return False
-                
-                
+
+
         # Checks if there is already a road there
         if (vertex1 < vertex2):
             if self.roads[(vertex1, vertex2)] == "AA" or self.roads[(vertex1, vertex2)] == "BB" or self.roads[(vertex1, vertex2)] == "CC" or self.roads[(vertex1, vertex2)] == "DD" or \
             self.roads[(vertex1, vertex2)] == "WW" or self.roads[(vertex1, vertex2)] == "XX" or self.roads[(vertex1, vertex2)] == "YY" or self.roads[(vertex1, vertex2)] == "ZZ":
+                return False
+
+        #Bug that fixes above code where if a road was placed at 13 then 8, someone could place a road at 8 then 13, this fixes it.
+        if (vertex1 > vertex2):
+            if self.roads[(vertex2, vertex1)] == "AA" or self.roads[(vertex2, vertex1)] == "BB" or self.roads[(vertex2, vertex1)] == "CC" or self.roads[(vertex2, vertex1)] == "DD" or \
+            self.roads[(vertex2, vertex1)] == "WW" or self.roads[(vertex2, vertex1)] == "XX" or self.roads[(vertex2, vertex1)] == "YY" or self.roads[(vertex2, vertex1)] == "ZZ":
                 return False
 
         # Checks if there is a settlement of the same playerName at either
@@ -359,7 +365,7 @@ class Board:
             self.roads[(vertex1, vertex2)] = player.name + player.name
         else:
             self.roads[(vertex2, vertex1)] = player.name + player.name
-
+        player.roads -=1
         self.assignLongestRoad(player, playerList)
         for i in playerList:
             print(i.longestRoad)

@@ -26,7 +26,6 @@ def buildCity(board, player):
     if (player.resourceDict["wheat"] < 2 or player.resourceDict["ore"] < 3):
         print("\tYou don't have the necessary resources to build a city.")
         return
-
     settlementVertices = []
     for i in range(0, len(board.vertices)):
         if (board.vertices[i].playerName == player.name and board.vertices[i].city == False):
@@ -58,6 +57,7 @@ def buildCity(board, player):
     player.resourceDict["wheat"] -= 2
     player.resourceDict["ore"] -= 3
     player.points += 1
+    player.cities -=1
     board.printBoard()
 
 
@@ -90,8 +90,7 @@ def buildSettlement(board, player):
         print("Bot("+player.name+") places a new settlement at "+ str(vertex))
         board.placeSettlement(vertex, player)
         board.printBoard()
-
-
+        player.settlements -=1
         player.resourceDict["wheat"] -= 1
         player.resourceDict["wood"] -= 1
         player.resourceDict["sheep"] -= 1
@@ -145,7 +144,6 @@ def buildRoad(board, player, playerList):
     if (board.canPlaceRoad(vertex1, vertex2, player.name)):
         board.placeRoad(vertex1, vertex2, player, playerList)
         board.printBoard()
-
         player.resourceDict["wood"] -= 1
         player.resourceDict["brick"] -= 1
     else:

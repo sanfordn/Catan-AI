@@ -51,7 +51,8 @@ if __name__ == "__main__":
             moveRobber(board, currentPlayer, playerList)
             for player in playerList:
                 if player.numResources() > 7:
-                   halveHand(player, player.numResources())
+                   #halveHand(player, player.numResources())
+                   pass
         else:
             handOutResources(board, playerList, roll)
 
@@ -111,11 +112,22 @@ if __name__ == "__main__":
                     toBuild = input("\t")
 
                 if (toBuild == "-c"):
-                    buildCity(board, currentPlayer)
+                    if currentPlayer.cities < 1:
+                        print("no more cities")
+                    else:
+                        buildCity(board, currentPlayer)
+
                 elif (toBuild == "-s"):
-                    buildSettlement(board, currentPlayer)
+                    if currentPlayer.settlements < 1:
+                        print("no more settlements")
+                        exit()
+                    else:
+                        buildSettlement(board, currentPlayer)
                 elif (toBuild == "-r"):
-                    buildRoad(board, currentPlayer, playerList)
+                    if currentPlayer.roads < 1:
+                        print("no more roads")
+                    else:
+                        buildRoad(board, currentPlayer, playerList)
                 elif (toBuild == "-d"):
                     result = buildDevCard(currentPlayer, devCardDeck)
                     if (result != None):

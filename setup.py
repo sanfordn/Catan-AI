@@ -157,7 +157,7 @@ def placeFirstSettlements(board, playerList):
 
     for i in playerList:
         board.printBoard()
-        
+
         firstVertex = 0
         notPlaced = True
         while(notPlaced):
@@ -169,7 +169,7 @@ def placeFirstSettlements(board, playerList):
                     firstVertex = toPlace
                     print("Bot("+i.name+") places it's first settlement at "+str(toPlace))
                     board.occupySpot(toPlace, i.name) #takes the spot
-                    notPlaced = False               
+                    notPlaced = False
             else:
                 toPlace = input("Player " + i.name + ", select the vertex where you want to place your first settlement: ")
                 if toPlace.isdigit():
@@ -189,13 +189,13 @@ def placeFirstSettlements(board, playerList):
         #building first roads
         notPlaced = True
         while(notPlaced):
-            if i.name in ROBOTS: 
+            if i.name in ROBOTS:
                 toPlace = botPlaceRoad()
                 if (board.canPlaceRoad(firstVertex, toPlace, i.name)):
                     # Legal placement
                     board.placeRoad(firstVertex, toPlace, i, playerList)
                     print("Bot("+i.name+") places a road at " + str(toPlace))
-                    notPlaced = False                    
+                    notPlaced = False
             else:
                 toPlace = input("Your road will start at vertex " + str(firstVertex) + ". Which vertex do you want it to link to? ")
                 if toPlace.isdigit():
@@ -209,7 +209,7 @@ def placeFirstSettlements(board, playerList):
                         print("Please enter a valid vertex.")
                 else:
                     print("Please enter a valid vertex.")
-           
+
 
     # To find out what initial resouces to the players should receive
     secondSettlements = []
@@ -231,7 +231,7 @@ def placeFirstSettlements(board, playerList):
                     print("Bot("+playerList[i].name+") places its second settlement at " + str(toPlace))
                     secondSettlements.append((playerList[i], toPlace))
                     notPlaced = False
-                
+
             else:
                 toPlace = input("Player " + playerList[i].name + ", select the vertex where you want to place your second settlement: ")
                 if toPlace.isdigit():
