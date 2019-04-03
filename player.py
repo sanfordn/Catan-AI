@@ -17,7 +17,7 @@ class Player:
             "wheat": 110,
             "sheep": 110,
             "brick": 110,
-            "ore":   0,
+            "ore":   110,
             "wood":  110
         }
         self.totalResources = 0

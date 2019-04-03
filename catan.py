@@ -120,7 +120,6 @@ if __name__ == "__main__":
                 elif (toBuild == "-s"):
                     if currentPlayer.settlements < 1:
                         print("no more settlements")
-                        exit()
                     else:
                         buildSettlement(board, currentPlayer)
                 elif (toBuild == "-r"):

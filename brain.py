@@ -38,7 +38,7 @@ def botStartTurn():
     choices = ["-b","-e","-d","-t"]
     randchoice =  random.randint(0,3)
     action = choices[randchoice]
-    return action
+    return '-b'
 
 def chooseToSteal(playerList):
     randchoice = random.randint(0,len(playerList)-1)
@@ -56,9 +56,9 @@ def botCommand(lc):
      #what last command (lc) does it look to see if the action before was a -b or not
     if lc == "-b": #build command
         #buildchoices = ["-c","-s","-r","-d"] #'-d' is for dev card
-        buildchoices = ["-s","-r"]
         #randchoice = random.randint(0,3)
-        randchoice = random.randint(0,1)
+        buildchoices = ["-s", "-r", "-c"]
+        randchoice = random.randint(0,2)
         action = buildchoices[randchoice]
         return action
     if lc == "-d":

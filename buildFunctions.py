@@ -90,7 +90,6 @@ def buildSettlement(board, player):
         print("Bot("+player.name+") places a new settlement at "+ str(vertex))
         board.placeSettlement(vertex, player)
         board.printBoard()
-        player.settlements -=1
         player.resourceDict["wheat"] -= 1
         player.resourceDict["wood"] -= 1
         player.resourceDict["sheep"] -= 1
