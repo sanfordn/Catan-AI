@@ -52,10 +52,13 @@ def botChooseResource():
 
 
 def botCommand(lc):
+    #in our NN when our roads are out remove the road building, same thing with settlements and dev cards.
      #what last command (lc) does it look to see if the action before was a -b or not
     if lc == "-b": #build command
-        buildchoices = ["-c","-s","-r","-d"] #'-d' is for dev card
-        randchoice = random.randint(0,3)
+        #buildchoices = ["-c","-s","-r","-d"] #'-d' is for dev card
+        buildchoices = ["-s","-r"]
+        #randchoice = random.randint(0,3)
+        randchoice = random.randint(0,1)
         action = buildchoices[randchoice]
         return action
     if lc == "-d":
