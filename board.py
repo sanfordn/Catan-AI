@@ -66,6 +66,11 @@ class Board:
         # List of hexes
         self.hexes = hexes
 
+        # List of humans robots and random robots
+        self.humans  = ["A","B","C","D"]
+        self.rando   = ["W","X","Y","Z"]
+        self.robots  = ["1","2","3","4"]
+
         # Roads is a dictionary: Key is a tuple of the vertices, value is name
         self.roads = {
             (0, 3): "//",
@@ -320,13 +325,15 @@ class Board:
         # Checks if there is already a road there
         if (vertex1 < vertex2):
             if self.roads[(vertex1, vertex2)] == "AA" or self.roads[(vertex1, vertex2)] == "BB" or self.roads[(vertex1, vertex2)] == "CC" or self.roads[(vertex1, vertex2)] == "DD" or \
-            self.roads[(vertex1, vertex2)] == "WW" or self.roads[(vertex1, vertex2)] == "XX" or self.roads[(vertex1, vertex2)] == "YY" or self.roads[(vertex1, vertex2)] == "ZZ":
+            self.roads[(vertex1, vertex2)] == "WW" or self.roads[(vertex1, vertex2)] == "XX" or self.roads[(vertex1, vertex2)] == "YY" or self.roads[(vertex1, vertex2)] == "ZZ" or \
+            self.roads[(vertex1, vertex2)] == "11" or self.roads[(vertex1, vertex2)] == "22" or self.roads[(vertex1, vertex2)] == "33" or self.roads[(vertex1, vertex2)] == "44":
                 return False
 
         #Bug that fixes above code where if a road was placed at 13 then 8, someone could place a road at 8 then 13, this fixes it.
         if (vertex1 > vertex2):
             if self.roads[(vertex2, vertex1)] == "AA" or self.roads[(vertex2, vertex1)] == "BB" or self.roads[(vertex2, vertex1)] == "CC" or self.roads[(vertex2, vertex1)] == "DD" or \
-            self.roads[(vertex2, vertex1)] == "WW" or self.roads[(vertex2, vertex1)] == "XX" or self.roads[(vertex2, vertex1)] == "YY" or self.roads[(vertex2, vertex1)] == "ZZ":
+            self.roads[(vertex2, vertex1)] == "WW" or self.roads[(vertex2, vertex1)] == "XX" or self.roads[(vertex2, vertex1)] == "YY" or self.roads[(vertex2, vertex1)] == "ZZ" or \
+            self.roads[(vertex2, vertex1)] == "11" or self.roads[(vertex2, vertex1)] == "22" or self.roads[(vertex2, vertex1)] == "33" or self.roads[(vertex2, vertex1)] == "44":
                 return False
 
         # Checks if there is a settlement of the same playerName at either

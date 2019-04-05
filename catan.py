@@ -14,9 +14,6 @@ from tradeFunctions import *
 from player import Player
 from logger import *
 
-HUMANS = ["A","B","C","D"]
-ROBOTS = ["W","X","Y","Z"]
-
 def printHelp():
     '''
     Outputs a list of commands that a user can call during their turn.
@@ -26,6 +23,61 @@ def printHelp():
     print("\t-b is for building.")
     print("\t-d is for using a development card.")
     print("\t-e is for ending your turn.")
+
+def tallyUsedDevCards(alist):
+        #tallies the total number of develpoment cards a player used
+        totalDict = {
+                "Knight": 0,
+                "Year of Plenty": 0,
+                "Monopoly": 0,
+                "Victory Point": 0,
+                "Road Building": 0
+            }
+        finalString = ""
+        tmp = []
+        for card in alist:
+            totalDict[card] +=1
+
+        for amount in totalDict:
+            tmp.append(totalDict[amount])
+
+        knights      = str(tmp[0])+ "  Knights, "
+        monopoly     = str(tmp[1])+ "  Year of Plenty, "
+        yearOfPlenty = str(tmp[2])+ "  Monopoly, "
+        roads        = str(tmp[4])+ "  Road Building. "
+        victoryPoints = "They also had " + str(tmp[3]) + "  points from Victory Point cards."
+
+        finalString = "They used " + knights + monopoly + yearOfPlenty + roads + victoryPoints
+
+        return finalString
+
+def rankPlayers(playerList):
+        winList = []
+        for p in playerList:
+            if p.longestRoad == True:
+                p.points +=2
+            if p.largestArmy == True:
+                p.points +=2
+            totalDevCards = tallyUsedDevCards(p.usedDevCards)
+            p.points += p.devCardDict["Victory Point"]
+            winList.append([p.points, p.name, totalDevCards])
+        winList.sort()
+        winList.reverse()
+        return winList
+
+def printVictory(winList,amount):
+        if amount == 2:
+            print("\t PLAYER " + winList[0][1] + " WINS WITH      " + str(winList[0][0])+ " POINTS. " + winList[0][2])
+            print("\t PLAYER " + winList[1][1] + " TOOK LAST WITH " + str(winList[1][0])+ "  POINTS. " + winList[1][2])
+        if amount == 3:
+            print("\t PLAYER " + winList[0][1] + " WINS WITH        " + str(winList[0][0])+ " POINTS. "+ winList[0][2])
+            print("\t PLAYER " + winList[1][1] + " TOOK SECOND WITH " + str(winList[1][0])+ "  POINTS. "+ winList[1][2])
+            print("\t PLAYER " + winList[2][1] + " TOOK LAST WITH   " + str(winList[2][0])+ "  POINTS. "+ winList[2][2])
+        if amount == 4:
+            print("\t PLAYER " + winList[0][1] + " WINS WITH        " + str(winList[0][0])+ " POINTS. "+ winList[0][2])
+            print("\t PLAYER " + winList[1][1] + " TOOK SECOND WITH " + str(winList[1][0])+ "  POINTS. "+ winList[1][2])
+            print("\t PLAYER " + winList[2][1] + " TOOK THIRD WITH  " + str(winList[2][0])+ "  POINTS. "+ winList[2][2])
+            print("\t PLAYER " + winList[3][1] + " TOOK LAST WITH   " + str(winList[3][0])+ "  POINTS. "+ winList[3][2])
 
 if __name__ == "__main__":
     playerList = initializePlayers()
@@ -51,14 +103,19 @@ if __name__ == "__main__":
             moveRobber(board, currentPlayer, playerList)
             for player in playerList:
                 if player.numResources() > 7:
-                   #halveHand(player, player.numResources())
-                   pass
+                   halveHand(player, player.numResources(),board)
         else:
             handOutResources(board, playerList, roll)
 
         # Begin the action phase for the current player
-        print("Player " + currentPlayer.name + ":")
+        if currentPlayer.name in board.humans:
+            print("Player " + currentPlayer.name + ":")
+        elif currentPlayer.name in board.rando:
+            print("Rando " + currentPlayer.name + ":")
+        else:
+            print("Robot " + currentPlayer.name + ":")
         currentPlayer.printHand()
+
         # Keep track of what development cards the player obtains in their turn. They can't immediately use them.
         obtainedDevCards = {
             "Knight": 0,
@@ -73,8 +130,13 @@ if __name__ == "__main__":
         while(notDone):
             print()
             print("What would you like to do? Type a command, or -h for a list of commands.")
-            if currentPlayer.name in ROBOTS:
-                command = botStartTurn()
+            if currentPlayer.name in board.robots:   #Robot
+                command = currentPlayer.botStartTurn()
+                currentPlayer.lastcommand = command
+                currentPlayer.move = command
+                print("Robot("+currentPlayer.name+") does "+command)
+            elif currentPlayer.name in board.rando:  #Rando
+                command = currentPlayer.botStartTurn()
                 currentPlayer.lastcommand = command
                 currentPlayer.move = command
                 print("Bot("+currentPlayer.name+") does "+command)
@@ -85,7 +147,7 @@ if __name__ == "__main__":
                 printHelp()
             elif (command == "-t"):
                 print("\tWho would you like to trade with? Enter the player's name or type \"bank\" if you would like to trade with the bank.")
-                if currentPlayer.name in ROBOTS:
+                if currentPlayer.name in board.rando or currentPlayer.name in board.robots:
                     trader = "Bank"
                 else:
                     trader = input("\t")
@@ -103,8 +165,13 @@ if __name__ == "__main__":
                     print("\tInvalid command.")
             elif (command == "-b"):
                 print("\tWhat would you like to build? Type -c for a city, -s for a settlement, -r for a road, or -d for a development card.")
-                if currentPlayer.name in ROBOTS:
-                    toBuild = botCommand(currentPlayer.lastcommand)
+                if currentPlayer.name in board.robots:
+                    toBuild = currentPlayer.botCommand(currentPlayer.lastcommand)
+                    currentPlayer.lastcommand = ''
+                    currentPlayer.move = toBuild
+                    print("Rando("+currentPlayer.name+") does "+ toBuild)
+                elif currentPlayer.name in board.rando:
+                    toBuild = currentPlayer.botCommand(currentPlayer.lastcommand)
                     currentPlayer.lastcommand = ''
                     currentPlayer.move = toBuild
                     print("Bot("+currentPlayer.name+") does "+ toBuild)
@@ -139,8 +206,13 @@ if __name__ == "__main__":
                 else:
                     usedDevCard = True
                     print("\tWhich development card would you like to use? Type -k to use a knight, -y to use Year of Plenty, -m to use monopoly, or -r to use road building.")
-                    if currentPlayer.name in ROBOTS:
-                        toUse = botCommand(currentPlayer.lastcommand)
+                    if currentPlayer.name in board.robots:
+                        toUse = currentPlayer.botCommand(currentPlayer.lastcommand)
+                        currentPlayer.lastcommand = toUse
+                        currentPlayer.move = toUse
+                        print("Robot("+currentPlayer.name+") does "+toUse)
+                    elif currentPlayer.name in board.rando:
+                        toUse = currentPlayer.botCommand(currentPlayer.lastcommand)
                         currentPlayer.lastcommand = toUse
                         currentPlayer.move = toUse
                         print("Bot("+currentPlayer.name+") does "+toUse)

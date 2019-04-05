@@ -1,4 +1,32 @@
-from subprocess import Popen, PIPE, STDOUT
-p = Popen(['python3', 'catan.py'], stdout=PIPE, stdin=PIPE, stderr=PIPE)
-stdout_data = p.communicate(input=input("how many players: ").encode('utf-8'))[0]
-print(stdout_data.decode('utf-8'))
+from player import Player
+
+class Robot(Player):
+    def __init__(self, name):
+        super().__init__(name)
+
+    def botPlaceSettlement(self):
+        pass
+
+    def botPlaceRoad(self):
+        pass
+
+    def botPlaceNewSettlement(self, currentBoard):
+        pass
+
+    def botPlaceCity(self, original, taken, player):
+        pass
+
+    def botThrowAway(self):
+        pass
+
+    def botStartTurn(self):
+        pass
+
+    def chooseToSteal(self, playerList):
+        pass
+
+    def botChooseResource(self):
+        pass
+
+    def botCommand(self, lc):
+        pass

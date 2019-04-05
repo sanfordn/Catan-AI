@@ -12,12 +12,11 @@ game. The setup phase consists of:
 import random
 from random import shuffle
 from player import Player
+from rando import Rando
+from robot import Robot
 from board import *
 from brain import *
 
-
-HUMANS = ["A","B","C","D"]
-ROBOTS = ["W","X","Y","Z"]
 
 def initializePlayers():
     '''
@@ -47,13 +46,13 @@ def initializePlayers():
         robots = input("How many bots are playing? You can have up to " + str(avaliableBots)+ ": ")
 
     if (int(robots) >= 1):
-        playerList.append(Player("W"))
+        playerList.append(Rando("W"))
     if (int(robots) >= 2):
-        playerList.append(Player("X"))
+        playerList.append(Rando("X"))
     if (int(robots) >= 3):
-        playerList.append(Player("Y"))
+        playerList.append(Rando("Y"))
     if (int(robots) >= 4):
-        playerList.append(Player("Z"))
+        playerList.append(Rando("Z"))
 
     return playerList
 
@@ -161,8 +160,8 @@ def placeFirstSettlements(board, playerList):
         firstVertex = 0
         notPlaced = True
         while(notPlaced):
-            if i.name in ROBOTS:
-                toPlace = botPlaceSettlement()
+            if i.name in board.rando or i.name in board.robots:
+                toPlace = i.botPlaceSettlement()
                 if (board.canPlaceSettlement(toPlace, i.name, True)):
                     # Legal placement
                     board.placeSettlement(toPlace, i)
@@ -189,8 +188,8 @@ def placeFirstSettlements(board, playerList):
         #building first roads
         notPlaced = True
         while(notPlaced):
-            if i.name in ROBOTS:
-                toPlace = botPlaceRoad()
+            if i.name in board.rando or i.name in board.robots:
+                toPlace = i.botPlaceRoad()
                 if (board.canPlaceRoad(firstVertex, toPlace, i.name)):
                     # Legal placement
                     board.placeRoad(firstVertex, toPlace, i, playerList)
@@ -221,8 +220,8 @@ def placeFirstSettlements(board, playerList):
         firtVertex = 0
         notPlaced = True
         while(notPlaced):
-            if playerList[i].name in ROBOTS:
-                toPlace = botPlaceSettlement()
+            if playerList[i].name in board.rando or playerList[i].name in board.robots:
+                toPlace = playerList[i].botPlaceSettlement()
                 if (board.canPlaceSettlement(toPlace, playerList[i].name, True)):
                     # Legal placement
                     board.placeSettlement(toPlace, playerList[i])
@@ -253,11 +252,11 @@ def placeFirstSettlements(board, playerList):
 
         notPlaced = True
         while(notPlaced):
-            if playerList[i].name in ROBOTS:
+            if playerList[i].name in board.rando or playerList[i].name in board.robots:
                 # Get road
                 notPlaced = True
                 while(notPlaced):
-                    toPlace = botPlaceRoad()
+                    toPlace = playerList[i].botPlaceRoad()
                     if (board.canPlaceRoad(firstVertex, toPlace, playerList[i].name)):
                         # Legal placement
                         board.placeRoad(firstVertex, toPlace, playerList[i], playerList)

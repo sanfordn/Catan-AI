@@ -14,11 +14,11 @@ class Player:
     def __init__(self, name):
         self.name = name
         self.resourceDict = {
-            "wheat": 110,
-            "sheep": 110,
-            "brick": 110,
-            "ore":   110,
-            "wood":  110
+            "wheat": 0,
+            "sheep": 0,
+            "brick": 0,
+            "ore":   0,
+            "wood":  0
         }
         self.totalResources = 0
         self.devCardDict = {

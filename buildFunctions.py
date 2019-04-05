@@ -12,10 +12,6 @@ from player import Player
 from brain import *
 from random import randint
 
-HUMANS = ["A","B","C","D"]
-ROBOTS = ["W","X","Y","Z"]
-
-
 def buildCity(board, player):
     '''
     Asks the player to build a city on top of one of their currently existing
@@ -41,8 +37,8 @@ def buildCity(board, player):
     print()
     print("\tWhich settlement would you like to place it on? Pick the settlement number, starting from top left (and starting from 0).")
 
-    if player.name in ROBOTS:
-        settlementNum,board.takenSpots = botPlaceCity(board.hexRelationMatrix,board.takenSpots, player)
+    if player.name in board.robots or player.name in board.rando:
+        settlementNum,board.takenSpots = player.botPlaceCity(board.hexRelationMatrix,board.takenSpots, player)
     else:
         settlementNum = input("\t")
         if (not settlementNum.isdigit()):
@@ -75,8 +71,8 @@ def buildSettlement(board, player):
     board.printBoard()
     print()
     print("\tWhich vertex would you like to place it on? Pick the vertex number, starting from top left (and starting from 0).")
-    if player.name in ROBOTS:
-       vertex = botPlaceNewSettlement(board.takenSpots)
+    if player.name in board.robots or player.name in board.rando:
+       vertex = player.botPlaceNewSettlement(board.takenSpots)
     else:
         vertex = input("\t")
     if (not vertex.isdigit()):
@@ -87,7 +83,10 @@ def buildSettlement(board, player):
     # Determines if you can place a settlement on the inputted vertex. False
     # means that this isn't the first settlement of the game.
     if (board.canPlaceSettlement(vertex, player.name, False)):
-        print("Bot("+player.name+") places a new settlement at "+ str(vertex))
+        if player.name in board.robots:
+            print("Robot("+player.name+") places a new settlement at "+ str(vertex))
+        elif player.name in board.rando:
+            print("Bot("+player.name+") places a new settlement at "+ str(vertex))
         board.placeSettlement(vertex, player)
         board.printBoard()
         player.resourceDict["wheat"] -= 1
@@ -112,7 +111,7 @@ def buildRoad(board, player, playerList):
     # Get the two vertices the road should connect.
     board.printBoard()
     print()
-    if player.name in ROBOTS:
+    if player.name in board.robots or player.name in board.rando:
         vertex1 = randint(0,53)
         vertex2 = randint(0,53)
         while(board.canPlaceRoad(vertex1,vertex2,player.name)) == False:
@@ -131,7 +130,7 @@ def buildRoad(board, player, playerList):
             return
     vertex1 = int(vertex1)
 
-    if player.name not in ROBOTS:
+    if player.name not in board.robots and player.name not in board.rando:
         print("\tEnter the number of the second vertex it will connect to.")
         vertex2 = input("\t")
         if (not vertex2.isdigit()):

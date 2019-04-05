@@ -12,9 +12,6 @@ from player import Player
 from botFunctions import *
 from brain import *
 
-HUMANS = ["A","B","C","D"]
-ROBOTS = ["W","X","Y","Z"]
-
 def diceRoll():
     '''
     Simulates rolling a pair of dice that are numbered 1-6 each. Returns a
@@ -56,11 +53,15 @@ def moveRobber(board, mover, playerList):
     newHex = 0
     while (notPlaced):
         #if(mover.isBot == True):
-        if mover.name in ROBOTS:
+        if mover.name in board.robots or mover.name in board.rando:
             newHex = random.randint(0,18)
             while newHex == currentHex:
                 newHex = random.randint(0,18)
-            print("Bot("+mover.name+") moved the robber to " + str(newHex))
+            if mover.name in board.rando:
+                print("Bot("+mover.name+") moved the robber to " + str(newHex))
+            elif mover.name in board.robots:
+                print("Robot("+mover.name+") moved the robber to " + str(newHex))
+
             board.hexes[newHex].robber = True
             notPlaced = False
         else:
@@ -96,8 +97,8 @@ def moveRobber(board, mover, playerList):
             name = None
             #if(mover.isBot == True):
                 #name = botChooseWhoToRob()
-            if mover.name in ROBOTS:
-                name = chooseToSteal(possibleVictims)
+            if mover.name in board.rando or mover.name in board.robots:
+                name = mover.chooseToSteal(possibleVictims)
             else:
                 name = input()
             if (getPlayerFromName(playerList, name) not in possibleVictims):
@@ -122,7 +123,7 @@ def moveRobber(board, mover, playerList):
     board.printBoard()
 
 
-def halveHand(player, originalNumResources):
+def halveHand(player, originalNumResources, board):
     '''
     Asks the player to remove cards from their hand until they're under half of
     what they originally had. Called when a seven is rolled and a player has
@@ -134,8 +135,8 @@ def halveHand(player, originalNumResources):
     while (True):
         player.printHand()
         print("Please enter the name of the resource you would like to throw away.")
-        if player.name in ROBOTS:
-            toDiscard = botThrowAway()
+        if (player.name in board.robots) or (player.name in board.rando):
+            toDiscard = player.botThrowAway()
         else:
             toDiscard = input()
         if (toDiscard not in player.resourceDict):
