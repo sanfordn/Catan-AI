@@ -24,7 +24,7 @@ def printHelp():
     print("\t-d is for using a development card.")
     print("\t-e is for ending your turn.")
 
-def tallyUsedDevCards(alist):
+def tallyUsedDevCards(player):
         #tallies the total number of develpoment cards a player used
         totalDict = {
                 "Knight": 0,
@@ -35,8 +35,10 @@ def tallyUsedDevCards(alist):
             }
         finalString = ""
         tmp = []
-        for card in alist:
+        for card in player.usedDevCards:
             totalDict[card] +=1
+
+        totalDict["Victory Point"] += player.devCardDict["Victory Point"]
 
         for amount in totalDict:
             tmp.append(totalDict[amount])
@@ -45,9 +47,21 @@ def tallyUsedDevCards(alist):
         monopoly     = str(tmp[1])+ "  Year of Plenty, "
         yearOfPlenty = str(tmp[2])+ "  Monopoly, "
         roads        = str(tmp[4])+ "  Road Building. "
-        victoryPoints = "They also had " + str(tmp[3]) + "  points from Victory Point cards."
 
-        finalString = "They used " + knights + monopoly + yearOfPlenty + roads + victoryPoints
+        victoryPoints = "They also had " +  str(tmp[3])+ "  points from Victory Point cards."
+        if player.largestArmy == False:
+            largestArmy = "They DIDN'T HAVE the largest army."
+        else:
+            largestArmy = "They HAVE the largest army."
+
+        if player.longestRoad == False:
+            longestRoad = "They DIDN'T HAVE the longest road."
+        else:
+            longestRoad = "The HAVE the longest road."
+
+
+
+        finalString = "They used " + knights + monopoly + yearOfPlenty + roads + victoryPoints + largestArmy + longestRoad
 
         return finalString
 
@@ -58,7 +72,7 @@ def rankPlayers(playerList):
                 p.points +=2
             if p.largestArmy == True:
                 p.points +=2
-            totalDevCards = tallyUsedDevCards(p.usedDevCards)
+            totalDevCards = tallyUsedDevCards(p)
             p.points += p.devCardDict["Victory Point"]
             winList.append([p.points, p.name, totalDevCards])
         winList.sort()
