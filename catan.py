@@ -89,18 +89,25 @@ if __name__ == "__main__":
 
     # Game Phase
     currentPlayerIndex = 0
-    while(not playerList[currentPlayerIndex].victorious()):
+    #while(not playerList[currentPlayerIndex].victorious()):
+    playing = True
+    while(playing):
+        toLog = "Info:"
+        commandList = "|Commands:"
         currentPlayer = playerList[currentPlayerIndex]
 
         board.printBoard()
 
         # Roll the dice and resolve consequences of the dice roll
         roll = diceRoll()
+        toLog += "Roll:" + str(roll)
+        toLog += "|NumResources:" + str(currentPlayer.numResources())
         print()
         print("A " + str(roll) + " was rolled.")
         if (roll == 7):
             # Player moves robber
             moveRobber(board, currentPlayer, playerList)
+
             for player in playerList:
                 if player.numResources() > 7:
                    halveHand(player, player.numResources(),board)
@@ -146,6 +153,7 @@ if __name__ == "__main__":
             if (command == "-h"):
                 printHelp()
             elif (command == "-t"):
+                commandList += (command + "|")
                 print("\tWho would you like to trade with? Enter the player's name or type \"bank\" if you would like to trade with the bank.")
                 if currentPlayer.name in board.rando or currentPlayer.name in board.robots:
                     trader = "Bank"
@@ -164,6 +172,7 @@ if __name__ == "__main__":
                 else:
                     print("\tInvalid command.")
             elif (command == "-b"):
+                commandList += (command + "|")
                 print("\tWhat would you like to build? Type -c for a city, -s for a settlement, -r for a road, or -d for a development card.")
                 if currentPlayer.name in board.robots:
                     toBuild = currentPlayer.botCommand(currentPlayer.lastcommand)
@@ -183,6 +192,7 @@ if __name__ == "__main__":
                         print("no more cities")
                     else:
                         buildCity(board, currentPlayer)
+                        commandList += ""
 
                 elif (toBuild == "-s"):
                     if currentPlayer.settlements < 1:
@@ -200,7 +210,9 @@ if __name__ == "__main__":
                         obtainedDevCards[result] += 1
                 else:
                     print("\tInvalid command.")
+                commandList += (toBuild + "|")
             elif (command == '-d'):
+                commandList += (command + "|")
                 if (usedDevCard):
                     print("\tYou may only use 1 development card per turn.")
                 else:
@@ -247,7 +259,9 @@ if __name__ == "__main__":
                     else:
                         print("\tInvalid command.")
                         usedDevCard = False
+                    commandList += (toUse + "|")
             elif (command == "-e"):
+                commandList += command
                 usedDevCard = False
                 obtainedDevCards["Knight"] = 0
                 obtainedDevCards["Year of Plenty"] = 0
@@ -262,11 +276,17 @@ if __name__ == "__main__":
             #    currentPlayer.resourceDict["wheat"] = 1
             else:
                 print("Invalid command.")
+            toLog += ("|" + commandList)
+            log(currentPlayer, toLog)
+
+        if playerList[currentPlayerIndex].victorious():
+            playing = False
         # Switch the current player
         if (currentPlayerIndex != len(playerList) - 1):
             currentPlayerIndex += 1
         else:
             currentPlayerIndex = 0
+
     #Displays the win
     winList = rankPlayers(playerList)
     printVictory(winList,len(playerList))
