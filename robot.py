@@ -5,28 +5,28 @@ class Robot(Player):
         super().__init__(name)
 
     def botPlaceSettlement(self):
-        pass
+        print("idk how to place a settlement you honky ass boi")
 
     def botPlaceRoad(self):
-        pass
+        print("idk how to place a road you honky ass boi")
 
     def botPlaceNewSettlement(self, currentBoard):
-        pass
+        print("idk how to place a settlement you honky ass boi")
 
     def botPlaceCity(self, original, taken, player):
-        pass
+        print("idk how to place a city you honky ass boi")
 
     def botThrowAway(self):
-        pass
+        print("idk how to throw away my entire life savings you honky ass boi")
 
     def botStartTurn(self):
-        pass
+        print("idk how to play this game you honky ass boi")
 
     def chooseToSteal(self, playerList):
-        pass
+        print("idk how to steal anything you honky ass boi")
 
     def botChooseResource(self):
-        pass
+        print("idk how to make up my mind you honky ass boi")
 
     def botCommand(self, lc):
-        pass
+        print("idk how to speak you honky ass boi")

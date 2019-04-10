@@ -27,3 +27,11 @@ def getSize(filename):
 def deleteContent(pfile):
     pfile.seek(0)
     pfile.truncate()
+
+def prepSettlements(board,player):
+    pass
+
+def logSettlement(board,move):
+    f = open("log-settlements.txt", "a")
+    if getSize("game-log.txt") > (1000 * 1024):
+        deleteContent(f)

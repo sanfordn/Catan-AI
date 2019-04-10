@@ -24,6 +24,9 @@ def initializePlayers():
     '''
     playerList = []
 
+    players = 0
+    robots = 0
+    randos = 0
     players = input("How many humans are playing? ")
     while not players.isdigit() or (int(players) > 4) or (int(players) < 0):
         print("Please enter a valid number.")
@@ -38,21 +41,41 @@ def initializePlayers():
     if (int(players) >= 4):
         playerList.append(Player("D"))
 
-    avaliableBots = 4-int(players)
+    availableBots = 4-int(players)
 
-    robots = input("How many bots are playing? You can have up to " + str(avaliableBots)+ ": ")
-    while (not robots.isdigit() or (int(robots) > 4) or (int(robots) < 1) and (int(robots) > avaliableBots)):
-        print("Please enter a valid number less than or equal to " + str(avaliableBots)+".")
-        robots = input("How many bots are playing? You can have up to " + str(avaliableBots)+ ": ")
+    if availableBots > 0:
+        randos = input("How many random bots are playing? You can have up to " + str(availableBots)+ ": ")
+        while (not randos.isdigit() or (int(randos) > 4) or (int(randos) < 0) or (int(randos) > availableBots)):
+            print("Please enter a valid number less than or equal to " + str(availableBots)+".")
+            randos = input("How many random bots are playing? You can have up to " + str(availableBots)+ ": ")
+
+        availableBots = availableBots - int(randos)
+
+    if availableBots > 0:
+        robots = input("How many intelligent bots are playing? You can have up to " + str(availableBots)+ ": ")
+        while (not robots.isdigit() or (int(robots) > 4) or (int(robots) < 0) or (int(robots) > availableBots)):
+            print("Please enter a valid number less than or equal to " + str(availableBots)+".")
+            robots = input("How many random bots are playing? You can have up to " + str(availableBots)+ ": ")
+        availableBots = availableBots - int(robots)
+
+
+    if (int(randos) >= 1):
+        playerList.append(Rando("W"))
+    if (int(randos) >= 2):
+        playerList.append(Rando("X"))
+    if (int(randos) >= 3):
+        playerList.append(Rando("Y"))
+    if (int(randos) >= 4):
+        playerList.append(Rando("Z"))
 
     if (int(robots) >= 1):
-        playerList.append(Rando("W"))
+        playerList.append(Robot("1"))
     if (int(robots) >= 2):
-        playerList.append(Rando("X"))
+        playerList.append(Robot("2"))
     if (int(robots) >= 3):
-        playerList.append(Rando("Y"))
+        playerList.append(Robot("3"))
     if (int(robots) >= 4):
-        playerList.append(Rando("Z"))
+        playerList.append(Robot("4"))
 
     return playerList
 

@@ -87,6 +87,8 @@ def buildSettlement(board, player):
             print("Robot("+player.name+") places a new settlement at "+ str(vertex))
         elif player.name in board.rando:
             print("Bot("+player.name+") places a new settlement at "+ str(vertex))
+
+        #Sets up the board for the ability to be logged.
         board.placeSettlement(vertex, player)
         board.printBoard()
         player.resourceDict["wheat"] -= 1
@@ -146,7 +148,6 @@ def buildRoad(board, player, playerList):
         player.resourceDict["brick"] -= 1
     else:
         print("\tIllegal road placement.")
-
 
 def buildDevCard(player, devCardDeck):
     '''
