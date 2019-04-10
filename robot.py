@@ -1,11 +1,12 @@
 from player import Player
+from settlementNN import chooseSettlement
 
 class Robot(Player):
     def __init__(self, name):
         super().__init__(name)
 
-    def botPlaceSettlement(self):
-        print("idk how to place a settlement you honky ass boi")
+    def botPlaceSettlement(self,board):
+        return chooseSettlement(board)
 
     def botPlaceRoad(self):
         print("idk how to place a road you honky ass boi")

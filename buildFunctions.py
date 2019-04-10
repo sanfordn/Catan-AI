@@ -11,6 +11,7 @@ from board import *
 from player import Player
 from brain import *
 from random import randint
+from logger import *
 
 def buildCity(board, player):
     '''
@@ -70,6 +71,7 @@ def buildSettlement(board, player):
 
     board.printBoard()
     print()
+
     print("\tWhich vertex would you like to place it on? Pick the vertex number, starting from top left (and starting from 0).")
     if player.name in board.robots or player.name in board.rando:
        vertex = player.botPlaceNewSettlement(board.takenSpots)
@@ -83,12 +85,14 @@ def buildSettlement(board, player):
     # Determines if you can place a settlement on the inputted vertex. False
     # means that this isn't the first settlement of the game.
     if (board.canPlaceSettlement(vertex, player.name, False)):
+        #Sets up the board for the ability to be logged.
+        currentBoard = prepSettlementsForLog(board.takenSpots,player.name)
         if player.name in board.robots:
             print("Robot("+player.name+") places a new settlement at "+ str(vertex))
         elif player.name in board.rando:
             print("Bot("+player.name+") places a new settlement at "+ str(vertex))
 
-        #Sets up the board for the ability to be logged.
+        logSettlement(currentBoard,vertex)
         board.placeSettlement(vertex, player)
         board.printBoard()
         player.resourceDict["wheat"] -= 1

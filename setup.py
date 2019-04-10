@@ -16,6 +16,7 @@ from rando import Rando
 from robot import Robot
 from board import *
 from brain import *
+from logger import prepSettlementsForLog, logSettlement
 
 
 def initializePlayers():
@@ -183,13 +184,18 @@ def placeFirstSettlements(board, playerList):
         firstVertex = 0
         notPlaced = True
         while(notPlaced):
+            currentBoard = prepSettlementsForLog(board.takenSpots,i.name)
             if i.name in board.rando or i.name in board.robots:
-                toPlace = i.botPlaceSettlement()
+                toPlace = i.botPlaceSettlement(currentBoard)
                 if (board.canPlaceSettlement(toPlace, i.name, True)):
                     # Legal placement
                     board.placeSettlement(toPlace, i)
                     firstVertex = toPlace
-                    print("Bot("+i.name+") places it's first settlement at "+str(toPlace))
+                    if i.name in board.rando:
+                        start = "Bot("
+                    else:
+                        start = "Robot("
+                    print(start+i.name+") places it's first settlement at "+str(toPlace))
                     board.occupySpot(toPlace, i.name) #takes the spot
                     notPlaced = False
             else:
@@ -207,9 +213,10 @@ def placeFirstSettlements(board, playerList):
                 else:
                     print("Please enter a valid vertex.")
         board.printBoard()
-
+        logSettlement(currentBoard, toPlace)  #LOGS FIRST SETTLEMENTS PLACED
         #building first roads
         notPlaced = True
+        exit()
         while(notPlaced):
             if i.name in board.rando or i.name in board.robots:
                 toPlace = i.botPlaceRoad()
@@ -232,19 +239,17 @@ def placeFirstSettlements(board, playerList):
                 else:
                     print("Please enter a valid vertex.")
 
-
     # To find out what initial resouces to the players should receive
     secondSettlements = []
 
     for i in range(len(playerList)-1, -1, -1):
-
         board.printBoard()
-
         firtVertex = 0
         notPlaced = True
         while(notPlaced):
+            currentBoard = prepSettlementsForLog(board.takenSpots,playerList[i].name)
             if playerList[i].name in board.rando or playerList[i].name in board.robots:
-                toPlace = playerList[i].botPlaceSettlement()
+                toPlace = playerList[i].botPlaceSettlement(currentBoard)
                 if (board.canPlaceSettlement(toPlace, playerList[i].name, True)):
                     # Legal placement
                     board.placeSettlement(toPlace, playerList[i])
@@ -252,6 +257,7 @@ def placeFirstSettlements(board, playerList):
                     board.occupySpot(toPlace,playerList[i].name)
                     print("Bot("+playerList[i].name+") places its second settlement at " + str(toPlace))
                     secondSettlements.append((playerList[i], toPlace))
+                    logSettlement(currentBoard, toPlace)
                     notPlaced = False
 
             else:
@@ -265,6 +271,7 @@ def placeFirstSettlements(board, playerList):
                         board.occupySpot(toPlace, playerList[i].name)
                         notPlaced = False
                         secondSettlements.append((playerList[i], toPlace))
+                        logSettlement(currentBoard, toPlace)
                     else:
                         # Non legal placement
                         print("Please enter a valid vertex.")

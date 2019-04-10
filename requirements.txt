@@ -1,2 +1,2 @@
 Numpy(for neural network):
-python -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
+python3 -m pi3 install --user numpy scipy matplotlib ipython jupyter pandas sympy nose

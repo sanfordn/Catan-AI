@@ -100,6 +100,7 @@ if __name__ == "__main__":
 
     # Setup Phase
     placeFirstSettlements(board, playerList)
+    exit()
 
     # Game Phase
     currentPlayerIndex = 0
