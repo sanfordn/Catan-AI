@@ -86,13 +86,13 @@ def buildSettlement(board, player):
     # means that this isn't the first settlement of the game.
     if (board.canPlaceSettlement(vertex, player.name, False)):
         #Sets up the board for the ability to be logged.
-        currentBoard = prepSettlementsForLog(board.takenSpots,player.name)
+        currentBoard = prepSettlementsForLog(board.vertices,player.name)
         if player.name in board.robots:
             print("Robot("+player.name+") places a new settlement at "+ str(vertex))
         elif player.name in board.rando:
             print("Bot("+player.name+") places a new settlement at "+ str(vertex))
 
-        logSettlement(currentBoard,vertex)
+        logSettlement(currentBoard,vertex,player.name)
         board.placeSettlement(vertex, player)
         board.printBoard()
         player.resourceDict["wheat"] -= 1
@@ -146,6 +146,9 @@ def buildRoad(board, player, playerList):
 
     # Attempt to place it
     if (board.canPlaceRoad(vertex1, vertex2, player.name)):
+        currentBoard = prepSettlementsForLog(board.vertices,player.name)
+        currentRoads = prepRoadsForLog(board.roads,player.name)
+        logRoads(currentBoard,currentRoads,vertex1,vertex2,player.name)
         board.placeRoad(vertex1, vertex2, player, playerList)
         board.printBoard()
         player.resourceDict["wood"] -= 1

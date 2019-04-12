@@ -8,7 +8,7 @@ class Rando(Player):
     def botPlaceSettlement(self,board):
         return random.randint(0,53)
 
-    def botPlaceRoad(self):
+    def botPlaceRoad(self,board):
         return random.randint(0,53)
 
     def botPlaceNewSettlement(self, currentBoard):

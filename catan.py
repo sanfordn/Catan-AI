@@ -77,7 +77,8 @@ def rankPlayers(playerList):
             winList.append([p.points, p.name, totalDevCards])
         winList.sort()
         winList.reverse()
-        return winList
+        winner = winList[0][1]
+        return winList,winner
 
 def printVictory(winList,amount):
         if amount == 2:
@@ -100,7 +101,6 @@ if __name__ == "__main__":
 
     # Setup Phase
     placeFirstSettlements(board, playerList)
-    exit()
 
     # Game Phase
     currentPlayerIndex = 0
@@ -289,5 +289,6 @@ if __name__ == "__main__":
             currentPlayerIndex = 0
 
     #Displays the win
-    winList = rankPlayers(playerList)
+    winList,winner = rankPlayers(playerList)
     printVictory(winList,len(playerList))
+    getWinnerData(winner)

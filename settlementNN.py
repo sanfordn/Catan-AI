@@ -1,12 +1,12 @@
 import numpy as np
 
 class NeuralNetwork():
-    def __init__(self,x):
+    def __init__(self,x,y):
         # X IS THE NUM OF INPUTS
         #seeding for random number generations
         np.random.seed(1)
-        #converting weights to a 114 by 1 matrix with values from -1 to 1 and mean of 0
-        self.synaptic_weights = 2 * np.random.random((x,1)) - 1
+        #converting weights to a x by y matrix with values from -1 to 1 and mean of 0
+        self.synaptic_weights = 2 * np.random.random((x,y)) - 1
 
     def sigmoid(self,x):
         #applying sigmoid function
@@ -37,9 +37,9 @@ class NeuralNetwork():
 def convertSettlementsData():
     inputs = []
     outputs = [[]]
-    fin = open("log-settlements.txt", "r")
+    fin = open("rando-log-settlements.txt", "r")
     for aline in fin:
-        firstHalf,move = aline.strip().split("|")
+        name,firstHalf,move = aline.strip().split("|")
         tmp = []
         for i in firstHalf:
             tmp.append(int(i))
@@ -49,12 +49,33 @@ def convertSettlementsData():
     return inputs,outputs
     #initializes the neuron class
 
+def convertRoadData():
+    inputs = []
+    outputs1 = [[]]
+    outputs2 = [[]]
+    fin = open("rando-log-roads.txt", "r")
+    for aline in fin:
+        name,firstHalf,secondHalf,vertex1,vertex2 = aline.strip().split("|")
+        tmp = []
+        for i in firstHalf:
+            tmp.append(int(i))
+        for i in secondHalf:
+            tmp.append(int(i))
+        inputs.append(tmp)
+        move1 = round(int(vertex1)/55,4)
+        move2 = round(int(vertex2)/55,4)
+        outputs1[0].append(move1)
+        outputs2[0].append(move2)
+    outputs = outputs1+outputs2
+    print(outputs)
+    return inputs,outputs
+
+
 def chooseSettlement(board):
-    neural_network = NeuralNetwork(114)
+    neural_network = NeuralNetwork(54,1)
 
     #print("Beginning Randomly Generated Weights: ")
     #print(neural_network.synaptic_weights)
-
     #THIS TRAINING DATA IS FROM log-settlements.txt
     inputs,outputs = convertSettlementsData()
     training_inputs = np.array(inputs)
@@ -70,6 +91,25 @@ def chooseSettlement(board):
     tmp = list(map(str,board))
     theMove = neural_network.think(np.array(tmp))
     theMove = int(theMove * 55)
-
     #print("The neural network says you should do", theMove)
     return theMove
+
+def chooseRoads(board,roads):
+    neural_network = NeuralNetwork(126,2)
+    inputs,outputs = convertRoadData()
+    training_inputs = np.array(inputs)
+    training_outputs = np.array(outputs).T
+
+    neural_network.train(training_inputs, training_outputs, 15000)
+
+    #print("Ending weights after training: ")
+    #print(neural_network.synaptic_weights)
+
+    #print("CONSIDER NEW SITUATION")
+    tmpBoard = list(map(str,board))
+    tmpRoads = list(map(str,roads))
+    tmp = tmpBoard+tmpRoads
+    vertex1,vertex2 = neural_network.think(np.array(tmp))
+    print(vertex1* 55, vertex2* 55)
+    #print("The neural network says you should do", theMove)
+    return road1, road2

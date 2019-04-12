@@ -16,7 +16,7 @@ from rando import Rando
 from robot import Robot
 from board import *
 from brain import *
-from logger import prepSettlementsForLog, logSettlement
+from logger import *
 
 
 def initializePlayers():
@@ -80,8 +80,6 @@ def initializePlayers():
 
     return playerList
 
-
-
 def initializeDevCards():
     '''
     Creates the deck of the development cards. There starts out with 25
@@ -91,7 +89,6 @@ def initializeDevCards():
     devCards = ["Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Knight", "Year of Plenty", "Year of Plenty", "Monopoly", "Monopoly", "Road Building", "Road Building", "Victory Point", "Victory Point", "Victory Point", "Victory Point", "Victory Point"]
     shuffle(devCards)
     return devCards
-
 
 def createBoard():
     '''
@@ -184,7 +181,7 @@ def placeFirstSettlements(board, playerList):
         firstVertex = 0
         notPlaced = True
         while(notPlaced):
-            currentBoard = prepSettlementsForLog(board.takenSpots,i.name)
+            currentBoard = prepSettlementsForLog(board.vertices,i.name)
             if i.name in board.rando or i.name in board.robots:
                 toPlace = i.botPlaceSettlement(currentBoard)
                 if (board.canPlaceSettlement(toPlace, i.name, True)):
@@ -213,17 +210,36 @@ def placeFirstSettlements(board, playerList):
                 else:
                     print("Please enter a valid vertex.")
         board.printBoard()
-        logSettlement(currentBoard, toPlace)  #LOGS FIRST SETTLEMENTS PLACED
+
+
+
+
+        #logSettlement(currentBoard, toPlace,i.name)  #LOGS SETTLEMENTS PLACED
         #building first roads
+
+
+
+
         notPlaced = True
-        exit()
         while(notPlaced):
             if i.name in board.rando or i.name in board.robots:
-                toPlace = i.botPlaceRoad()
+                if i.name in board.rando:
+                    toPlace = i.botPlaceRoad(None)
+                else:
+                    currentRoads = prepRoadsForLog(board.roads,i.name)
+                    currentBoard = prepSettlementsForLog(board.vertices,i.name)
+                    throwaway,toPlace = i.botPlaceRoad(currentBoard,currentRoads)
                 if (board.canPlaceRoad(firstVertex, toPlace, i.name)):
                     # Legal placement
+                    currentRoads = prepRoadsForLog(board.roads,i.name)
+                    currentBoard = prepSettlementsForLog(board.vertices,i.name)
+                    logRoads(currentBoard, currentRoads,firstVertex,toPlace,i.name)
                     board.placeRoad(firstVertex, toPlace, i, playerList)
-                    print("Bot("+i.name+") places a road at " + str(toPlace))
+                    if i.name in board.rando:
+                        start = "Bot("
+                    else:
+                        start = "Robot("
+                    print(start+i.name+") places a road at " + str(toPlace))
                     notPlaced = False
             else:
                 toPlace = input("Your road will start at vertex " + str(firstVertex) + ". Which vertex do you want it to link to? ")
@@ -247,7 +263,7 @@ def placeFirstSettlements(board, playerList):
         firtVertex = 0
         notPlaced = True
         while(notPlaced):
-            currentBoard = prepSettlementsForLog(board.takenSpots,playerList[i].name)
+            currentBoard = prepSettlementsForLog(board.vertices,playerList[i].name)
             if playerList[i].name in board.rando or playerList[i].name in board.robots:
                 toPlace = playerList[i].botPlaceSettlement(currentBoard)
                 if (board.canPlaceSettlement(toPlace, playerList[i].name, True)):
@@ -257,7 +273,7 @@ def placeFirstSettlements(board, playerList):
                     board.occupySpot(toPlace,playerList[i].name)
                     print("Bot("+playerList[i].name+") places its second settlement at " + str(toPlace))
                     secondSettlements.append((playerList[i], toPlace))
-                    logSettlement(currentBoard, toPlace)
+                    logSettlement(currentBoard, toPlace,playerList[i].name)
                     notPlaced = False
 
             else:
@@ -271,7 +287,6 @@ def placeFirstSettlements(board, playerList):
                         board.occupySpot(toPlace, playerList[i].name)
                         notPlaced = False
                         secondSettlements.append((playerList[i], toPlace))
-                        logSettlement(currentBoard, toPlace)
                     else:
                         # Non legal placement
                         print("Please enter a valid vertex.")
@@ -286,8 +301,11 @@ def placeFirstSettlements(board, playerList):
                 # Get road
                 notPlaced = True
                 while(notPlaced):
-                    toPlace = playerList[i].botPlaceRoad()
+                    toPlace = playerList[i].botPlaceRoad(board)
                     if (board.canPlaceRoad(firstVertex, toPlace, playerList[i].name)):
+                        currentRoads = prepRoadsForLog(board.roads,playerList[i].name)
+                        currentBoard = prepSettlementsForLog(board.vertices,playerList[i].name)
+                        logRoads(currentBoard, currentRoads,firstVertex,toPlace,playerList[i].name)
                         # Legal placement
                         board.placeRoad(firstVertex, toPlace, playerList[i], playerList)
                         print("Bot("+playerList[i].name+") places a road at " + str(toPlace))

@@ -1,5 +1,5 @@
 from player import Player
-from settlementNN import chooseSettlement
+from settlementNN import chooseSettlement, chooseRoads
 
 class Robot(Player):
     def __init__(self, name):
@@ -8,8 +8,9 @@ class Robot(Player):
     def botPlaceSettlement(self,board):
         return chooseSettlement(board)
 
-    def botPlaceRoad(self):
-        print("idk how to place a road you honky ass boi")
+    def botPlaceRoad(self,board,roads):
+        vertex1, vertex2 = chooseRoads(board,roads)
+        return vertex1, vertex2
 
     def botPlaceNewSettlement(self, currentBoard):
         print("idk how to place a settlement you honky ass boi")
