@@ -28,10 +28,72 @@ def deleteContent(pfile):
     pfile.seek(0)
     pfile.truncate()
 
-def prepSettlements(board,player):
-    pass
+def prepSettlementsForLog(current,player):
+    binaryBoard = []
+    for vertex in current:
+        if vertex.playerName == player:
+            binaryBoard.append(1)
+        else:
+            binaryBoard.append(0)
+    return binaryBoard
 
-def logSettlement(board,move):
-    f = open("log-settlements.txt", "a")
-    if getSize("game-log.txt") > (1000 * 1024):
+def prepRoadsForLog(roads,player):
+    roadList = []
+    for name in roads:
+        if roads[name] ==  player + player: #the name
+            roadList.append(1)
+        else:
+            roadList.append(0)
+    return roadList
+
+
+def logRoads(board,roads,vertex1,vertex2,player):
+    f = open("rando-log-roads-stage.txt","a")
+    if getSize("rando-log-roads-stage.txt") > (1000 * 1024):
         deleteContent(f)
+    f.write(player)
+    f.write("|")
+    for i in board:
+        tmp = str(i)
+        f.write(tmp)
+    f.write("|")
+    for i in roads:
+        tmp = str(i)
+        f.write(tmp)
+    f.write("|")
+    f.write(str(vertex1))
+    f.write("|")
+    f.write(str(vertex2))
+    f.write("\r\n")
+    f.close()
+
+def logSettlement(board,move,player):
+    f = open("rando-log-settlements-stage.txt", "a")
+    if getSize("rando-log-settlements-stage.txt") > (1000 * 1024):
+        deleteContent(f)
+    f.write(player)
+    f.write("|")
+    for i in board:
+        tmp = str(i)
+        f.write(tmp)
+    f.write("|")
+    f.write(str(move))
+    f.write("\r\n")
+    f.close()
+
+def getWinnerData(winner):
+    #extracts ONLY the winning data from rando, settlements
+    #settlements
+    writeWinnerData("rando-log-settlements-stage.txt","rando-log-settlements.txt",winner)
+    writeWinnerData("rando-log-roads-stage.txt","rando-log-roads.txt",winner)
+
+def writeWinnerData(fin,fout,winner):
+        fin = open(fin,"r+")
+        lines = fin.readlines()
+        fout = open(fout, "a")
+        for line in lines:
+            if line[0] == winner:
+                fout.write(line)
+        deleteContent(fin)
+        fin.close()
+        fout.close()

@@ -5,10 +5,10 @@ class Rando(Player):
     def __init__(self, name):
         super().__init__(name)
 
-    def botPlaceSettlement(self):
+    def botPlaceSettlement(self,board):
         return random.randint(0,53)
 
-    def botPlaceRoad(self):
+    def botPlaceRoad(self,board):
         return random.randint(0,53)
 
     def botPlaceNewSettlement(self, currentBoard):

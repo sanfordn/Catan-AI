@@ -46,7 +46,6 @@ class Player:
         Prints out what the player has in their hand at the moment. This happens
         at the start of each turn.
         '''
-
         print("Current Hand:")
         print("\tResources:")
         print("\t\tWheat: " + str(self.resourceDict["wheat"]) + "\tSheep: " + str(self.resourceDict["sheep"]) + "\tBrick: " + str(self.resourceDict["brick"]))
