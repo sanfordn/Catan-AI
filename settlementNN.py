@@ -67,9 +67,7 @@ def convertRoadData():
         outputs1[0].append(move1)
         outputs2[0].append(move2)
     outputs = outputs1+outputs2
-    print(outputs)
     return inputs,outputs
-
 
 def chooseSettlement(board):
     neural_network = NeuralNetwork(54,1)
@@ -102,14 +100,11 @@ def chooseRoads(board,roads):
 
     neural_network.train(training_inputs, training_outputs, 15000)
 
-    #print("Ending weights after training: ")
-    #print(neural_network.synaptic_weights)
-
     #print("CONSIDER NEW SITUATION")
     tmpBoard = list(map(str,board))
     tmpRoads = list(map(str,roads))
     tmp = tmpBoard+tmpRoads
     vertex1,vertex2 = neural_network.think(np.array(tmp))
-    print(vertex1* 55, vertex2* 55)
+    print(int(vertex1* 55), int(vertex2* 55))
     #print("The neural network says you should do", theMove)
-    return road1, road2
+    return vertex1, vertex2
