@@ -214,7 +214,7 @@ def placeFirstSettlements(board, playerList):
 
 
 
-        #logSettlement(currentBoard, toPlace,i.name)  #LOGS SETTLEMENTS PLACED
+        logSettlement(currentBoard, toPlace,i.name)  #LOGS SETTLEMENTS PLACED
         #building first roads
 
 

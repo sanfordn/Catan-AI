@@ -94,6 +94,6 @@ def writeWinnerData(fin,fout,winner):
         for line in lines:
             if line[0] == winner:
                 fout.write(line)
-        deleteContent(fin)
+        #deleteContent(fin)
         fin.close()
         fout.close()
