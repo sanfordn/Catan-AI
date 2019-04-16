@@ -1,0 +1,71 @@
+What would you like to do? Type a command, or -h for a list of commands.
+Bot(W) does -b
+	What would you like to build? Type -c for a city, -s for a settlement, -r for a road, or -d for a development card.
+Bot(W) does -r
+                                               Wood                Wildcard
+                                        00     @4,1         01     @2,6         02
+                                      ZZ  ZZ              ZZ  WW              WW  WW
+                                    ZZ      ZZ          ZZ      WW          WW      WW
+                                  ZZ          ZZ      ZZ          WW      WW          WW
+                                ZZ              ZZ  ZZ              WW  WW              WW
+                              03                ZS(04)                05                  06
+                              ZZ       sand       ZZ      brick       ZZ       ore        WW
+                              ZZ        0         ZZ        3         ZZ        8         WW
+                 Brick        ZZ                  ZZ                  ZZ                  WW
+                 @7,11        07                  08                XS(09)                10
+                            //  ZZ              ZZ  XX              XX  ZZ              ZZ  WW
+                          //      ZZ          ZZ      XX          XX      ZZ          ZZ      WW
+                        //          ZZ      ZZ          XX      XX          ZZ      ZZ          WW
+                      //              ZZ  ZZ              XX  XX              ZZ  ZZ              WW
+                    11                  12                  13                  14                WS(15)
+                    ||      sheep       ZZ      wheat       XX       wood       ZZ      sheep       WW       Wheat
+                    ||        6         ZZ        4         XX        5         ZZ        10        WW       @15,20
+                    ||                  ZZ                  XX                  ZZ                  WW
+                    16                  17                  18                ZS(19)                20
+                  //  \\               XX  XX             XX  XX              ZZ  ZZ              WW  WW
+                //      \\           XX      XX         XX      XX          ZZ      ZZ          WW      WW
+              //          \\      XX          XX      XX          XX      ZZ          ZZ      WW          WW
+            //              \\  XX              XX  XX              XX  ZZ              ZZ  WW              WW
+Wildcard  21                  22                  23                  24                  25                  26
+@21,27    ||      wheat       XX      brick       XX       ore        XX      sheep       ZZ      sheep       YY
+          ||        2         XX        9         XX        11        XX        6         ZZ        9         YY
+          ||                  XX                  XX        R         XX                  ZZ                  YY
+          27                  28                YS(29)                30                  31                  32
+            \\              //  \\              YY  YY              XX  XX              YY  YY              YY
+              \\          //      \\          YY      YY          XX      XX          YY      YY          YY
+                \\      //          \\      YY          YY      XX          XX      YY          YY      YY
+                  \\  //              \\  YY              YY  XX              XX  YY              YY  YY
+                    33                  34                  35                XS(36)              YS(37)
+                    ||       ore        YY       wood       YY      wheat       YY      brick       YY
+                    ||        5         YY        10        YY        3         YY        12        YY
+                    ||                  YY                  YY                  YY                  YY     Ore
+                    38                  39                  40                  41                  42     @37,42
+                      \\              //  \\              YY  YY              XX  WW              YY
+                        \\          //      \\          YY      YY          XX      WW          YY
+                          \\      //          \\      YY          YY      XX          WW      YY
+                            \\  //              \\  YY              YY  XX              WW  YY
+               Wildcard       43                  44                  45                WS(46)
+               @38,43         ||      wheat       YY       wood       XX       wood       WW
+                              ||        8         YY        4         XX        11        WW
+                              ||                  YY                  XX       R          WW
+                              47                  48                XS(49)                50
+                                \\              YY  XX              XX  XX              WW
+                                  \\          YY      XX          XX      XX          WW
+                                    \\      YY          XX      XX          XX      WW
+                                      \\  YY              XX  XX              XX  WW      Wildcard
+                                        51       Sheep      52                  53        @50,53
+                                                 @48,52
+
+^CTraceback (most recent call last):
+  File "catan.py", line 213, in <module>
+    buildRoad(board, currentPlayer, playerList)
+  File "/Users/nicksanford/repos/catan-ai/buildFunctions.py", line 125, in buildRoad
+    vertex2 = randint(0,53)
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/random.py", line 222, in randint
+    return self.randrange(a, b+1)
+  File "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/random.py", line 198, in randrange
+    return istart + self._randbelow(width)
+KeyboardInterrupt
+
+
+-----------------------------------------------------------------
