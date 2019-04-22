@@ -316,11 +316,17 @@ class Board:
         if not vertex2 in self.vertexRelationMatrix[vertex1]:
             return False
 
+        if not vertex1 in self.vertexRelationMatrix[vertex2]:
+            return False
+
         #vertex 1 can't be placed if vertex1 is an enemy settlement
         if self.vertices[vertex1].empty == False:
             if (self.vertices[vertex1].playerName != playerName):
                 return False
-
+        #vertex2 can't be placed if vertex1 is an enemy settlement
+        if self.vertices[vertex2].empty == False:
+            if (self.vertices[vertex2].playerName != playerName):
+                return False
 
         # Checks if there is already a road there
         if (vertex1 < vertex2):

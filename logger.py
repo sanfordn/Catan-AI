@@ -6,8 +6,8 @@ logger.py
 
 def log(player, message):
     f = open("game-log.txt","a")
-    if getSize("game-log.txt") > (1000 * 1024):
-        deleteContent(f)
+    # if getSize("game-log.txt") > (1000 * 1024):
+    #     deleteContent(f)
     name = player.name
     vp = player.points
     long_road = player.longestRoad

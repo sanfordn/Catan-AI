@@ -120,9 +120,11 @@ def buildRoad(board, player, playerList):
     if player.name in board.robots or player.name in board.rando:
         vertex1 = randint(0,53)
         vertex2 = randint(0,53)
-        while(board.canPlaceRoad(vertex1,vertex2,player.name)) == False:
+        tries = 0
+        while(board.canPlaceRoad(vertex1,vertex2,player.name) == False and tries < 50):
             vertex1 = randint(0,53)
             vertex2 = randint(0,53)
+            tries += 1
         vertex1 = str(vertex1)
         vertex2 = str(vertex2)
         print("\tEnter the number of the first vertex it will connect to. " +vertex1)
