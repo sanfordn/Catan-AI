@@ -108,7 +108,7 @@ if __name__ == "__main__":
     playing = True
     while(playing):
         currentPlayer = playerList[currentPlayerIndex]
-        board.printBoard()
+        board.printBoard(PRINT_BOOL)
 
         # Roll the dice and resolve consequences of the dice roll
         roll = diceRoll()

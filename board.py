@@ -196,9 +196,9 @@ class Board:
 
         # A matrix that tells what vertices each vertex is linked to
         self.vertexRelationMatrix = [
-            [3, 4],
-            [4, 5],
-            [5, 6],
+            [3, 4],   #0 is connected to 3,4
+            [4, 5],   #1 is connected to 4,5
+            [5, 6],   #2 is connected to 5,6
             [0, 7],
             [0, 1, 8],
             [1, 2, 9],
@@ -316,17 +316,11 @@ class Board:
         if not vertex2 in self.vertexRelationMatrix[vertex1]:
             return False
 
-        if not vertex1 in self.vertexRelationMatrix[vertex2]:
-            return False
-
         #vertex 1 can't be placed if vertex1 is an enemy settlement
         if self.vertices[vertex1].empty == False:
             if (self.vertices[vertex1].playerName != playerName):
                 return False
-        #vertex2 can't be placed if vertex1 is an enemy settlement
-        if self.vertices[vertex2].empty == False:
-            if (self.vertices[vertex2].playerName != playerName):
-                return False
+
 
         # Checks if there is already a road there
         if (vertex1 < vertex2):
@@ -383,6 +377,17 @@ class Board:
         for i in playerList:
             print(i.longestRoad)
 
+    def openVertex(self,avertex,player):
+        openSpots=[]
+        for v in self.vertexRelationMatrix[avertex]:
+            if self.canPlaceRoad(avertex,v,player):
+                openSpots.append(1) #this means its open
+            else:
+                openSpots.append(0)#means its closed
+        if len(openSpots) == 2:
+            openSpots.append(0), #means its a port
+        return openSpots       
+                
 
     def findRoadEdges(self, playerRoads):
         '''
@@ -575,60 +580,64 @@ class Board:
         #at ALL occupied spots and what spots belong to our Brain, using playerNames
 
 
-    def printBoard(self):
-        '''
-        Prints the board
-        '''
-        print(" "*10+"                                     Wood                Wildcard")
-        print(" "*10+"                            "+self.formatVertex(0)+"   @4,1       "+self.formatVertex(1)+"   @2,6       "+self.formatVertex(2)+"")
-        print(" "*10+"                            "+self.roads[(0,3)]+"  "+self.roads[(0,4)]+"              "+self.roads[(1,4)]+"  "+self.roads[(1,5)]+"              "+self.roads[(2,5)]+"  "+self.roads[(2,6)]+"")
-        print(" "*10+"                          "+self.roads[(0,3)]+"      "+self.roads[(0,4)]+"          "+self.roads[(1,4)]+"      "+self.roads[(1,5)]+"          "+self.roads[(2,5)]+"      "+self.roads[(2,6)]+"")
-        print(" "*10+"                        "+self.roads[(0,3)]+"          "+self.roads[(0,4)]+"      "+self.roads[(1,4)]+"          "+self.roads[(1,5)]+"      "+self.roads[(2,5)]+"          "+self.roads[(2,6)]+"")
-        print(" "*10+"                      "+self.roads[(0,3)]+"              "+self.roads[(0,4)]+"  "+self.roads[(1,4)]+"              "+self.roads[(1,5)]+"  "+self.roads[(2,5)]+"              "+self.roads[(2,6)]+" ")
-        print(" "*10+"                  "+self.formatVertex(3)+"              "+self.formatVertex(4)+"              "+self.formatVertex(5)+"              "+self.formatVertex(6)+"")
-        print(" "*10+"                    "+self.roads[(3,7)]+self.formatHex(self.hexes[0].resourceType)+self.roads[(4,8)]+self.formatHex(self.hexes[1].resourceType)+ self.roads[(5,9)]+self.formatHex(self.hexes[2].resourceType)+ self.roads[(6,10)])
-        print(" "*10+"                    "+self.roads[(3,7)]+self.formatHex(self.hexes[0].number)+self.roads[(4,8)]+self.formatHex(self.hexes[1].number)+self.roads[(5,9)]+self.formatHex(self.hexes[2].number)+self.roads[(6,10)])
-        print(" "*10+"       Brick        "+self.roads[(3,7)]+"         "+self.hexes[0].robberFormat()+"        "+self.roads[(4,8)]+"         "+self.hexes[1].robberFormat()+"        "+self.roads[(5,9)]+"         "+self.hexes[2].robberFormat()+"        "+self.roads[(6,10)])
-        print(" "*10+"       @7,11      "+self.formatVertex(7)+"              "+self.formatVertex(8)+"              "+self.formatVertex(9)+"              "+self.formatVertex(10)+"")
-        print(" "*10+"                  "+self.roads[(7,11)]+"  "+self.roads[(7,12)]+"              "+self.roads[(8,12)]+"  "+self.roads[(8,13)]+"              "+self.roads[(9,13)]+"  "+self.roads[(9,14)]+"              "+self.roads[(10,14)]+"  "+self.roads[(10,15)])
-        print(" "*10+"                "+self.roads[(7,11)]+"      "+self.roads[(7,12)]+"          "+self.roads[(8,12)]+"      "+self.roads[(8,13)]+"          "+self.roads[(9,13)]+"      "+self.roads[(9,14)]+"          "+self.roads[(10,14)]+"      "+self.roads[(10,15)])
-        print(" "*10+"              "+self.roads[(7,11)]+"          "+self.roads[(7,12)]+"      "+self.roads[(8,12)]+"          "+self.roads[(8,13)]+"      "+self.roads[(9,13)]+"          "+self.roads[(9,14)]+"      "+self.roads[(10,14)]+"          "+self.roads[(10,15)])
-        print(" "*10+"            "+self.roads[(7,11)]+"              "+self.roads[(7,12)]+"  "+self.roads[(8,12)]+"              "+self.roads[(8,13)]+"  "+self.roads[(9,13)]+"              "+self.roads[(9,14)]+"  "+self.roads[(10,14)]+"              "+self.roads[(10,15)])
-        print(" "*10+"        "+self.formatVertex(11)+"              "+self.formatVertex(12)+"              "+self.formatVertex(13)+"              "+self.formatVertex(14)+"              "+self.formatVertex(15)+"")
-        print(" "*10+"          "+self.roads[(11,16)]+self.formatHex(self.hexes[3].resourceType)+self.roads[(12,17)]+self.formatHex(self.hexes[4].resourceType)+self.roads[(13,18)]+self.formatHex(self.hexes[5].resourceType)+self.roads[(14,19)]+self.formatHex(self.hexes[6].resourceType)+self.roads[(15,20)]+"       Wheat")
-        print(" "*10+"          "+self.roads[(11,16)]+self.formatHex(self.hexes[3].number)+self.roads[(12,17)]+self.formatHex(self.hexes[4].number)+self.roads[(13,18)]+self.formatHex(self.hexes[5].number)+self.roads[(14,19)]+self.formatHex(self.hexes[6].number)+self.roads[(15,20)]+"       @15,20")
-        print(" "*10+"          "+self.roads[(11,16)]+"        "+self.hexes[3].robberFormat()+"         "+self.roads[(12,17)]+"       "+self.hexes[4].robberFormat()+"          "+self.roads[(13,18)]+"       "+self.hexes[5].robberFormat()+"          "+self.roads[(14,19)]+"        "+self.hexes[6].robberFormat()+"         "+self.roads[(15,20)])
-        print(" "*10+"        "+self.formatVertex(16)+"              "+self.formatVertex(17)+"              "+self.formatVertex(18)+"              "+self.formatVertex(19)+"              "+self.formatVertex(20)+"")
-        print(" "*10+"        "+self.roads[(16,21)]+"  "+self.roads[(16,22)]+"               "+self.roads[(17,22)]+"  "+self.roads[(17,23)]+"             "+self.roads[(18,23)]+"  "+self.roads[(18,24)]+"              "+self.roads[(19,24)]+"  "+self.roads[(19,25)]+"              "+self.roads[(20,25)]+"  "+self.roads[(20,26)])
-        print(" "*10+"      "+self.roads[(16,21)]+"      "+self.roads[(16,22)]+"           "+self.roads[(17,22)]+"      "+self.roads[(17,23)]+"         "+self.roads[(18,23)]+"      "+self.roads[(18,24)]+"          "+self.roads[(19,24)]+"      "+self.roads[(19,25)]+"          "+self.roads[(20,25)]+"      "+self.roads[(20,26)])
-        print(" "*10+"    "+self.roads[(16,21)]+"          "+self.roads[(16,22)]+"      "+self.roads[(17,22)]+"          "+self.roads[(17,23)]+"      "+self.roads[(18,23)]+"          "+self.roads[(18,24)]+"      "+self.roads[(19,24)]+"          "+self.roads[(19,25)]+"      "+self.roads[(20,25)]+"          "+self.roads[(20,26)])
-        print(" "*10+"  "+self.roads[(16,21)]+"              "+self.roads[(16,22)]+"  "+self.roads[(17,22)]+"              "+self.roads[(17,23)]+"  "+self.roads[(18,23)]+"              "+self.roads[(18,24)]+"  "+self.roads[(19,24)]+"              "+self.roads[(19,25)]+"  "+self.roads[(20,25)]+"              "+self.roads[(20,26)])
-        print("Wildcard"+self.formatVertex(21)+"              "+self.formatVertex(22)+"              "+self.formatVertex(23)+"              "+self.formatVertex(24)+"              "+self.formatVertex(25)+"              "+self.formatVertex(26))
-        print("@21,27    "+self.roads[(21,27)]+self.formatHex(self.hexes[7].resourceType)+self.roads[(22,28)]+self.formatHex(self.hexes[8].resourceType)+self.roads[(23,29)]+self.formatHex(self.hexes[9].resourceType)+self.roads[(24,30)]+self.formatHex(self.hexes[10].resourceType)+self.roads[(25,31)]+self.formatHex(self.hexes[11].resourceType)+self.roads[(26,32)])
-        print(" "*10+self.roads[(21,27)]+self.formatHex(self.hexes[7].number)+self.roads[(22,28)]+self.formatHex(self.hexes[8].number)+self.roads[(23,29)]+self.formatHex(self.hexes[9].number)+self.roads[(24,30)]+self.formatHex(self.hexes[10].number)+self.roads[(25,31)]+self.formatHex(self.hexes[11].number)+self.roads[(26,32)]+"")
-        print(" "*10+self.roads[(21,27)]+"         "+self.hexes[7].robberFormat()+"        "+self.roads[(22,28)]+"        "+self.hexes[8].robberFormat()+"         "+self.roads[(23,29)]+"        "+self.hexes[9].robberFormat()+"         "+self.roads[(24,30)]+"         "+self.hexes[10].robberFormat()+"        "+self.roads[(25,31)]+"         "+self.hexes[11].robberFormat()+"        "+self.roads[(26,32)])
-        print(" "*8+self.formatVertex(27)+"              "+self.formatVertex(28)+"              "+self.formatVertex(29)+"              "+self.formatVertex(30)+"              "+self.formatVertex(31)+"              "+self.formatVertex(32))
-        print(" "*10+"  "+self.roads[(27,33)]+"              "+self.roads[(28,33)]+"  "+self.roads[(28,34)]+"              "+self.roads[(29,34)]+"  "+self.roads[(29,35)]+"              "+self.roads[(30,35)]+"  "+self.roads[(30,36)]+"              "+self.roads[(31,36)]+"  "+self.roads[(31,37)]+"              "+self.roads[(32,37)])
-        print(" "*10+"    "+self.roads[(27,33)]+"          "+self.roads[(28,33)]+"      "+self.roads[(28,34)]+"          "+self.roads[(29,34)]+"      "+self.roads[(29,35)]+"          "+self.roads[(30,35)]+"      "+self.roads[(30,36)]+"          "+self.roads[(31,36)]+"      "+self.roads[(31,37)]+"          "+self.roads[(32,37)])
-        print(" "*10+"      "+self.roads[(27,33)]+"      "+self.roads[(28,33)]+"          "+self.roads[(28,34)]+"      "+self.roads[(29,34)]+"          "+self.roads[(29,35)]+"      "+self.roads[(30,35)]+"          "+self.roads[(30,36)]+"      "+self.roads[(31,36)]+"          "+self.roads[(31,37)]+"      "+self.roads[(32,37)])
-        print(" "*10+"        "+self.roads[(27,33)]+"  "+self.roads[(28,33)]+"              "+self.roads[(28,34)]+"  "+self.roads[(29,34)]+"              "+self.roads[(29,35)]+"  "+self.roads[(30,35)]+"              "+self.roads[(30,36)]+"  "+self.roads[(31,36)]+"              "+self.roads[(31,37)]+"  "+self.roads[(32,37)])
-        print(" "*10+"        "+self.formatVertex(33)+"              "+self.formatVertex(34)+"              "+self.formatVertex(35)+"              "+self.formatVertex(36)+"              "+self.formatVertex(37))
-        print(" "*10+"          "+self.roads[(33,38)]+self.formatHex(self.hexes[12].resourceType)+self.roads[(34,39)]+self.formatHex(self.hexes[13].resourceType)+self.roads[(35,40)]+self.formatHex(self.hexes[14].resourceType)+self.roads[(36,41)]+self.formatHex(self.hexes[15].resourceType)+self.roads[(37,42)])
-        print(" "*10+"          "+self.roads[(33,38)]+self.formatHex(self.hexes[12].number)+self.roads[(34,39)]+self.formatHex(self.hexes[13].number)+self.roads[(35,40)]+self.formatHex(self.hexes[14].number)+self.roads[(36,41)]+self.formatHex(self.hexes[15].number)+self.roads[(37,42)])
-        print(" "*10+"          "+self.roads[(33,38)]+"        "+self.hexes[12].robberFormat()+"         "+self.roads[(34,39)]+"         "+self.hexes[13].robberFormat()+"        "+self.roads[(35,40)]+"        "+self.hexes[14].robberFormat()+"         "+self.roads[(36,41)]+"         "+self.hexes[15].robberFormat()+"        "+self.roads[(37,42)]+"     Ore")
-        print(" "*10+"        "+self.formatVertex(38)+"              "+self.formatVertex(39)+"              "+self.formatVertex(40)+"              "+self.formatVertex(41)+"              "+self.formatVertex(42)+"   @37,42")
-        print(" "*10+"            "+self.roads[(38,43)]+"              "+self.roads[(39,43)]+"  "+self.roads[(39,44)]+"              "+self.roads[(40,44)]+"  "+self.roads[(40,45)]+"              "+self.roads[(41,45)]+"  "+self.roads[(41,46)]+"              "+self.roads[(42,46)])
-        print(" "*10+"              "+self.roads[(38,43)]+"          "+self.roads[(39,43)]+"      "+self.roads[(39,44)]+"          "+self.roads[(40,44)]+"      "+self.roads[(40,45)]+"          "+self.roads[(41,45)]+"      "+self.roads[(41,46)]+"          "+self.roads[(42,46)])
-        print(" "*10+"                "+self.roads[(38,43)]+"      "+self.roads[(39,43)]+"          "+self.roads[(39,44)]+"      "+self.roads[(40,44)]+"          "+self.roads[(40,45)]+"      "+self.roads[(41,45)]+"          "+self.roads[(41,46)]+"      "+self.roads[(42,46)])
-        print(" "*10+"                  "+self.roads[(38,43)]+"  "+self.roads[(39,43)]+"              "+self.roads[(39,44)]+"  "+self.roads[(40,44)]+"              "+self.roads[(40,45)]+"  "+self.roads[(41,45)]+"              "+self.roads[(41,46)]+"  "+self.roads[(42,46)])
-        print(" "*10+"     Wildcard     "+self.formatVertex(43)+"              "+self.formatVertex(44)+"              "+self.formatVertex(45)+"              "+self.formatVertex(46))
-        print(" "*10+"     @38,43         "+self.roads[(43,47)]+self.formatHex(self.hexes[16].resourceType)+self.roads[(44,48)]+self.formatHex(self.hexes[17].resourceType)+ self.roads[(45,49)]+self.formatHex(self.hexes[18].resourceType)+ self.roads[(46,50)])
-        print(" "*10+"                    "+self.roads[(43,47)]+self.formatHex(self.hexes[16].number)+ self.roads[(44,48)]+self.formatHex(self.hexes[17].number)+ self.roads[(45,49)]+self.formatHex(self.hexes[18].number)+ self.roads[(46,50)])
-        print(" "*10+"                    "+self.roads[(43,47)]+"        "+self.hexes[16].robberFormat()+"         "+self.roads[(44,48)]+"         "+self.hexes[17].robberFormat()+"        "+self.roads[(45,49)]+"       "+self.hexes[18].robberFormat()+"          "+self.roads[(46,50)])
-        print(" "*10+"                  "+self.formatVertex(47)+"              "+self.formatVertex(48)+"              "+self.formatVertex(49)+"              "+self.formatVertex(50))
-        print(" "*10+"                      "+self.roads[(47,51)]+"              "+self.roads[(48,51)]+"  "+self.roads[(48,52)]+"              "+self.roads[(49,52)]+"  "+self.roads[(49,53)]+"              "+self.roads[(50,53)])
-        print(" "*10+"                        "+self.roads[(47,51)]+"          "+self.roads[(48,51)]+"      "+self.roads[(48,52)]+"          "+self.roads[(49,52)]+"      "+self.roads[(49,53)]+"          "+self.roads[(50,53)])
-        print(" "*10+"                          "+self.roads[(47,51)]+"      "+self.roads[(48,51)]+"          "+self.roads[(48,52)]+"      "+self.roads[(49,52)]+"          "+self.roads[(49,53)]+"      "+self.roads[(50,53)])
-        print(" "*10+"                            "+self.roads[(47,51)]+"  "+self.roads[(48,51)]+"              "+self.roads[(48,52)]+"  "+self.roads[(49,52)]+"              "+self.roads[(49,53)]+"  "+self.roads[(50,53)]+"      Wildcard")
-        print(" "*10+"                            "+self.formatVertex(51)+"     Sheep    "+self.formatVertex(52)+"              "+self.formatVertex(53)+"      @50,53")
-        print(" "*10+"                                       @48,52 ")
+    def printBoard(self, printBool):
+        if printBool:
+
+            '''
+            Prints the board
+            '''
+            print(" "*10+"                                     Wood                Wildcard")
+            print(" "*10+"                            "+self.formatVertex(0)+"   @4,1       "+self.formatVertex(1)+"   @2,6       "+self.formatVertex(2)+"")
+            print(" "*10+"                            "+self.roads[(0,3)]+"  "+self.roads[(0,4)]+"              "+self.roads[(1,4)]+"  "+self.roads[(1,5)]+"              "+self.roads[(2,5)]+"  "+self.roads[(2,6)]+"")
+            print(" "*10+"                          "+self.roads[(0,3)]+"      "+self.roads[(0,4)]+"          "+self.roads[(1,4)]+"      "+self.roads[(1,5)]+"          "+self.roads[(2,5)]+"      "+self.roads[(2,6)]+"")
+            print(" "*10+"                        "+self.roads[(0,3)]+"          "+self.roads[(0,4)]+"      "+self.roads[(1,4)]+"          "+self.roads[(1,5)]+"      "+self.roads[(2,5)]+"          "+self.roads[(2,6)]+"")
+            print(" "*10+"                      "+self.roads[(0,3)]+"              "+self.roads[(0,4)]+"  "+self.roads[(1,4)]+"              "+self.roads[(1,5)]+"  "+self.roads[(2,5)]+"              "+self.roads[(2,6)]+" ")
+            print(" "*10+"                  "+self.formatVertex(3)+"              "+self.formatVertex(4)+"              "+self.formatVertex(5)+"              "+self.formatVertex(6)+"")
+            print(" "*10+"                    "+self.roads[(3,7)]+self.formatHex(self.hexes[0].resourceType)+self.roads[(4,8)]+self.formatHex(self.hexes[1].resourceType)+ self.roads[(5,9)]+self.formatHex(self.hexes[2].resourceType)+ self.roads[(6,10)])
+            print(" "*10+"                    "+self.roads[(3,7)]+self.formatHex(self.hexes[0].number)+self.roads[(4,8)]+self.formatHex(self.hexes[1].number)+self.roads[(5,9)]+self.formatHex(self.hexes[2].number)+self.roads[(6,10)])
+            print(" "*10+"       Brick        "+self.roads[(3,7)]+"         "+self.hexes[0].robberFormat()+"        "+self.roads[(4,8)]+"         "+self.hexes[1].robberFormat()+"        "+self.roads[(5,9)]+"         "+self.hexes[2].robberFormat()+"        "+self.roads[(6,10)])
+            print(" "*10+"       @7,11      "+self.formatVertex(7)+"              "+self.formatVertex(8)+"              "+self.formatVertex(9)+"              "+self.formatVertex(10)+"")
+            print(" "*10+"                  "+self.roads[(7,11)]+"  "+self.roads[(7,12)]+"              "+self.roads[(8,12)]+"  "+self.roads[(8,13)]+"              "+self.roads[(9,13)]+"  "+self.roads[(9,14)]+"              "+self.roads[(10,14)]+"  "+self.roads[(10,15)])
+            print(" "*10+"                "+self.roads[(7,11)]+"      "+self.roads[(7,12)]+"          "+self.roads[(8,12)]+"      "+self.roads[(8,13)]+"          "+self.roads[(9,13)]+"      "+self.roads[(9,14)]+"          "+self.roads[(10,14)]+"      "+self.roads[(10,15)])
+            print(" "*10+"              "+self.roads[(7,11)]+"          "+self.roads[(7,12)]+"      "+self.roads[(8,12)]+"          "+self.roads[(8,13)]+"      "+self.roads[(9,13)]+"          "+self.roads[(9,14)]+"      "+self.roads[(10,14)]+"          "+self.roads[(10,15)])
+            print(" "*10+"            "+self.roads[(7,11)]+"              "+self.roads[(7,12)]+"  "+self.roads[(8,12)]+"              "+self.roads[(8,13)]+"  "+self.roads[(9,13)]+"              "+self.roads[(9,14)]+"  "+self.roads[(10,14)]+"              "+self.roads[(10,15)])
+            print(" "*10+"        "+self.formatVertex(11)+"              "+self.formatVertex(12)+"              "+self.formatVertex(13)+"              "+self.formatVertex(14)+"              "+self.formatVertex(15)+"")
+            print(" "*10+"          "+self.roads[(11,16)]+self.formatHex(self.hexes[3].resourceType)+self.roads[(12,17)]+self.formatHex(self.hexes[4].resourceType)+self.roads[(13,18)]+self.formatHex(self.hexes[5].resourceType)+self.roads[(14,19)]+self.formatHex(self.hexes[6].resourceType)+self.roads[(15,20)]+"       Wheat")
+            print(" "*10+"          "+self.roads[(11,16)]+self.formatHex(self.hexes[3].number)+self.roads[(12,17)]+self.formatHex(self.hexes[4].number)+self.roads[(13,18)]+self.formatHex(self.hexes[5].number)+self.roads[(14,19)]+self.formatHex(self.hexes[6].number)+self.roads[(15,20)]+"       @15,20")
+            print(" "*10+"          "+self.roads[(11,16)]+"        "+self.hexes[3].robberFormat()+"         "+self.roads[(12,17)]+"       "+self.hexes[4].robberFormat()+"          "+self.roads[(13,18)]+"       "+self.hexes[5].robberFormat()+"          "+self.roads[(14,19)]+"        "+self.hexes[6].robberFormat()+"         "+self.roads[(15,20)])
+            print(" "*10+"        "+self.formatVertex(16)+"              "+self.formatVertex(17)+"              "+self.formatVertex(18)+"              "+self.formatVertex(19)+"              "+self.formatVertex(20)+"")
+            print(" "*10+"        "+self.roads[(16,21)]+"  "+self.roads[(16,22)]+"               "+self.roads[(17,22)]+"  "+self.roads[(17,23)]+"             "+self.roads[(18,23)]+"  "+self.roads[(18,24)]+"              "+self.roads[(19,24)]+"  "+self.roads[(19,25)]+"              "+self.roads[(20,25)]+"  "+self.roads[(20,26)])
+            print(" "*10+"      "+self.roads[(16,21)]+"      "+self.roads[(16,22)]+"           "+self.roads[(17,22)]+"      "+self.roads[(17,23)]+"         "+self.roads[(18,23)]+"      "+self.roads[(18,24)]+"          "+self.roads[(19,24)]+"      "+self.roads[(19,25)]+"          "+self.roads[(20,25)]+"      "+self.roads[(20,26)])
+            print(" "*10+"    "+self.roads[(16,21)]+"          "+self.roads[(16,22)]+"      "+self.roads[(17,22)]+"          "+self.roads[(17,23)]+"      "+self.roads[(18,23)]+"          "+self.roads[(18,24)]+"      "+self.roads[(19,24)]+"          "+self.roads[(19,25)]+"      "+self.roads[(20,25)]+"          "+self.roads[(20,26)])
+            print(" "*10+"  "+self.roads[(16,21)]+"              "+self.roads[(16,22)]+"  "+self.roads[(17,22)]+"              "+self.roads[(17,23)]+"  "+self.roads[(18,23)]+"              "+self.roads[(18,24)]+"  "+self.roads[(19,24)]+"              "+self.roads[(19,25)]+"  "+self.roads[(20,25)]+"              "+self.roads[(20,26)])
+            print("Wildcard"+self.formatVertex(21)+"              "+self.formatVertex(22)+"              "+self.formatVertex(23)+"              "+self.formatVertex(24)+"              "+self.formatVertex(25)+"              "+self.formatVertex(26))
+            print("@21,27    "+self.roads[(21,27)]+self.formatHex(self.hexes[7].resourceType)+self.roads[(22,28)]+self.formatHex(self.hexes[8].resourceType)+self.roads[(23,29)]+self.formatHex(self.hexes[9].resourceType)+self.roads[(24,30)]+self.formatHex(self.hexes[10].resourceType)+self.roads[(25,31)]+self.formatHex(self.hexes[11].resourceType)+self.roads[(26,32)])
+            print(" "*10+self.roads[(21,27)]+self.formatHex(self.hexes[7].number)+self.roads[(22,28)]+self.formatHex(self.hexes[8].number)+self.roads[(23,29)]+self.formatHex(self.hexes[9].number)+self.roads[(24,30)]+self.formatHex(self.hexes[10].number)+self.roads[(25,31)]+self.formatHex(self.hexes[11].number)+self.roads[(26,32)]+"")
+            print(" "*10+self.roads[(21,27)]+"         "+self.hexes[7].robberFormat()+"        "+self.roads[(22,28)]+"        "+self.hexes[8].robberFormat()+"         "+self.roads[(23,29)]+"        "+self.hexes[9].robberFormat()+"         "+self.roads[(24,30)]+"         "+self.hexes[10].robberFormat()+"        "+self.roads[(25,31)]+"         "+self.hexes[11].robberFormat()+"        "+self.roads[(26,32)])
+            print(" "*8+self.formatVertex(27)+"              "+self.formatVertex(28)+"              "+self.formatVertex(29)+"              "+self.formatVertex(30)+"              "+self.formatVertex(31)+"              "+self.formatVertex(32))
+            print(" "*10+"  "+self.roads[(27,33)]+"              "+self.roads[(28,33)]+"  "+self.roads[(28,34)]+"              "+self.roads[(29,34)]+"  "+self.roads[(29,35)]+"              "+self.roads[(30,35)]+"  "+self.roads[(30,36)]+"              "+self.roads[(31,36)]+"  "+self.roads[(31,37)]+"              "+self.roads[(32,37)])
+            print(" "*10+"    "+self.roads[(27,33)]+"          "+self.roads[(28,33)]+"      "+self.roads[(28,34)]+"          "+self.roads[(29,34)]+"      "+self.roads[(29,35)]+"          "+self.roads[(30,35)]+"      "+self.roads[(30,36)]+"          "+self.roads[(31,36)]+"      "+self.roads[(31,37)]+"          "+self.roads[(32,37)])
+            print(" "*10+"      "+self.roads[(27,33)]+"      "+self.roads[(28,33)]+"          "+self.roads[(28,34)]+"      "+self.roads[(29,34)]+"          "+self.roads[(29,35)]+"      "+self.roads[(30,35)]+"          "+self.roads[(30,36)]+"      "+self.roads[(31,36)]+"          "+self.roads[(31,37)]+"      "+self.roads[(32,37)])
+            print(" "*10+"        "+self.roads[(27,33)]+"  "+self.roads[(28,33)]+"              "+self.roads[(28,34)]+"  "+self.roads[(29,34)]+"              "+self.roads[(29,35)]+"  "+self.roads[(30,35)]+"              "+self.roads[(30,36)]+"  "+self.roads[(31,36)]+"              "+self.roads[(31,37)]+"  "+self.roads[(32,37)])
+            print(" "*10+"        "+self.formatVertex(33)+"              "+self.formatVertex(34)+"              "+self.formatVertex(35)+"              "+self.formatVertex(36)+"              "+self.formatVertex(37))
+            print(" "*10+"          "+self.roads[(33,38)]+self.formatHex(self.hexes[12].resourceType)+self.roads[(34,39)]+self.formatHex(self.hexes[13].resourceType)+self.roads[(35,40)]+self.formatHex(self.hexes[14].resourceType)+self.roads[(36,41)]+self.formatHex(self.hexes[15].resourceType)+self.roads[(37,42)])
+            print(" "*10+"          "+self.roads[(33,38)]+self.formatHex(self.hexes[12].number)+self.roads[(34,39)]+self.formatHex(self.hexes[13].number)+self.roads[(35,40)]+self.formatHex(self.hexes[14].number)+self.roads[(36,41)]+self.formatHex(self.hexes[15].number)+self.roads[(37,42)])
+            print(" "*10+"          "+self.roads[(33,38)]+"        "+self.hexes[12].robberFormat()+"         "+self.roads[(34,39)]+"         "+self.hexes[13].robberFormat()+"        "+self.roads[(35,40)]+"        "+self.hexes[14].robberFormat()+"         "+self.roads[(36,41)]+"         "+self.hexes[15].robberFormat()+"        "+self.roads[(37,42)]+"     Ore")
+            print(" "*10+"        "+self.formatVertex(38)+"              "+self.formatVertex(39)+"              "+self.formatVertex(40)+"              "+self.formatVertex(41)+"              "+self.formatVertex(42)+"   @37,42")
+            print(" "*10+"            "+self.roads[(38,43)]+"              "+self.roads[(39,43)]+"  "+self.roads[(39,44)]+"              "+self.roads[(40,44)]+"  "+self.roads[(40,45)]+"              "+self.roads[(41,45)]+"  "+self.roads[(41,46)]+"              "+self.roads[(42,46)])
+            print(" "*10+"              "+self.roads[(38,43)]+"          "+self.roads[(39,43)]+"      "+self.roads[(39,44)]+"          "+self.roads[(40,44)]+"      "+self.roads[(40,45)]+"          "+self.roads[(41,45)]+"      "+self.roads[(41,46)]+"          "+self.roads[(42,46)])
+            print(" "*10+"                "+self.roads[(38,43)]+"      "+self.roads[(39,43)]+"          "+self.roads[(39,44)]+"      "+self.roads[(40,44)]+"          "+self.roads[(40,45)]+"      "+self.roads[(41,45)]+"          "+self.roads[(41,46)]+"      "+self.roads[(42,46)])
+            print(" "*10+"                  "+self.roads[(38,43)]+"  "+self.roads[(39,43)]+"              "+self.roads[(39,44)]+"  "+self.roads[(40,44)]+"              "+self.roads[(40,45)]+"  "+self.roads[(41,45)]+"              "+self.roads[(41,46)]+"  "+self.roads[(42,46)])
+            print(" "*10+"     Wildcard     "+self.formatVertex(43)+"              "+self.formatVertex(44)+"              "+self.formatVertex(45)+"              "+self.formatVertex(46))
+            print(" "*10+"     @38,43         "+self.roads[(43,47)]+self.formatHex(self.hexes[16].resourceType)+self.roads[(44,48)]+self.formatHex(self.hexes[17].resourceType)+ self.roads[(45,49)]+self.formatHex(self.hexes[18].resourceType)+ self.roads[(46,50)])
+            print(" "*10+"                    "+self.roads[(43,47)]+self.formatHex(self.hexes[16].number)+ self.roads[(44,48)]+self.formatHex(self.hexes[17].number)+ self.roads[(45,49)]+self.formatHex(self.hexes[18].number)+ self.roads[(46,50)])
+            print(" "*10+"                    "+self.roads[(43,47)]+"        "+self.hexes[16].robberFormat()+"         "+self.roads[(44,48)]+"         "+self.hexes[17].robberFormat()+"        "+self.roads[(45,49)]+"       "+self.hexes[18].robberFormat()+"          "+self.roads[(46,50)])
+            print(" "*10+"                  "+self.formatVertex(47)+"              "+self.formatVertex(48)+"              "+self.formatVertex(49)+"              "+self.formatVertex(50))
+            print(" "*10+"                      "+self.roads[(47,51)]+"              "+self.roads[(48,51)]+"  "+self.roads[(48,52)]+"              "+self.roads[(49,52)]+"  "+self.roads[(49,53)]+"              "+self.roads[(50,53)])
+            print(" "*10+"                        "+self.roads[(47,51)]+"          "+self.roads[(48,51)]+"      "+self.roads[(48,52)]+"          "+self.roads[(49,52)]+"      "+self.roads[(49,53)]+"          "+self.roads[(50,53)])
+            print(" "*10+"                          "+self.roads[(47,51)]+"      "+self.roads[(48,51)]+"          "+self.roads[(48,52)]+"      "+self.roads[(49,52)]+"          "+self.roads[(49,53)]+"      "+self.roads[(50,53)])
+            print(" "*10+"                            "+self.roads[(47,51)]+"  "+self.roads[(48,51)]+"              "+self.roads[(48,52)]+"  "+self.roads[(49,52)]+"              "+self.roads[(49,53)]+"  "+self.roads[(50,53)]+"      Wildcard")
+            print(" "*10+"                            "+self.formatVertex(51)+"     Sheep    "+self.formatVertex(52)+"              "+self.formatVertex(53)+"      @50,53")
+            print(" "*10+"                                       @48,52 ")
+        else:
+            pass

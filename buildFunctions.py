@@ -12,6 +12,7 @@ from player import Player
 from brain import *
 from random import randint
 from logger import *
+from setup import *
 
 def buildCity(board, player):
     '''
@@ -34,7 +35,7 @@ def buildCity(board, player):
         print("\tYou have no settlements to put cities on.")
         return
 
-    board.printBoard()
+    board.printBoard(PRINT_BOOL)
     print()
     print("\tWhich settlement would you like to place it on? Pick the settlement number, starting from top left (and starting from 0).")
 
@@ -55,7 +56,7 @@ def buildCity(board, player):
     player.resourceDict["ore"] -= 3
     player.points += 1
     player.cities -=1
-    board.printBoard()
+    board.printBoard(PRINT_BOOL)
 
 
 def buildSettlement(board, player):
@@ -69,7 +70,7 @@ def buildSettlement(board, player):
         print("\tYou don't have the necessary resources to build a settlement.")
         return
 
-    board.printBoard()
+    board.printBoard(PRINT_BOOL)
     print()
 
     print("\tWhich vertex would you like to place it on? Pick the vertex number, starting from top left (and starting from 0).")
@@ -94,7 +95,7 @@ def buildSettlement(board, player):
 
         logSettlement(currentBoard,vertex,player.name)
         board.placeSettlement(vertex, player)
-        board.printBoard()
+        board.printBoard(PRINT_BOOL)
         player.resourceDict["wheat"] -= 1
         player.resourceDict["wood"] -= 1
         player.resourceDict["sheep"] -= 1
@@ -115,7 +116,7 @@ def buildRoad(board, player, playerList):
         return
 
     # Get the two vertices the road should connect.
-    board.printBoard()
+    board.printBoard(PRINT_BOOL)
     print()
     if player.name in board.robots or player.name in board.rando:
         vertex1 = randint(0,53)
@@ -129,7 +130,7 @@ def buildRoad(board, player, playerList):
         vertex2 = str(vertex2)
         print("\tEnter the number of the first vertex it will connect to. " +vertex1)
         print("\tEnter the number of the second vertex it will connect to. "+vertex2)
-
+            
     else:
         print("\tEnter the number of the first vertex it will connect to.")
         vertex1 = input("\t")
@@ -148,11 +149,13 @@ def buildRoad(board, player, playerList):
 
     # Attempt to place it
     if (board.canPlaceRoad(vertex1, vertex2, player.name)):
-        currentBoard = prepSettlementsForLog(board.vertices,player.name)
-        currentRoads = prepRoadsForLog(board.roads,player.name)
-        logRoads(currentBoard,currentRoads,vertex1,vertex2,player.name)
+
+        openSpots = board.openVertex(vertex1,player.name)
+        indexOf = board.vertexRelationMatrix[vertex1].index(vertex2) + 1
+        logRoads(vertex1,openSpots,indexOf,player.name)
+
         board.placeRoad(vertex1, vertex2, player, playerList)
-        board.printBoard()
+        board.printBoard(PRINT_BOOL)
         player.resourceDict["wood"] -= 1
         player.resourceDict["brick"] -= 1
     else:

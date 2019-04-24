@@ -11,6 +11,7 @@ from board import *
 from player import Player
 from botFunctions import *
 from brain import *
+from setup import *
 
 def diceRoll():
     '''
@@ -120,7 +121,7 @@ def moveRobber(board, mover, playerList):
             mover.resourceDict[resourceTheftList[randomIndex]] += 1
             print("Successfully stole " + resourceTheftList[randomIndex])
 
-    board.printBoard()
+    board.printBoard(PRINT_BOOL)
 
 
 def halveHand(player, originalNumResources, board):

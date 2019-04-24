@@ -18,6 +18,8 @@ from board import *
 from brain import *
 from logger import *
 
+PRINT_BOOL = True
+
 
 def initializePlayers():
     '''
@@ -28,10 +30,16 @@ def initializePlayers():
     players = 0
     robots = 0
     randos = 0
+    answer = input("Do you want to print the board?(y/n)")
+    while not(answer == "y" or answer == "n"):
+        answer = input("Do you want to print the board?(y/n)")
+    if answer == "n":
+        PRINT_BOOL = False
     players = input("How many humans are playing? ")
     while not players.isdigit() or (int(players) > 4) or (int(players) < 0):
         print("Please enter a valid number.")
         players = input("How many humans are playing? ")
+    
 
     if (int(players) >= 1):
         playerList.append(Player("A"))
@@ -176,7 +184,7 @@ def placeFirstSettlements(board, playerList):
         playerList.pop(0)
 
     for i in playerList:
-        board.printBoard()
+        board.printBoard(PRINT_BOOL)
 
         firstVertex = 0
         notPlaced = True
@@ -209,16 +217,10 @@ def placeFirstSettlements(board, playerList):
                         print("Please enter a valid vertex.")
                 else:
                     print("Please enter a valid vertex.")
-        board.printBoard()
-
-
-
+        board.printBoard(PRINT_BOOL)
 
         logSettlement(currentBoard, toPlace,i.name)  #LOGS SETTLEMENTS PLACED
         #building first roads
-
-
-
 
         notPlaced = True
         while(notPlaced):
@@ -226,14 +228,13 @@ def placeFirstSettlements(board, playerList):
                 if i.name in board.rando:
                     toPlace = i.botPlaceRoad(None)
                 else:
-                    currentRoads = prepRoadsForLog(board.roads,i.name)
-                    currentBoard = prepSettlementsForLog(board.vertices,i.name)
-                    throwaway,toPlace = i.botPlaceRoad(currentBoard,currentRoads)
+                    toPlace = i.botPlaceRoad(firstVertex)
+
                 if (board.canPlaceRoad(firstVertex, toPlace, i.name)):
-                    # Legal placement
-                    currentRoads = prepRoadsForLog(board.roads,i.name)
-                    currentBoard = prepSettlementsForLog(board.vertices,i.name)
-                    logRoads(currentBoard, currentRoads,firstVertex,toPlace,i.name)
+                    openSpots = board.openVertex(firstVertex,i.name)
+                    indexOf = board.vertexRelationMatrix[firstVertex].index(toPlace) + 1
+                    logRoads(firstVertex,openSpots,indexOf,i.name)
+
                     board.placeRoad(firstVertex, toPlace, i, playerList)
                     if i.name in board.rando:
                         start = "Bot("
@@ -259,7 +260,7 @@ def placeFirstSettlements(board, playerList):
     secondSettlements = []
 
     for i in range(len(playerList)-1, -1, -1):
-        board.printBoard()
+        board.printBoard(PRINT_BOOL)
         firtVertex = 0
         notPlaced = True
         while(notPlaced):
@@ -293,7 +294,7 @@ def placeFirstSettlements(board, playerList):
                 else:
                     print("Please enter a valid vertex.")
 
-        board.printBoard()
+        board.printBoard(PRINT_BOOL)
 
         notPlaced = True
         while(notPlaced):
@@ -303,9 +304,9 @@ def placeFirstSettlements(board, playerList):
                 while(notPlaced):
                     toPlace = playerList[i].botPlaceRoad(board)
                     if (board.canPlaceRoad(firstVertex, toPlace, playerList[i].name)):
-                        currentRoads = prepRoadsForLog(board.roads,playerList[i].name)
-                        currentBoard = prepSettlementsForLog(board.vertices,playerList[i].name)
-                        logRoads(currentBoard, currentRoads,firstVertex,toPlace,playerList[i].name)
+                        openSpots = board.openVertex(firstVertex,playerList[i].name)
+                        indexOf = board.vertexRelationMatrix[firstVertex].index(toPlace) + 1
+                        logRoads(firstVertex,openSpots,indexOf,playerList[i].name)
                         # Legal placement
                         board.placeRoad(firstVertex, toPlace, playerList[i], playerList)
                         print("Bot("+playerList[i].name+") places a road at " + str(toPlace))

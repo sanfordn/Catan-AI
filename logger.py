@@ -47,23 +47,19 @@ def prepRoadsForLog(roads,player):
     return roadList
 
 
-def logRoads(board,roads,vertex1,vertex2,player):
+def logRoads(firstVertex,openSpots,chosenSpot,player):
     f = open("rando-log-roads-stage.txt","a")
     if getSize("rando-log-roads-stage.txt") > (1000 * 1024):
         deleteContent(f)
     f.write(player)
     f.write("|")
-    for i in board:
+    f.write(str(firstVertex))
+    f.write("|")
+    for i in openSpots:
         tmp = str(i)
         f.write(tmp)
     f.write("|")
-    for i in roads:
-        tmp = str(i)
-        f.write(tmp)
-    f.write("|")
-    f.write(str(vertex1))
-    f.write("|")
-    f.write(str(vertex2))
+    f.write(str(chosenSpot))
     f.write("\r\n")
     f.close()
 

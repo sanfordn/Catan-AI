@@ -9,6 +9,7 @@ from board import *
 from gameFunctions import moveRobber
 from brain import *
 from random import randint
+from setup import *
 
 
 HUMANS = ["A","B","C","D"]
@@ -138,7 +139,7 @@ def roadBuilding(board, player, playerList):
             print("\tEnter the number of the second vertex your road will connect to.")
             print(str(vertex2))
             board.placeRoad(vertex1, vertex2, player, playerList)
-            board.printBoard()
+            board.printBoard(PRINT_BOOL)
         else:
             while (notPlaced):
                 notReceived = True
@@ -163,7 +164,7 @@ def roadBuilding(board, player, playerList):
 
                 if (board.canPlaceRoad(vertex1, vertex2, player.name)):
                     board.placeRoad(vertex1, vertex2, player, playerList)
-                    board.printBoard()
+                    board.printBoard(PRINT_BOOL)
                     notPlaced = False
                 else:
                     print("\tIllegal road placement.")
