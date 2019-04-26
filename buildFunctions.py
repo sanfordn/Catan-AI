@@ -22,7 +22,8 @@ def buildCity(board, player):
 
     # Checks if the player has the resources needed to build a city
     if (player.resourceDict["wheat"] < 2 or player.resourceDict["ore"] < 3):
-        print("\tYou don't have the necessary resources to build a city.")
+        if board.print_bool:
+            print("\tYou don't have the necessary resources to build a city.")
         return
     settlementVertices = []
     for i in range(0, len(board.vertices)):
@@ -32,23 +33,27 @@ def buildCity(board, player):
 
     # Ensures there's a settlement to put the city on
     if (len(settlementVertices) == 0):
-        print("\tYou have no settlements to put cities on.")
+        if board.print_bool:
+            print("\tYou have no settlements to     put cities on.")
         return
 
-    board.printBoard(PRINT_BOOL)
-    print()
-    print("\tWhich settlement would you like to place it on? Pick the settlement number, starting from top left (and starting from 0).")
+    board.printBoard(board.print_bool)
+    if board.print_bool:
+        print()
+        print("\tWhich settlement would you like to place it on? Pick the settlement number, starting from top left (and starting from 0).")
 
     if player.name in board.robots or player.name in board.rando:
         settlementNum,board.takenSpots = player.botPlaceCity(board.hexRelationMatrix,board.takenSpots, player)
     else:
         settlementNum = input("\t")
         if (not settlementNum.isdigit()):
-            print("\tInvalid number.")
+            if board.print_bool:
+                print("\tInvalid number.")
             return
         settlementNum = int(settlementNum)
     if (settlementNum < 0 or settlementNum >= len(settlementVertices)):
-        print("\tInvalid number.")
+        if board.print_bool:
+            print("\tInvalid number.")
         return
 
     board.vertices[settlementVertices[settlementNum]].city = True
@@ -56,7 +61,7 @@ def buildCity(board, player):
     player.resourceDict["ore"] -= 3
     player.points += 1
     player.cities -=1
-    board.printBoard(PRINT_BOOL)
+    board.printBoard(board.print_bool)
 
 
 def buildSettlement(board, player):
@@ -67,19 +72,21 @@ def buildSettlement(board, player):
 
     # Checks if the player has the resources needed to build a settlement
     if (player.resourceDict["wheat"] < 1 or player.resourceDict["wood"] < 1 or player.resourceDict["sheep"] < 1 or player.resourceDict["brick"] < 1):
-        print("\tYou don't have the necessary resources to build a settlement.")
+        if board.print_bool:
+            print("\tYou don't have the necessary resources to build a settlement.")
         return
 
-    board.printBoard(PRINT_BOOL)
-    print()
-
-    print("\tWhich vertex would you like to place it on? Pick the vertex number, starting from top left (and starting from 0).")
+    board.printBoard(board.print_bool)
+    if board.print_bool:
+        print()
+        print("\tWhich vertex would you like to place it on? Pick the vertex number, starting from top left (and starting from 0).")
     if player.name in board.robots or player.name in board.rando:
        vertex = player.botPlaceNewSettlement(board.takenSpots)
     else:
         vertex = input("\t")
     if (not vertex.isdigit()):
-        print("\tInvalid number.")
+        if board.print_bool:
+            print("\tInvalid number.")
         return
     vertex = int(vertex)
 
@@ -89,19 +96,22 @@ def buildSettlement(board, player):
         #Sets up the board for the ability to be logged.
         currentBoard = prepSettlementsForLog(board.vertices,player.name)
         if player.name in board.robots:
-            print("Robot("+player.name+") places a new settlement at "+ str(vertex))
+            if board.print_bool:
+                print("Robot("+player.name+") places a new settlement at "+ str(vertex))
         elif player.name in board.rando:
-            print("Bot("+player.name+") places a new settlement at "+ str(vertex))
+            if board.print_bool:
+                print("Bot("+player.name+") places a new settlement at "+ str(vertex))
 
         logSettlement(currentBoard,vertex,player.name)
         board.placeSettlement(vertex, player)
-        board.printBoard(PRINT_BOOL)
+        board.printBoard(board.print_bool)
         player.resourceDict["wheat"] -= 1
         player.resourceDict["wood"] -= 1
         player.resourceDict["sheep"] -= 1
         player.resourceDict["brick"] -= 1
     else:
-        print("\tIllegal settlement placement.")
+        if board.print_bool:
+            print("\tIllegal settlement placement.")
 
 
 def buildRoad(board, player, playerList):
@@ -112,11 +122,12 @@ def buildRoad(board, player, playerList):
 
     # Checks if the player has the resources needed to build a road
     if (player.resourceDict["wood"] < 1 or player.resourceDict["brick"] < 1):
-        print("\tYou don't have the necessary resources to build a road.")
+        if board.print_bool:
+            print("\tYou don't have the necessary resources to build a road.")
         return
 
     # Get the two vertices the road should connect.
-    board.printBoard(PRINT_BOOL)
+    board.printBoard(board.print_bool)
     print()
     if player.name in board.robots or player.name in board.rando:
         vertex1 = randint(0,53)
@@ -128,22 +139,27 @@ def buildRoad(board, player, playerList):
             tries += 1
         vertex1 = str(vertex1)
         vertex2 = str(vertex2)
-        print("\tEnter the number of the first vertex it will connect to. " +vertex1)
-        print("\tEnter the number of the second vertex it will connect to. "+vertex2)
+        if board.print_bool:
+            print("\tEnter the number of the first vertex it will connect to. " +vertex1)
+            print("\tEnter the number of the second vertex it will connect to. "+vertex2)
             
     else:
-        print("\tEnter the number of the first vertex it will connect to.")
+        if board.print_bool:
+            print("\tEnter the number of the first vertex it will connect to.")
         vertex1 = input("\t")
         if (not vertex1.isdigit()):
-            print("\tInvalid number.")
+            if board.print_bool:
+                print("\tInvalid number.")
             return
     vertex1 = int(vertex1)
 
     if player.name not in board.robots and player.name not in board.rando:
-        print("\tEnter the number of the second vertex it will connect to.")
+        if board.print_bool:
+            print("\tEnter the number of the second vertex it will connect to.")
         vertex2 = input("\t")
         if (not vertex2.isdigit()):
-            print("\tInvalid number.")
+            if board.print_bool:
+                print("\tInvalid number.")
             return
     vertex2 = int(vertex2)
 
@@ -155,13 +171,14 @@ def buildRoad(board, player, playerList):
         logRoads(vertex1,openSpots,indexOf,player.name)
 
         board.placeRoad(vertex1, vertex2, player, playerList)
-        board.printBoard(PRINT_BOOL)
+        board.printBoard(board.print_bool)
         player.resourceDict["wood"] -= 1
         player.resourceDict["brick"] -= 1
     else:
-        print("\tIllegal road placement.")
+        if board.print_bool:
+            print("\tIllegal road placement.")
 
-def buildDevCard(player, devCardDeck):
+def buildDevCard(player, devCardDeck,printBool):
     '''
     Gives the player a development card off of the deck, and returns the string
     containing the name of the development card. That's for tracking which cards
@@ -171,12 +188,14 @@ def buildDevCard(player, devCardDeck):
 
     # Checks if the player has the resources needed to build a road
     if (player.resourceDict["ore"] < 1 or player.resourceDict["sheep"] < 1 or player.resourceDict["wheat"] < 1):
-        print("\tYou don't have the necessary resources to get a development card.")
+        if printBool:
+            print("\tYou don't have the necessary resources to get a development card.")
         return None
 
     # Ensures there are still development cards
     if (len(devCardDeck) == 0):
-        print("\tNo more development cards remain.")
+        if printBool:
+            print("\tNo more development cards remain.")
         return None
 
     newCard = devCardDeck.pop()
@@ -186,6 +205,6 @@ def buildDevCard(player, devCardDeck):
     player.resourceDict["wheat"] -= 1
 
     print()
-    player.printHand()
+    player.printHand(printBool)
 
     return newCard

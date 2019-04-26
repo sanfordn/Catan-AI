@@ -16,24 +16,12 @@ def convertRoadData():
         tmpo.append(int(chosenSpot))
         outputs = outputs + (tmpo,)
     return inputs,outputs
-
-#inputs = data from our rando-log-roads file. It represents 3 binary digits. 
-#the corresponding spot they chose
-inputs,outputs = convertRoadData()
-X = np.array(inputs,  dtype=float)
-y = np.array(outputs, dtype=float)
-
-#normalize our units.
-X = X/np.amax(X, axis=0)
-y = y/100 #max choice we have is 3
-
-
 class NeuralNetwork(object):
-    def __init__(self):
+    def __init__(self,isize,osize):
          # X IS THE NUM OF INPUTS
          #seeding for random number generations
-        self.inputSize = 3
-        self.outputSize = 1
+        self.inputSize = isize
+        self.outputSize = osize
         self.hiddenSize = 3
         #weights
         #weights
@@ -71,83 +59,76 @@ class NeuralNetwork(object):
         o = self.forward(X)
         self.backward(X, y, o)
 
-NN = NeuralNetwork()
-for i in range(1000):
+#NN = NeuralNetwork()
+#for i in range(1000):
     #print( "Input: \n" + str(X)) 
     #print( "Actual Output: \n" + str(y))
     #print( "Predicted Output: \n" + str(NN.forward(X)) )
     #print( "Loss: \n" + str(np.mean(np.square(y - NN.forward(X))))) # mean sum squared loss
     #print( "\n")
-    NN.train(X,y)
+ #   NN.train(X,y)
 
-Q = np.array([0,0,1])
-print("Input: " + str(Q))
-print(str(NN.forward(Q)))
-result = int(round(NN.forward(Q)[0], 2) * 100)
-print("Predicted output: " + str(result))
+#Q = np.array([0,0,1])
+#print("Input: " + str(Q))
+#print(str(NN.forward(Q)))
+#result = int(round(NN.forward(Q)[0], 2) * 100)
+#print("Predicted output: " + str(result))
 
    
 
-def convertSettlementsData():
-    inputs = []
-    outputs = [[]]
+def convertSettlementData():
+    inputs = ()
+    outputs = ()
     fin = open("rando-log-settlements.txt", "r")
     for aline in fin:
         name,firstHalf,move = aline.strip().split("|")
         tmp = []
+        tmpo = []
         for i in firstHalf:
             tmp.append(int(i))
-        inputs.append(tmp)
-        num = round(int(move)/55,4) #because i want to keep this within 1, i divide by 55 possible moves.
-        outputs[0].append(num)
+        inputs = inputs + (tmp,)
+        tmpo.append(int(move))
+        outputs = outputs + (tmpo,)
     return inputs,outputs
-    #initializes the neuron class
 
 
 def chooseSettlement(board):
-    neural_network = NeuralNetwork(54,1)
+    inputs,outputs = convertSettlementData()
+    X = np.array(inputs,  dtype=float)
+    y = np.array(outputs, dtype=float)
 
-    #print("Beginning Randomly Generated Weights: ")
-    #print(neural_network.synaptic_weights)
-    #THIS TRAINING DATA IS FROM log-settlements.txt
-    inputs,outputs = convertSettlementsData()
-    training_inputs = np.array(inputs)
-    training_outputs = np.array(outputs).T
+    #normalize our units.
+    X = X/np.amax(X, axis=0)
+    y = y/100 #max choice we have is 3
 
-    #training taking place
-    neural_network.train(training_inputs, training_outputs, 15000)
+    NN = NeuralNetwork(54,1)
+    
+    #NN = NeuralNetwork()
+    for i in range(1000):
+        NN.train(X,y)
 
-    #print("Ending weights after training: ")
-    #print(neural_network.synaptic_weights)
+    Q = np.array(board)
 
-    #print("CONSIDER NEW SITUATION")
-    tmp = list(map(str,board))
-    theMove = neural_network.think(np.array(tmp))
-    theMove = int(theMove * 55)
-    #print("The neural network says you should do", theMove)
-    return theMove
+    print("Input: " + str(Q))
+    print(str(NN.forward(Q)))
+    result = int(round(NN.forward(Q)[0], 2) * 100)
+    print("Predicted output: " + str(result))
+    exit()
+    return result
 
 def chooseRoads(possibleSpots):
-    neural_network = NeuralNetwork(3,1)
-
-    print("Beginning Randomly Generated Weights: ")
-    print(neural_network.synaptic_weights)
-    #THIS TRAINING DATA IS FROM log-settlements.txt
-
     inputs,outputs = convertRoadData()
-    training_inputs = np.array(inputs)
-    training_outputs = np.array(outputs).T
+    X = np.array(inputs,  dtype=float)
+    y = np.array(outputs, dtype=float)
 
-    neural_network.train(training_inputs, training_outputs, 100)
+    #normalize our units.
+    X = X/np.amax(X, axis=0)
+    y = y/100 #max choice we have is 3
 
-    print("Ending weights after training: ")
-    print(neural_network.synaptic_weights)
-
-    print("CONSIDER NEW SITUATION")
-
-
-    vertex = neural_network.think(np.array(possibleSpots))
-    print("The neural network says you should do", vertex)
-    return vertex
-
-#chooseRoads(['0','1','1'])
+    NN = NeuralNetwork(3,1)
+    
+    for i in range(1000):
+        NN.train(X,y)
+    Q = np.array(possibleSpots)
+    result = int(round(NN.forward(Q)[0], 2) * 100)
+    return result

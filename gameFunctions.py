@@ -59,22 +59,27 @@ def moveRobber(board, mover, playerList):
             while newHex == currentHex:
                 newHex = random.randint(0,18)
             if mover.name in board.rando:
-                print("Bot("+mover.name+") moved the robber to " + str(newHex))
+                if board.print_bool:
+                    print("Bot("+mover.name+") moved the robber to " + str(newHex))
             elif mover.name in board.robots:
-                print("Robot("+mover.name+") moved the robber to " + str(newHex))
+                if board.print_bool:
+                    print("Robot("+mover.name+") moved the robber to " + str(newHex))
 
             board.hexes[newHex].robber = True
             notPlaced = False
         else:
             newHex = input("Player " + mover.name + ", which hex would you like to move the robber to? Select a number 0 - 18, starting from the top left hex and moving right. ")
             if (not newHex.isdigit()):
-                print("Invalid number.")
+                if board.print_bool:
+                    print("Invalid number.")
                 continue
             newHex = int(newHex)
             if (newHex == currentHex):
-                print("The robber is already there. Select a different hex.")
+                if board.print_bool:
+                    print("The robber is already there. Select a different hex.")
             elif (newHex < 0 or newHex > 18):
-                print("Please enter a hex between 0 and 18.")
+                if board.print_bool:
+                    print("Please enter a hex between 0 and 18.")
             else:
                 board.hexes[newHex].robber = True
                 notPlaced = False
@@ -94,7 +99,8 @@ def moveRobber(board, mover, playerList):
         # Choose someone to steal from and set it to "victim"
         notChosen = True
         while (notChosen):
-            print("Player " + mover.name + ", who would you like to steal from? ")
+            if board.print_bool:
+                print("Player " + mover.name + ", who would you like to steal from? ")
             name = None
             #if(mover.isBot == True):
                 #name = botChooseWhoToRob()
@@ -103,7 +109,8 @@ def moveRobber(board, mover, playerList):
             else:
                 name = input()
             if (getPlayerFromName(playerList, name) not in possibleVictims):
-                print("Invalid user.")
+                if board.print_bool:
+                    print("Invalid user.")
             else:
                 for i in range(0, len(possibleVictims)):
                     if possibleVictims[i] == getPlayerFromName(playerList, name):
@@ -119,9 +126,10 @@ def moveRobber(board, mover, playerList):
             randomIndex = random.randint(0, len(resourceTheftList)-1)
             victim.resourceDict[resourceTheftList[randomIndex]] -= 1
             mover.resourceDict[resourceTheftList[randomIndex]] += 1
-            print("Successfully stole " + resourceTheftList[randomIndex])
+            if board.print_bool:
+                print("Successfully stole " + resourceTheftList[randomIndex])
 
-    board.printBoard(PRINT_BOOL)
+    board.printBoard(board.print_bool)
 
 
 def halveHand(player, originalNumResources, board):
@@ -131,19 +139,23 @@ def halveHand(player, originalNumResources, board):
     more than 7 cards.
     '''
 
-    print("Player " + player.name + ":")
+    if board.print_bool:
+        print("Player " + player.name + ":")
     targetNum = originalNumResources / 2
     while (True):
-        player.printHand()
-        print("Please enter the name of the resource you would like to throw away.")
+        player.printHand(board.print_bool)
+        if board.print_bool:
+            print("Please enter the name of the resource you would like to throw away.")
         if (player.name in board.robots) or (player.name in board.rando):
             toDiscard = player.botThrowAway()
         else:
             toDiscard = input()
         if (toDiscard not in player.resourceDict):
-            print("Invalid resource.")
+            if board.print_bool:
+                print("Invalid resource.")
         elif (player.resourceDict[toDiscard] == 0):
-            print("You don't have any " + toDiscard + ".")
+            if board.print_bool:
+                print("You don't have any " + toDiscard + ".")
         else:
             player.resourceDict[toDiscard] -= 1
             if (player.numResources() <= targetNum):

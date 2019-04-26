@@ -59,12 +59,15 @@ class Board:
     This is an object of the entire board.
     '''
 
-    def __init__(self, vertices, hexes):
+    def __init__(self, vertices, hexes,showBoard):
         # List of vertices
         self.vertices = vertices
 
         # List of hexes
         self.hexes = hexes
+
+        #This makes it so we dont have to see the board
+        self.print_bool = showBoard
 
         # List of humans robots and random robots
         self.humans  = ["A","B","C","D"]
@@ -375,7 +378,8 @@ class Board:
         player.roads -=1
         self.assignLongestRoad(player, playerList)
         for i in playerList:
-            print(i.longestRoad)
+            if self.print_bool:
+                print(i.longestRoad)
 
     def openVertex(self,avertex,player):
         openSpots=[]
@@ -582,7 +586,6 @@ class Board:
 
     def printBoard(self, printBool):
         if printBool:
-
             '''
             Prints the board
             '''

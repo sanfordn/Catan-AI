@@ -95,9 +95,9 @@ def printVictory(winList,amount):
             print("\t PLAYER " + winList[3][1] + " TOOK LAST WITH   " + str(winList[3][0])+ "  POINTS. "+ winList[3][2])
 
 if __name__ == "__main__":
-    playerList = initializePlayers()
+    playerList,printBool = initializePlayers()
     devCardDeck = initializeDevCards()
-    board = createBoard()
+    board = createBoard(printBool)
 
     # Setup Phase
     placeFirstSettlements(board, playerList)
@@ -108,12 +108,13 @@ if __name__ == "__main__":
     playing = True
     while(playing):
         currentPlayer = playerList[currentPlayerIndex]
-        board.printBoard(PRINT_BOOL)
+        board.printBoard(board.print_bool)
 
         # Roll the dice and resolve consequences of the dice roll
         roll = diceRoll()
-        print()
-        print("A " + str(roll) + " was rolled.")
+        if board.print_bool:
+            print()
+            print("A " + str(roll) + " was rolled.")
         if (roll == 7):
             # Player moves robber
             moveRobber(board, currentPlayer, playerList)
@@ -126,12 +127,15 @@ if __name__ == "__main__":
 
         # Begin the action phase for the current player
         if currentPlayer.name in board.humans:
-            print("Player " + currentPlayer.name + ":")
+            if board.print_bool:
+                print("Player " + currentPlayer.name + ":")
         elif currentPlayer.name in board.rando:
-            print("Rando " + currentPlayer.name + ":")
+            if board.print_bool:
+                print("Rando " + currentPlayer.name + ":")
         else:
-            print("Robot " + currentPlayer.name + ":")
-        currentPlayer.printHand()
+            if board.print_bool:
+                print("Robot " + currentPlayer.name + ":")
+        currentPlayer.printHand(board.print_bool)
 
         # Keep track of what development cards the player obtains in their turn. They can't immediately use them.
         obtainedDevCards = {
@@ -145,25 +149,29 @@ if __name__ == "__main__":
         notDone = True
         usedDevCard = False
         while(notDone):
-            print()
-            print("What would you like to do? Type a command, or -h for a list of commands.")
+            if board.print_bool:
+                print()
+                print("What would you like to do? Type a command, or -h for a list of commands.")
             if currentPlayer.name in board.robots:   #Robot
                 command = currentPlayer.botStartTurn()
                 currentPlayer.lastcommand = command
                 currentPlayer.move = command
-                print("Robot("+currentPlayer.name+") does "+command)
+                if board.print_bool:
+                    print("Robot("+currentPlayer.name+") does "+command)
             elif currentPlayer.name in board.rando:  #Rando
                 command = currentPlayer.botStartTurn()
                 currentPlayer.lastcommand = command
                 currentPlayer.move = command
-                print("Bot("+currentPlayer.name+") does "+command)
+                if board.print_bool:
+                    print("Bot("+currentPlayer.name+") does "+command)
             else:
                 command = input()
 
             if (command == "-h"):
                 printHelp()
             elif (command == "-t"):
-                print("\tWho would you like to trade with? Enter the player's name or type \"bank\" if you would like to trade with the bank.")
+                if board.print_bool:
+                    print("\tWho would you like to trade with? Enter the player's name or type \"bank\" if you would like to trade with the bank.")
                 if currentPlayer.name in board.rando or currentPlayer.name in board.robots:
                     trader = "Bank"
                 else:
@@ -174,65 +182,77 @@ if __name__ == "__main__":
                     print("\tYou can't trade with yourself.")
                 elif (trader == "Bank"):
                     # Trade with the bank
-                    bankTrade(board, currentPlayer)
+                    bankTrade(board, currentPlayer,board.print_bool)
                 elif (getPlayerFromName(playerList, trader) != None):
                     # Trade with another player
                     playerTrade(currentPlayer, getPlayerFromName(playerList, trader))
                 else:
-                    print("\tInvalid command.")
+                    if board.print_bool:
+                        print("\tInvalid command.")
             elif (command == "-b"):
-                print("\tWhat would you like to build? Type -c for a city, -s for a settlement, -r for a road, or -d for a development card.")
+                if board.print_bool:
+                    print("\tWhat would you like to build? Type -c for a city, -s for a settlement, -r for a road, or -d for a development card.")
                 if currentPlayer.name in board.robots:
                     toBuild = currentPlayer.botCommand(currentPlayer.lastcommand)
                     currentPlayer.lastcommand = ''
                     currentPlayer.move = toBuild
-                    print("Rando("+currentPlayer.name+") does "+ toBuild)
+                    if board.print_bool:
+                        print("Rando("+currentPlayer.name+") does "+ toBuild)
                 elif currentPlayer.name in board.rando:
                     toBuild = currentPlayer.botCommand(currentPlayer.lastcommand)
                     currentPlayer.lastcommand = ''
                     currentPlayer.move = toBuild
-                    print("Bot("+currentPlayer.name+") does "+ toBuild)
+                    if board.print_bool:
+                        print("Bot("+currentPlayer.name+") does "+ toBuild)
                 else:
                     toBuild = input("\t")
 
                 if (toBuild == "-c"):
                     if currentPlayer.cities < 1:
-                        print("no more cities")
+                        if board.print_bool:
+                            print("no more cities")
                     else:
                         buildCity(board, currentPlayer)
 
                 elif (toBuild == "-s"):
                     if currentPlayer.settlements < 1:
-                        print("no more settlements")
+                        if board.print_bool:
+                            print("no more settlements")
                     else:
                         buildSettlement(board, currentPlayer)
                 elif (toBuild == "-r"):
                     if currentPlayer.roads < 1:
-                        print("no more roads")
+                        if board.print_bool:
+                            print("no more roads")
                     else:
                         buildRoad(board, currentPlayer, playerList)
                 elif (toBuild == "-d"):
-                    result = buildDevCard(currentPlayer, devCardDeck)
+                    result = buildDevCard(currentPlayer, devCardDeck,board.print_bool)
                     if (result != None):
                         obtainedDevCards[result] += 1
                 else:
-                    print("\tInvalid command.")
+                    if board.print_bool:
+                        print("\tInvalid command.")
             elif (command == '-d'):
                 if (usedDevCard):
-                    print("\tYou may only use 1 development card per turn.")
+                    if board.print_bool:
+                        print("\tYou may only use 1 development card per turn.")
                 else:
                     usedDevCard = True
-                    print("\tWhich development card would you like to use? Type -k to use a knight, -y to use Year of Plenty, -m to use monopoly, or -r to use road building.")
+                    if board.print_bool:
+                        print("\tWhich development card would you like to use? Type -k to use a knight, -y to use Year of Plenty, -m to use monopoly, or -r to use road building.")
                     if currentPlayer.name in board.robots:
                         toUse = currentPlayer.botCommand(currentPlayer.lastcommand)
                         currentPlayer.lastcommand = toUse
                         currentPlayer.move = toUse
-                        print("Robot("+currentPlayer.name+") does "+toUse)
+                        if board.print_bool:
+                            print("Robot("+currentPlayer.name+") does "+toUse)
                     elif currentPlayer.name in board.rando:
                         toUse = currentPlayer.botCommand(currentPlayer.lastcommand)
                         currentPlayer.lastcommand = toUse
                         currentPlayer.move = toUse
-                        print("Bot("+currentPlayer.name+") does "+toUse)
+                        if board.print_bool:
+                            print("Bot("+currentPlayer.name+") does "+toUse)
                     else:
                         toUse = input("\t")
                     if (toUse == "-k"):
@@ -240,29 +260,33 @@ if __name__ == "__main__":
                         if (currentPlayer.devCardDict["Knight"] - obtainedDevCards["Knight"] - 1 >= 0):
                             useKnight(board, currentPlayer, playerList)
                             currentPlayer.usedDevCards.append("Knight")
-                            print(currentPlayer.usedDevCards)
                         else:
-                            print("\tYou can't use a knight.")
+                            if board.print_bool:
+                                print("\tYou can't use a knight.")
                     elif (toUse == "-y"):
                         if (currentPlayer.devCardDict["Year of Plenty"] - obtainedDevCards["Year of Plenty"] - 1 >= 0):
-                            yearOfPlenty(currentPlayer)
+                            yearOfPlenty(currentPlayer,printBool)
                             currentPlayer.usedDevCards.append("Year of Plenty")
                         else:
-                            print("You can't use year of plenty.")
+                            if board.print_bool:
+                                print("You can't use year of plenty.")
                     elif (toUse == "-m"):
                         if (currentPlayer.devCardDict["Monopoly"] - obtainedDevCards["Monopoly"] - 1 >= 0):
-                            monopoly(playerList, currentPlayer)
+                            monopoly(playerList, currentPlayer,printBool)
                             currentPlayer.usedDevCards.append("Monopoly")
                         else:
-                            print("You can't use monopoly.")
+                            if board.print_bool:
+                                print("You can't use monopoly.")
                     elif (toUse == "-r"):
                         if (currentPlayer.devCardDict["Road Building"] - obtainedDevCards["Road Building"] - 1 >= 0):
                             roadBuilding(board, currentPlayer, playerList)
                             currentPlayer.usedDevCards.append("Road Building")
                         else:
-                            print("You can't use road building.")
+                            if board.print_bool:
+                                print("You can't use road building.")
                     else:
-                        print("\tInvalid command.")
+                        if board.print_bool:
+                            print("\tInvalid command.")
                         usedDevCard = False
             elif (command == "-e"):
                 usedDevCard = False
@@ -278,7 +302,8 @@ if __name__ == "__main__":
             #    currentPlayer.resourceDict["ore"] = 1
             #    currentPlayer.resourceDict["wheat"] = 1
             else:
-                print("Invalid command.")
+                if board.print_bool:
+                    print("Invalid command.")
 
         if playerList[currentPlayerIndex].victorious():
             playing = False

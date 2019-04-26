@@ -8,11 +8,12 @@ class Robot(Player):
 
     def botPlaceSettlement(self,board):
         #return chooseSettlement(board)
-        return random.randint(0,53)
+        aspot = chooseSettlement(board)
+        return aspot
 
-    def botPlaceRoad(self,vertex):
-        avertex = chooseRoads(vertex)
-        return vertex
+    def botPlaceRoad(self,openSpots):
+        avertex = chooseRoads(openSpots)
+        return avertex
 
     def botPlaceNewSettlement(self, currentBoard):
         print("idk how to place a settlement")

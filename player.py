@@ -41,21 +41,24 @@ class Player:
         self.moveList = []
         self.usedDevCards = []
 
-    def printHand(self):
+    def printHand(self,printBool):
         '''
         Prints out what the player has in their hand at the moment. This happens
         at the start of each turn.
         '''
-        print("Current Hand:")
-        print("\tResources:")
-        print("\t\tWheat: " + str(self.resourceDict["wheat"]) + "\tSheep: " + str(self.resourceDict["sheep"]) + "\tBrick: " + str(self.resourceDict["brick"]))
-        print("\t\tOre: " + str(self.resourceDict["ore"]) + "\t\tWood: " + str(self.resourceDict["wood"]))
-        print("\tDevelopment Cards:")
-        print("\t\tKnights: " + str(self.devCardDict["Knight"]) + "\tMonopoly: " + str(self.devCardDict["Monopoly"]) + "\tYear of Plenty: " + str(self.devCardDict["Year of Plenty"]))
-        print("\t\tVictory Points: " + str(self.devCardDict["Victory Point"]) + "\t\tRoad Building: " + str(self.devCardDict["Road Building"]))
-        print("\tStatus:")
-        print("\t\tLongest Road: " + str(self.longestRoad) + "\t\tLargest Army: " + str(self.largestArmy))
-        print("\t\tPoints: " + str(self.points))
+        if printBool:
+            print("Current Hand:")
+            print("\tResources:")
+            print("\t\tWheat: " + str(self.resourceDict["wheat"]) + "\tSheep: " + str(self.resourceDict["sheep"]) + "\tBrick: " + str(self.resourceDict["brick"]))
+            print("\t\tOre: " + str(self.resourceDict["ore"]) + "\t\tWood: " + str(self.resourceDict["wood"]))
+            print("\tDevelopment Cards:")
+            print("\t\tKnights: " + str(self.devCardDict["Knight"]) + "\tMonopoly: " + str(self.devCardDict["Monopoly"]) + "\tYear of Plenty: " + str(self.devCardDict["Year of Plenty"]))
+            print("\t\tVictory Points: " + str(self.devCardDict["Victory Point"]) + "\t\tRoad Building: " + str(self.devCardDict["Road Building"]))
+            print("\tStatus:")
+            print("\t\tLongest Road: " + str(self.longestRoad) + "\t\tLargest Army: " + str(self.largestArmy))
+            print("\t\tPoints: " + str(self.points))
+        else:
+            pass
 
 
     def numResources(self):

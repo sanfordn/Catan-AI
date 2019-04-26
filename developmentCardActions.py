@@ -48,7 +48,7 @@ def useKnight(board, player, playerList):
     player.devCardDict["Knight"] -= 1
 
 
-def yearOfPlenty(player):
+def yearOfPlenty(player,printBool):
     '''
     This gives two resources of the player's choice to the player, which is the
     "player" variable.
@@ -56,37 +56,43 @@ def yearOfPlenty(player):
 
     notReceived = True
     while (notReceived):
-        print("\tWhat's the first resource you would like? Please enter the full name of the resource.")
+        if printBool:
+            print("\tWhat's the first resource you would like? Please enter the full name of the resource.")
         if player.name in ROBOTS:
             toGet = botChooseResource()
-            print(toGet) #this is feedback for the CLI to show what bot chose
+            if printBool: 
+                print(toGet) #this is feedback for the CLI to show what bot chose
         else:
             toGet = input("\t")
         if (toGet in player.resourceDict):
             player.resourceDict[toGet] += 1
             notReceived = False
         else:
-            print("\tPlease enter a valid resource.")
+            if printBool:
+                print("\tPlease enter a valid resource.")
 
     notReceived = True
     while (notReceived):
-        print("\tWhat's the second resource you would like? Please enter the full name of the resource.")
+        if printBool:
+            print("\tWhat's the second resource you would like? Please enter the full name of the resource.")
         if player.name in ROBOTS:
             toGet = botChooseResource()
-            print(toGet)
+            if printBool:
+                print(toGet)
         else:
             toGet = input("\t")
         if (toGet in player.resourceDict):
             player.resourceDict[toGet] += 1
             notReceived = False
         else:
-            print("\tPlease enter a valid resource.")
+            if printBool:
+                print("\tPlease enter a valid resource.")
 
     # Removes the development card from their hand
     player.devCardDict["Year of Plenty"] -= 1
 
 
-def monopoly(playerList, player):
+def monopoly(playerList, player,printBool):
     '''
     This takes away all of the other player's resource card of the current
     current player's choice.
@@ -94,10 +100,12 @@ def monopoly(playerList, player):
 
     notReceived = True
     while (notReceived):
-        print("\tWhat resource would you like to take? Please enter the full name of the resource.")
+        if printBool:
+            print("\tWhat resource would you like to take? Please enter the full name of the resource.")
         if player.name  in ROBOTS:
             toGet = botChooseResource()
-            print(toGet) #this is feedback for the CLI to show what bot chose
+            if printBool:
+                print(toGet) #this is feedback for the CLI to show what bot chose
         else:
             toGet = input("\t")
         if (toGet in player.resourceDict):
@@ -109,7 +117,8 @@ def monopoly(playerList, player):
                     i.resourceDict[toGet] -= i.resourceDict[toGet]
             notReceived = False
         else:
-            print("\tPlease enter a valid resource.")
+            if printBool:
+                print("\tPlease enter a valid resource.")
 
     # Removes the development card from their hand
     player.devCardDict["Monopoly"] -= 1
@@ -134,27 +143,31 @@ def roadBuilding(board, player, playerList):
                 vertex1 = randint(0,53)
                 vertex2 = randint(0,53)
 
-            print("\tEnter the number of the first vertex your road will connect to.")
-            print(str(vertex1))
-            print("\tEnter the number of the second vertex your road will connect to.")
-            print(str(vertex2))
+            if board.print_bool:
+                print("\tEnter the number of the first vertex your road will connect to.")
+                print(str(vertex1))
+                print("\tEnter the number of the second vertex your road will connect to.")
+                print(str(vertex2))
             board.placeRoad(vertex1, vertex2, player, playerList)
-            board.printBoard(PRINT_BOOL)
+            board.printBoard(board.print_bool)
         else:
             while (notPlaced):
                 notReceived = True
                 while (notReceived):
-                    print("\tEnter the number of the first vertex your road will connect to.")
+                    if board.print_bool:
+                        print("\tEnter the number of the first vertex your road will connect to.")
                     vertex1 = input("\t")
                     if (not vertex1.isdigit()):
-                        print("\tInvalid number.")
+                        if board.print_bool:
+                            print("\tInvalid number.")
                     else:
                         vertex1 = int(vertex1)
                         notReceived = False
                         
                 notReceived = True
                 while (notReceived):
-                    print("\tEnter the number of the second vertex your road will connect to.")
+                    if board.print_bool:
+                        print("\tEnter the number of the second vertex your road will connect to.")
                     vertex2 = input("\t")
                     if (not vertex2.isdigit()):
                         print("\tInvalid number.")
@@ -164,10 +177,11 @@ def roadBuilding(board, player, playerList):
 
                 if (board.canPlaceRoad(vertex1, vertex2, player.name)):
                     board.placeRoad(vertex1, vertex2, player, playerList)
-                    board.printBoard(PRINT_BOOL)
+                    board.printBoard(board.print_bool)
                     notPlaced = False
                 else:
-                    print("\tIllegal road placement.")
+                    if board.print_bool:
+                        print("\tIllegal road placement.")
 
     # Removes the development card from their hand
     player.devCardDict["Road Building"] -= 1
