@@ -257,14 +257,15 @@ class Board:
 
 
     def occupySpot(self,piece,player):
+        '''
+        Goes through the taken spots on the visual representation of the board and replaces the
+            chosen vertex with "[PLAYERNAME] + S" to give visual feedback and for logging purposes
+        '''
+        
         for row in range(len(self.takenSpots)):
             for vertex in range(len(self.takenSpots[row])):
                if self.takenSpots[row][vertex] == piece:
                     self.takenSpots[row][vertex] = player+"S"
-
-    def getOpenRoads(self):
-        #return the road list from above
-        return self.roads
 
     def canPlaceSettlement(self, vertex, playerName, firstPlacement):
         '''
@@ -382,6 +383,11 @@ class Board:
                 print(i.longestRoad)
 
     def openVertex(self,avertex,player):
+        '''
+        A vertex is passed in, the function then gets the index of the vertex
+            and sees if there are possible road openings.This function returns 
+            a 3 digit binary array of open spots, where 1 is open, 0 is closed.
+        '''
         openSpots=[]
         for v in self.vertexRelationMatrix[avertex]:
             if self.canPlaceRoad(avertex,v,player):

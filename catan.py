@@ -25,74 +25,89 @@ def printHelp():
     print("\t-e is for ending your turn.")
 
 def tallyUsedDevCards(player):
-        #tallies the total number of develpoment cards a player used
-        totalDict = {
-                "Knight": 0,
-                "Year of Plenty": 0,
-                "Monopoly": 0,
-                "Victory Point": 0,
-                "Road Building": 0
-            }
-        finalString = ""
-        tmp = []
-        for card in player.usedDevCards:
-            totalDict[card] +=1
+    '''
+    Gets the player's data of the development cards they used, and how many
+        points they got from victory point development cards. Function then
+        sees if the player had the largest army and/or longest road. 
+        Finally returns a string with all the collected data.
+    '''
+    #tallies the total number of develpoment cards a player used
+    totalDict = {
+            "Knight": 0,
+            "Year of Plenty": 0,
+            "Monopoly": 0,
+            "Victory Point": 0,
+            "Road Building": 0
+        }
+    finalString = ""
+    tmp = []
+    for card in player.usedDevCards:
+        totalDict[card] +=1
 
-        totalDict["Victory Point"] += player.devCardDict["Victory Point"]
+    totalDict["Victory Point"] += player.devCardDict["Victory Point"]
 
-        for amount in totalDict:
-            tmp.append(totalDict[amount])
+    for amount in totalDict:
+        tmp.append(totalDict[amount])
 
-        knights      = str(tmp[0])+ "  Knights, "
-        monopoly     = str(tmp[1])+ "  Year of Plenty, "
-        yearOfPlenty = str(tmp[2])+ "  Monopoly, "
-        roads        = str(tmp[4])+ "  Road Building. "
+    knights      = str(tmp[0])+ "  Knights, "
+    monopoly     = str(tmp[1])+ "  Year of Plenty, "
+    yearOfPlenty = str(tmp[2])+ "  Monopoly, "
+    roads        = str(tmp[4])+ "  Road Building. "
 
-        victoryPoints = "They also had " +  str(tmp[3])+ "  points from Victory Point cards."
-        if player.largestArmy == False:
-            largestArmy = "They DIDN'T HAVE the largest army."
-        else:
-            largestArmy = "They HAVE the largest army."
+    victoryPoints = "They also had " +  str(tmp[3])+ "  points from Victory Point cards."
+    if player.largestArmy == False:
+        largestArmy = "They DIDN'T HAVE the largest army."
+    else:
+        largestArmy = "They HAVE the largest army."
 
-        if player.longestRoad == False:
-            longestRoad = "They DIDN'T HAVE the longest road."
-        else:
-            longestRoad = "The HAVE the longest road."
+    if player.longestRoad == False:
+        longestRoad = "They DIDN'T HAVE the longest road."
+    else:
+        longestRoad = "The HAVE the longest road."
 
 
 
-        finalString = "They used " + knights + monopoly + yearOfPlenty + roads + victoryPoints + largestArmy + longestRoad
+    finalString = "They used " + knights + monopoly + yearOfPlenty + roads + victoryPoints + largestArmy + longestRoad
 
-        return finalString
+    return finalString
 
 def rankPlayers(playerList):
-        winList = []
-        for p in playerList:
-            if p.longestRoad == True:
-                p.points +=2
-            if p.largestArmy == True:
-                p.points +=2
-            totalDevCards = tallyUsedDevCards(p)
-            p.points += p.devCardDict["Victory Point"]
-            winList.append([p.points, p.name, totalDevCards])
-        winList.sort()
-        winList.reverse()
-        winner = winList[0][1]
-        return winList,winner
+    '''
+    Ranks the players in order based on the amount of victory points they ended the game with
+    '''
+    winList = []
+    for p in playerList:
+        if p.longestRoad == True:
+            p.points +=2
+        if p.largestArmy == True:
+            p.points +=2
+        totalDevCards = tallyUsedDevCards(p)
+        p.points += p.devCardDict["Victory Point"]
+        winList.append([p.points, p.name, totalDevCards])
+    winList.sort()
+    winList.reverse()
+    winner = winList[0][1]
+    return winList,winner
 
 def printVictory(winList,amount):
-        if amount == 2:
-            print("\t PLAYER " + winList[0][1] + " WINS WITH      " + str(winList[0][0])+ " POINTS. " + winList[0][2])
-            print("\t PLAYER " + winList[1][1] + " TOOK LAST WITH " + str(winList[1][0])+ "  POINTS. " + winList[1][2])
-        if amount == 3:
-            print("\t PLAYER " + winList[0][1] + " WINS WITH        " + str(winList[0][0])+ " POINTS. "+ winList[0][2])
-            print("\t PLAYER " + winList[1][1] + " TOOK SECOND WITH " + str(winList[1][0])+ "  POINTS. "+ winList[1][2])
-            print("\t PLAYER " + winList[2][1] + " TOOK LAST WITH   " + str(winList[2][0])+ "  POINTS. "+ winList[2][2])
-        if amount == 4:
-            print("\t PLAYER " + winList[0][1] + " WINS WITH        " + str(winList[0][0])+ " POINTS. "+ winList[0][2])
-            print("\t PLAYER " + winList[1][1] + " TOOK SECOND WITH " + str(winList[1][0])+ "  POINTS. "+ winList[1][2])
-            print("\t PLAYER " + winList[2][1] + " TOOK THIRD WITH  " + str(winList[2][0])+ "  POINTS. "+ winList[2][2])
-            print("\t PLAYER " + winList[3][1] + " TOOK LAST WITH   " + str(winList[3][0])+ "  POINTS. "+ winList[3][2])
+    
+    '''
+    Prints a visual representation of what happened in the game 
+        (for development purposes and visual feedback in the game)
+    '''
+    
+    if amount == 2:
+        print("\t PLAYER " + winList[0][1] + " WINS WITH      " + str(winList[0][0])+ " POINTS. " + winList[0][2])
+        print("\t PLAYER " + winList[1][1] + " TOOK LAST WITH " + str(winList[1][0])+ "  POINTS. " + winList[1][2])
+    if amount == 3:
+        print("\t PLAYER " + winList[0][1] + " WINS WITH        " + str(winList[0][0])+ " POINTS. "+ winList[0][2])
+        print("\t PLAYER " + winList[1][1] + " TOOK SECOND WITH " + str(winList[1][0])+ "  POINTS. "+ winList[1][2])
+        print("\t PLAYER " + winList[2][1] + " TOOK LAST WITH   " + str(winList[2][0])+ "  POINTS. "+ winList[2][2])
+    if amount == 4:
+        print("\t PLAYER " + winList[0][1] + " WINS WITH        " + str(winList[0][0])+ " POINTS. "+ winList[0][2])
+        print("\t PLAYER " + winList[1][1] + " TOOK SECOND WITH " + str(winList[1][0])+ "  POINTS. "+ winList[1][2])
+        print("\t PLAYER " + winList[2][1] + " TOOK THIRD WITH  " + str(winList[2][0])+ "  POINTS. "+ winList[2][2])
+        print("\t PLAYER " + winList[3][1] + " TOOK LAST WITH   " + str(winList[3][0])+ "  POINTS. "+ winList[3][2])
 
 if __name__ == "__main__":
     playerList,printBool = initializePlayers()
@@ -296,11 +311,6 @@ if __name__ == "__main__":
                 obtainedDevCards["Road Building"] = 0
                 obtainedDevCards["Victory Point"] = 0
                 notDone = False
-            #elif (command == "dev"):
-            #    currentPlayer.move = "dev"
-            #    currentPlayer.resourceDict["sheep"] = 1
-            #    currentPlayer.resourceDict["ore"] = 1
-            #    currentPlayer.resourceDict["wheat"] = 1
             else:
                 if board.print_bool:
                     print("Invalid command.")

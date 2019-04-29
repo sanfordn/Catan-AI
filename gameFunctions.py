@@ -9,8 +9,6 @@ etc.
 import random
 from board import *
 from player import Player
-from botFunctions import *
-from brain import *
 from setup import *
 
 def diceRoll():

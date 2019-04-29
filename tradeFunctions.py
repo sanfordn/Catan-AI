@@ -7,7 +7,6 @@ another player or trading with the bank.
 
 from board import *
 from player import Player
-from brain import botChooseResource
 
 HUMANS = ["A","B","C","D"]
 ROBOTS = ["W","X","Y","Z"]
@@ -67,7 +66,7 @@ def bankTrade(board, player,printBool):
     if board.print_bool:
         print("\tWhat resource are you trading in? Type in the full resource name.")
     if player.name in ROBOTS:
-        tradeIn = botChooseResource()
+        tradeIn = player.botChooseResource()
         if board.print_bool:
             print("\t"+tradeIn)
     else:
@@ -117,7 +116,7 @@ def bankTrade(board, player,printBool):
     if board.print_bool:
         print("\tWhat resource are you trading " + tradeIn + " for?")
     if player.name in ROBOTS:
-        tradeFor = botChooseResource()
+        tradeFor = player.botChooseResource()
         if board.print_bool:
             print("\t"+tradeFor)
     else:

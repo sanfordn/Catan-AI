@@ -9,7 +9,6 @@ player doesn't have the necessary resources.
 
 from board import *
 from player import Player
-from brain import *
 from random import randint
 from logger import *
 from setup import *

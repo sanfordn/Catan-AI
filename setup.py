@@ -15,7 +15,6 @@ from player import Player
 from rando import Rando
 from robot import Robot
 from board import *
-from brain import *
 from logger import *
 
 def initializePlayers():
@@ -28,6 +27,7 @@ def initializePlayers():
     robots = 0
     randos = 0
     print_bool = True
+    
     answer = input("Do you want to print the board?(y/n)")
     while not(answer == "y" or answer == "n"):
         answer = input("Do you want to print the board?(y/n)")
@@ -39,6 +39,7 @@ def initializePlayers():
         players = input("How many humans are playing? ")
     
 
+    #assigns a letter to any Players [ABCD]
     if (int(players) >= 1):
         playerList.append(Player("A"))
     if (int(players) >= 2):
@@ -65,7 +66,7 @@ def initializePlayers():
             robots = input("How many random bots are playing? You can have up to " + str(availableBots)+ ": ")
         availableBots = availableBots - int(robots)
 
-
+    #assigns a letter to any Randos [WXYZ]
     if (int(randos) >= 1):
         playerList.append(Rando("W"))
     if (int(randos) >= 2):
@@ -75,6 +76,7 @@ def initializePlayers():
     if (int(randos) >= 4):
         playerList.append(Rando("Z"))
 
+    #assigns number to any robots [1234]
     if (int(robots) >= 1):
         playerList.append(Robot("1"))
     if (int(robots) >= 2):

@@ -3,6 +3,12 @@ import math
 
 
 def convertRoadData():
+    '''
+    Returns 2 lists:
+        Inputs: Binary array of roads owned
+        Outputs: Roads chosen
+    '''
+    
     inputs = ()
     outputs = ()
     fin = open("rando-log-roads.txt", "r")
@@ -16,7 +22,11 @@ def convertRoadData():
         tmpo.append(int(chosenSpot))
         outputs = outputs + (tmpo,)
     return inputs,outputs
+
 class NeuralNetwork(object):
+    '''
+    Based on this article: https://dev.to/shamdasani/build-a-flexible-neural-network-with-backpropagation-in-pythons
+    '''
     def __init__(self,isize,osize):
          # X IS THE NUM OF INPUTS
          #seeding for random number generations
@@ -57,26 +67,14 @@ class NeuralNetwork(object):
 
     def train (self, X, y):
         o = self.forward(X)
-        self.backward(X, y, o)
-
-#NN = NeuralNetwork()
-#for i in range(1000):
-    #print( "Input: \n" + str(X)) 
-    #print( "Actual Output: \n" + str(y))
-    #print( "Predicted Output: \n" + str(NN.forward(X)) )
-    #print( "Loss: \n" + str(np.mean(np.square(y - NN.forward(X))))) # mean sum squared loss
-    #print( "\n")
- #   NN.train(X,y)
-
-#Q = np.array([0,0,1])
-#print("Input: " + str(Q))
-#print(str(NN.forward(Q)))
-#result = int(round(NN.forward(Q)[0], 2) * 100)
-#print("Predicted output: " + str(result))
-
-   
+        self.backward(X, y, o) 
 
 def convertSettlementData():
+    '''
+    Returns 2 lists:
+        Inputs:  binary tuple of settlements owned. 
+        Outputs: tuples of the settlements chosen
+    '''
     inputs = ()
     outputs = ()
     fin = open("rando-log-settlements.txt", "r")
@@ -117,6 +115,9 @@ def chooseSettlement(board):
     return result
 
 def chooseRoads(possibleSpots):
+    '''
+    The 3 digit binary array is processed by the neural network and returns either a 1,2, or 3.
+    '''
     inputs,outputs = convertRoadData()
     X = np.array(inputs,  dtype=float)
     y = np.array(outputs, dtype=float)

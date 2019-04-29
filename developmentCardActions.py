@@ -7,7 +7,6 @@ This file holds the functions that will be used in playing development cards.
 from player import Player
 from board import *
 from gameFunctions import moveRobber
-from brain import *
 from random import randint
 from setup import *
 
@@ -59,7 +58,7 @@ def yearOfPlenty(player,printBool):
         if printBool:
             print("\tWhat's the first resource you would like? Please enter the full name of the resource.")
         if player.name in ROBOTS:
-            toGet = botChooseResource()
+            toGet = player.botChooseResource()
             if printBool: 
                 print(toGet) #this is feedback for the CLI to show what bot chose
         else:
@@ -76,7 +75,7 @@ def yearOfPlenty(player,printBool):
         if printBool:
             print("\tWhat's the second resource you would like? Please enter the full name of the resource.")
         if player.name in ROBOTS:
-            toGet = botChooseResource()
+            toGet = player.botChooseResource()
             if printBool:
                 print(toGet)
         else:
@@ -103,7 +102,7 @@ def monopoly(playerList, player,printBool):
         if printBool:
             print("\tWhat resource would you like to take? Please enter the full name of the resource.")
         if player.name  in ROBOTS:
-            toGet = botChooseResource()
+            toGet = player.botChooseResource()
             if printBool:
                 print(toGet) #this is feedback for the CLI to show what bot chose
         else:
