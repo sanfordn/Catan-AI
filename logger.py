@@ -44,7 +44,7 @@ def logRoads(firstVertex,openSpots,chosenSpot,player):
      Logs the playername, the first vertex they chose, a binary array [000] to [111]
             and what spot they chose as a result
      '''
-    f = open("rando-log-roads-stage.txt","a")
+    f = open("logging/rando-log-roads-stage.txt","a")
     f.write(player)
     f.write("|")
     f.write(str(firstVertex))
@@ -61,7 +61,7 @@ def logSettlement(board,move,player):
     ''' 
     Logs the settlements they currently own, the settlement they picked, and the player name 
     '''
-    f = open("rando-log-settlements-stage.txt", "a")
+    f = open("logging/rando-log-settlements-stage.txt", "a")
     f.write(player)
     f.write("|")
     for i in board:
@@ -76,8 +76,8 @@ def getWinnerData(winner):
     '''
     Extracts ONLY the winning data from the staging rando files. for roads and settlements
     '''
-    writeWinnerData("rando-log-settlements-stage.txt","rando-log-settlements.txt",winner)
-    writeWinnerData("rando-log-roads-stage.txt","rando-log-roads.txt",winner)
+    writeWinnerData("logging/rando-log-settlements-stage.txt","logging/rando-log-settlements.txt",winner)
+    writeWinnerData("logging/rando-log-roads-stage.txt","logging/rando-log-roads.txt",winner)
 
 def writeWinnerData(fin,fout,winner):
     '''

@@ -328,6 +328,7 @@ def placeFirstSettlements(board, playerList):
                 if board.print_bool:
                     print("Bot("+playerList[i].name+") places a road at " + str(toPlace))
                 notPlaced = False
+                #exit()
             else:
                 # Get road
                 toPlace = input("Your road will start at vertex " + str(firstVertex) + ". Which vertex do you want it to link to? ")

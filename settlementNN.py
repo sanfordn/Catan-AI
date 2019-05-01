@@ -11,7 +11,7 @@ def convertRoadData():
     
     inputs = ()
     outputs = ()
-    fin = open("rando-log-roads.txt", "r")
+    fin = open("logging/rando-log-roads.txt", "r")
     for aline in fin:
         name,firstVertex,openSpots,chosenSpot= aline.strip().split("|")
         tmp = []
@@ -77,7 +77,7 @@ def convertSettlementData():
     '''
     inputs = ()
     outputs = ()
-    fin = open("rando-log-settlements.txt", "r")
+    fin = open("logging/rando-log-settlements.txt", "r")
     for aline in fin:
         name,firstHalf,move = aline.strip().split("|")
         tmp = []
