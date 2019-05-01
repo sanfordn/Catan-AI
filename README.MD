@@ -6,6 +6,7 @@ Requirements for this system:
   - To install:
     - python3 -m pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose
 
+
 Command for repeating/automated run:
 - change the input.txt file to the user inputs you would like to use 
   - [y/n] for whether or not you want the full game to print
@@ -23,6 +24,13 @@ How to run the program:
 - Choose how many intelligent bots will play the game (partially implemented)
 - Either let the game run or play along with the game as it's running
 
-To test road building for intelligent system:
-- 
+To test initial road and settlement building for intelligent system:
+- Ensure you have installed all of the requirements
+- Run python3 catan.py
+- Choose "y" for board printing
+- Choose 0 human players
+- Choose 0 random players
+- Choose 1-4 intelligent players (robots)
+- The game will run, and when you see the last board, it will have settlements and roads built on it
+    - The bots are choosing roads and settlements intelligently based on what vertices are open on the board
 

@@ -8,7 +8,6 @@ def convertRoadData():
         Inputs: Binary array of roads owned
         Outputs: Roads chosen
     '''
-    
     inputs = ()
     outputs = ()
     fin = open("logging/rando-log-roads.txt", "r")
@@ -18,7 +17,7 @@ def convertRoadData():
         tmpo = []
         for i in openSpots:
             tmp.append(int(i))
-        inputs = inputs + (tmp,)
+        inputs = inputs + (tmp,) 
         tmpo.append(int(chosenSpot))
         outputs = outputs + (tmpo,)
     return inputs,outputs
@@ -96,22 +95,20 @@ def chooseSettlement(board):
     y = np.array(outputs, dtype=float)
 
     #normalize our units.
-    X = X/np.amax(X, axis=0)
+    X = X/np.amax(X)
     y = y/100 #max choice we have is 3
 
     NN = NeuralNetwork(54,1)
-    
-    #NN = NeuralNetwork()
+
     for i in range(1000):
         NN.train(X,y)
 
     Q = np.array(board)
 
-    print("Input: " + str(Q))
-    print(str(NN.forward(Q)))
+    #print("Input: " + str(Q))
+    #print(str(NN.forward(Q)))
     result = int(round(NN.forward(Q)[0], 2) * 100)
-    print("Predicted output: " + str(result))
-    exit()
+    #print("Predicted output: " + str(result))
     return result
 
 def chooseRoads(possibleSpots):

@@ -116,10 +116,16 @@ if __name__ == "__main__":
 
     # Setup Phase
     placeFirstSettlements(board, playerList)
+    #As of 5/1/2019 we have to exit early in order to avoid conflicts because our intelligent system has some flaws that will break the game. 
+    for player in playerList:
+        if player.name in board.robots:
+            print()
+            board.printBoard(board.print_bool)
+            print("All robots have made their implemented moves.")
+            exit()
 
     # Game Phase
     currentPlayerIndex = 0
-    #while(not playerList[currentPlayerIndex].victorious()):
     playing = True
     while(playing):
         currentPlayer = playerList[currentPlayerIndex]
@@ -238,7 +244,7 @@ if __name__ == "__main__":
                 elif (toBuild == "-r"):
                     if currentPlayer.roads < 1:
                         if board.print_bool:
-                            print("no more roads")
+                            print("No more roads")
                     else:
                         buildRoad(board, currentPlayer, playerList)
                 elif (toBuild == "-d"):

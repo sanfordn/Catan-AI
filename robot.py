@@ -9,6 +9,7 @@ class Robot(Player):
     def botPlaceSettlement(self,board):
         #return chooseSettlement(board)
         aspot = chooseSettlement(board)
+        #aspot = random.randint(0,53)
         return aspot
 
     def botPlaceRoad(self,openSpots):

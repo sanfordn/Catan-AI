@@ -1,7 +1,2 @@
 __pycache__/
 *.pyc
-logging/
-rando-log-roads.txt
-rando-log-roads-stage.txt
-rando-log-settlements.txt
-rando-log-settlements-stage.txt

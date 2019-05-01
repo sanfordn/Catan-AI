@@ -237,7 +237,7 @@ def placeFirstSettlements(board, playerList):
                     if 1 in spots:
                         #1 means there is a spot open
                         tmp = i.botPlaceRoad(spots)
-                        toPlace = board.vertexRelationMatrix[firstVertex][tmp]
+                        toPlace = board.vertexRelationMatrix[firstVertex][tmp-1]
                     
                 if (board.canPlaceRoad(firstVertex, toPlace, i.name)):
                     openSpots = board.openVertex(firstVertex,i.name)
@@ -328,6 +328,7 @@ def placeFirstSettlements(board, playerList):
                 if board.print_bool:
                     print("Bot("+playerList[i].name+") places a road at " + str(toPlace))
                 notPlaced = False
+                #UNCOMMENT THE NEXT LINE TO TEST INTELLIGENT ROAD BUILDING
                 #exit()
             else:
                 # Get road

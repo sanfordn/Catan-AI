@@ -7,6 +7,10 @@ logger.py
 def deleteContent(pfile):
     pfile.seek(0)
     pfile.truncate()
+    
+def getSize(filename):
+    st = os.stat(filename)
+    return st.st_size
 
 def prepSettlementsForLog(current,player):
     
@@ -76,6 +80,7 @@ def getWinnerData(winner):
     '''
     Extracts ONLY the winning data from the staging rando files. for roads and settlements
     '''
+    settlementLineCheck()
     writeWinnerData("logging/rando-log-settlements-stage.txt","logging/rando-log-settlements.txt",winner)
     writeWinnerData("logging/rando-log-roads-stage.txt","logging/rando-log-roads.txt",winner)
 
@@ -93,3 +98,13 @@ def writeWinnerData(fin,fout,winner):
     deleteContent(fin)
     fin.close()
     fout.close()
+
+def settlementLineCheck():
+    fin = open("logging/rando-log-settlements.txt","r+")
+    lines = fin.readlines()
+    if len(lines) > 60:
+        deleteContent(fin)
+    fin.close()
+        
+
+
