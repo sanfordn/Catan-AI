@@ -34,16 +34,16 @@ class NeuralNetwork(object):
         self.hiddenSize = 3
         #weights
         #weights
-        self.W1 = np.random.randn(self.inputSize, self.hiddenSize) # (3x2) weight matrix from input to hidden layer
-        self.W2 = np.random.randn(self.hiddenSize, self.outputSize) # (3x1) weight matrix from hidden to output layer
+        self.weight_set_1 = np.random.randn(self.inputSize, self.hiddenSize) # (3x2) weight matrix from input to hidden layer
+        self.weight_set_2 = np.random.randn(self.hiddenSize, self.outputSize) # (3x1) weight matrix from hidden to output layer
 
     def forward(self, X):
         #forward propagation through our network
-        self.z = np.dot(X, self.W1) # dot product of X (input) and first set of 3x2 weights
+        self.z = np.dot(X, self.weight_set_1) # dot product of X (input) and first set of 3x2 weights
         self.z2 = self.sigmoid(self.z) # activation function
-        self.z3 = np.dot(self.z2, self.W2) # dot product of hidden layer (z2) and second set of 3x1 weights
-        o = self.sigmoid(self.z3) # final activation function
-        return o 
+        self.z3 = np.dot(self.z2, self.weight_set_2) # dot product of hidden layer (z2) and second set of 3x1 weights
+        output = self.sigmoid(self.z3) # final activation function
+        return output 
 
     def sigmoid(self, s):
         # activation function 
@@ -53,20 +53,20 @@ class NeuralNetwork(object):
         #derivative of sigmoid
         return s * (1 - s)
 
-    def backward(self, X, y, o):
+    def backward(self, inputs, outputs, output):
         # backward propgate through the network
-        self.o_error = y - o # error in output
-        self.o_delta = self.o_error*self.sigmoidPrime(o) # applying derivative of sigmoid to error
+        self.output_error = outputs - output # error in output
+        self.output_delta = self.output_error*self.sigmoidPrime(output) # applying derivative of sigmoid to error
 
-        self.z2_error = self.o_delta.dot(self.W2.T) # z2 error: how much our hidden layer weights contributed to output error
+        self.z2_error = self.output_delta.dot(self.weight_set_2.T) # z2 error: how much our hidden layer weights contributed to output error
         self.z2_delta = self.z2_error*self.sigmoidPrime(self.z2) # applying derivative of sigmoid to z2 error
 
-        self.W1 += X.T.dot(self.z2_delta) # adjusting first set (input --> hidden) weights
-        self.W2 += self.z2.T.dot(self.o_delta) # adjusting second set (hidden --> output) weights
+        self.weight_set_1 += inputs.T.dot(self.z2_delta) # adjusting first set (input --> hidden) weights
+        self.weight_set_2 += self.z2.T.dot(self.output_delta) # adjusting second set (hidden --> output) weights
 
-    def train (self, X, y):
-        o = self.forward(X)
-        self.backward(X, y, o) 
+    def train (self, inputs, outputs):
+        output = self.forward(inputs)
+        self.backward(inputs, outputs, output) 
 
 def convertSettlementData():
     '''
@@ -91,17 +91,17 @@ def convertSettlementData():
 
 def chooseSettlement(board):
     inputs,outputs = convertSettlementData()
-    X = np.array(inputs,  dtype=float)
-    y = np.array(outputs, dtype=float)
+    inputs = np.array(inputs,  dtype=float)
+    outputs = np.array(outputs, dtype=float)
 
     #normalize our units.
-    X = X/np.amax(X)
-    y = y/100 #max choice we have is 3
+    inputs  = inputs/np.amax(inputs)
+    outputs = outputs/100 #mainputs choice we have is 3
 
     NN = NeuralNetwork(54,1)
 
     for i in range(1000):
-        NN.train(X,y)
+        NN.train(inputs,outputs)
 
     Q = np.array(board)
 
@@ -116,17 +116,18 @@ def chooseRoads(possibleSpots):
     The 3 digit binary array is processed by the neural network and returns either a 1,2, or 3.
     '''
     inputs,outputs = convertRoadData()
-    X = np.array(inputs,  dtype=float)
-    y = np.array(outputs, dtype=float)
+    inputs  = np.array(inputs,  dtype=float)
+    outputs = np.array(outputs, dtype=float)
 
     #normalize our units.
-    X = X/np.amax(X, axis=0)
-    y = y/100 #max choice we have is 3
+    inputs  = inputs/np.amax(inputs, axis=0)
+    outputs = outputs/100 #max choice we have is 3
 
     NN = NeuralNetwork(3,1)
     
     for i in range(1000):
-        NN.train(X,y)
+        NN.train(inputs,outputs)
+
     Q = np.array(possibleSpots)
     result = int(round(NN.forward(Q)[0], 2) * 100)
     return result
