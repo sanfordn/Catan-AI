@@ -1,2 +1,5 @@
 __pycache__/*
 *.pyc
+#This is my venv below.
+catan/ 
+logging/
