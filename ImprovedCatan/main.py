@@ -9,8 +9,7 @@ from improvedBoard import Board()
 
 #CREATE BOARD HERE
 SetupCatan = SetupCatan(0,0,0,False,Board)
-SetupCatan.initializePlayers().initializeDevCards()
-SetupCatan.setupRoundOne().setUpRoundTwo().
+SetupCatan.initializePlayers().initializeDevCards().
     setUpSettlement(SetupCatan.playerList,"first").
     setUpSettlement(SetupCatan.playerList.reverse(),"second").
     handOutResource()
